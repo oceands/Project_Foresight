@@ -1,0 +1,14 @@
+{
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 5432,
+            "driver": "PostgreSQL",
+            "name": "PostgresDB",
+            "username": "postgres",
+            "database": "ForesightDB",
+            "password": "pgadmin1002"
+        }
+    ]
+}

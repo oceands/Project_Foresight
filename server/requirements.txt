@@ -1,0 +1,11 @@
+Flask
+Flask-Cors
+Flask-JWT-Extended
+flask-restx
+Flask-SQLAlchemy
+werkzeug
+psycopg2
+psycopg2-binary
+flask-restx
+python-dotenv
+email_validator
