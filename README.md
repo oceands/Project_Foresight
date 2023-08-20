@@ -6,16 +6,19 @@ Foresight: Real-time CCTV 📹 anomaly detection and incident prediction. AI-pow
 ## Tech-stack
 
 ### Back-End
-![postgres_logo](https://github.com/oceands/Project_Foresight/assets/94485584/3416a10a-fb4f-4e28-a0ec-e8489bb3a742)
-![redis_logo](https://github.com/oceands/Project_Foresight/assets/94485584/0787ecab-b376-4249-b997-bd191b0adbc3)
-![yolo_logo](https://github.com/oceands/Project_Foresight/assets/94485584/0b5c77d1-4b27-4d46-a608-e493709f79b2)
-![homepage-docker-logo](https://github.com/oceands/Project_Foresight/assets/94485584/93f53dd6-6cf8-40ad-b344-b4c9dc60aff0)
-![nginx_logo](https://github.com/oceands/Project_Foresight/assets/94485584/c68f3279-32a6-482b-8cb9-312644d36111)
+![flask_logo](https://github.com/oceands/Project_Foresight/assets/94485584/ece76b80-6bdf-4b41-9411-04b6a2f7b486)
+![postgres_logo](https://github.com/oceands/Project_Foresight/assets/94485584/e3795eaf-72d5-4cd1-9f77-2d5e0fbaa206)
+![redis_logo](https://github.com/oceands/Project_Foresight/assets/94485584/a5d2f783-59a4-4e75-b963-bcdef195f635)
+![nginx_logo](https://github.com/o![homepage-docker-logo](https://github.com/oceands/Project_Foresight/assets/94485584/5822605a-d06b-4941-b55f-3d798fc66de1)
+ceands/Project_Foresight/assets/94485584/b4e3a648-1730-448f-8c69-4307170f9ea3)
+![yolo_logo](https://github.com/oceands/Project_Foresight/assets/94485584/b2c752da-baf6-4a0f-9a81-ee5e676d4d8a)
+
 
 ### Front-End
-![react_mui_logo](https://github.com/oceands/Project_Foresight/assets/94485584/e06a9055-88bc-4dec-907b-33ff09c18b07)
-![sass_logo](https://github.com/oceands/Project_Foresight/assets/94485584/4356d415-0c71-44e4-88bd-74a2a5c8bfce)
-![flask_logo](https://github.com/oceands/Project_Foresight/assets/94485584/0f561ce8-622d-496d-bbc4-f493f1873393)
+![react_mui_logo](https://github.com/oceands/Project_Foresight/assets/94485584/c94e5610-29db-4551-b4cc-9c600ca4778d)
+![sass_logo](https://github.com/oceands/Project_Foresight/assets/94485584/cbc357ff-ec2e-41e9-8c58-451228fb3386)
+
+
 
 
 
