@@ -21,6 +21,18 @@ Foresight: Real-time CCTV 📹 anomaly detection and incident prediction. AI-pow
 ## Tech-stack
 ![background-Github-techstack](https://github.com/oceands/Project_Foresight/assets/94485584/b13bb234-30c1-4b1e-9672-fe01e0ffc7a4)
 
+## Cloning the Repository
+
+To clone the **Project_Foresight** repository, follow these steps:
+
+1. Open your terminal or command prompt.
+2. Navigate to the directory where you want to clone the repository.
+3. Run the following command to clone the repository:
+
+   ```sh
+   git clone https://github.com/oceandss/Project_Foresight.git
+
+
 
 
 
