@@ -31,6 +31,7 @@ To clone the **Project_Foresight** repository, follow these steps:
 
    ```sh
    git clone https://github.com/oceandss/Project_Foresight.git
+   ```
 
 
 
