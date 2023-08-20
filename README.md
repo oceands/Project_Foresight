@@ -1,7 +1,8 @@
 # Project_Foresight
 ![GitHub last commit (by committer)](https://img.shields.io/github/last-commit/oceands/Project_Foresight)
 ![GitHub All Releases](https://img.shields.io/github/downloads/oceandss/Project_Foresight/total.svg)
-![GitHub contributors (via allcontributors.org)](https://img.shields.io/github/all-contributors/oceands/Project_Foresight)
+![Static Badge](https://img.shields.io/badge/collaborators-4-blue)
+
 
 
 
