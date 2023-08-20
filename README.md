@@ -30,10 +30,44 @@ To clone the **Project_Foresight** repository, follow these steps:
 3. Run the following command to clone the repository:
 
    ```sh
-   git clone https://github.com/oceandss/Project_Foresight.git
+   git clone https://github.com/oceands/Project_Foresight.git
+   ```
+__Go into the repository__
+```sh
+   cd Project_Foresight
+   ```
+__To go into frontend__
+```sh
+   cd client
+   ```
+__Install nessecary packages__
+```sh
+   npm -install
+   ```
+__Run frontend interface__
+```sh
+   npm run start
+   ```
+__To go into backend__
+```sh
+   cd client
+   ```
+__activate virtual env___
+```sh
+   server\venv\Scripts\activate
+```
+
+__Install nessecary packages__
+```sh
+   pip install -r requirments.txt
    ```
 
+__Run backend___
+```sh
+   flask run
+   ```
 
+##warning ⚠️
 
-
+Please do not push to the repository withoout prior testing on a test-system
 
