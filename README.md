@@ -52,7 +52,7 @@ __To go into backend__
 ```sh
    cd client
    ```
-__activate virtual env___
+__activate virtual env__
 ```sh
    server\venv\Scripts\activate
 ```
@@ -62,12 +62,12 @@ __Install nessecary packages__
    pip install -r requirments.txt
    ```
 
-__Run backend___
+__Run backend__
 ```sh
    flask run
    ```
 
-##warning ⚠️
+## warning ⚠️
 
 Please do not push to the repository withoout prior testing on a test-system
 
