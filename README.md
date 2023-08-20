@@ -67,7 +67,7 @@ __Run backend__
    flask run
    ```
 
-## warning ⚠️
+## WARNING ⚠️
 
 Please do not push to the repository withoout prior testing on a test-system
 
