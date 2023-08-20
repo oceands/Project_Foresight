@@ -1,4 +1,5 @@
 # Project_Foresight
+<div style="text-align:center>
 __Modern CCTV management system with hazard detection for incident response__
 
 ![GitHub last commit (by committer)](https://img.shields.io/github/last-commit/oceands/Project_Foresight)
@@ -7,7 +8,7 @@ __Modern CCTV management system with hazard detection for incident response__
 ![Static Badge](https://img.shields.io/badge/node_version-v18.16.1-red)
 ![Static Badge](https://img.shields.io/badge/python_version-v3.11.4-purple)
 
-
+</div>
 
 
 
