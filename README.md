@@ -1,5 +1,7 @@
 # Project_Foresight
 ![GitHub last commit (by committer)](https://img.shields.io/github/last-commit/oceands/Project_Foresight)
+![GitHub All Releases](https://img.shields.io/github/downloads/oceands/Project_Foresight)
+
 
 Foresight: Real-time CCTV 📹 anomaly detection and incident prediction. AI-powered 🧠  security for proactive threat prevention. Stay vigilant, stay secure. 
 
