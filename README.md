@@ -1,7 +1,7 @@
 # Project_Foresight
 Foresight: Real-time CCTV 📹 anomaly detection and incident prediction. AI-powered 🧠  security for proactive threat prevention. Stay vigilant, stay secure. 
 
-![Logo](https://drive.google.com/file/d/1YLJ5peOrWLxoV1TYynzbaDT3oVE8Iom_/view)
+![Logo](https://drive.google.com/file/d/1YLJ5peOrWLxoV1TYynzbaDT3oVE8Iom_/view?usp=sharing)
 
 ## Tech-stack
 
