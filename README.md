@@ -8,7 +8,7 @@ Foresight: Real-time CCTV 📹 anomaly detection and incident prediction. AI-pow
 ### Back-End
 
 ![flask-tutorial](https://github.com/oceands/Project_Foresight/assets/94485584/d47fd971-617c-428e-ad4b-bb3b096b28f6)
-![postgres_logo](https://github.com/oceands/Project_Foresight/assets/94485584/17f50bfe-412b-4427-bcdf-bac1b927683a)
+![postgres_logo-removebg-preview](https://github.com/oceands/Project_Foresight/assets/94485584/5bd33f2a-41a6-487b-8c9a-3943927a5b16)
 ![redis_logo](https://github.com/oceands/Project_Foresight/assets/94485584/a5d2f783-59a4-4e75-b963-bcdef195f635)
 ![nginx_logo](https://github.com/oceands/Project_Foresight/assets/94485584/c45473ee-3f1a-4ae0-b024-5a66011dd68f)
 ![yolo_logo](https://github.com/oceands/Project_Foresight/assets/94485584/b2c752da-baf6-4a0f-9a81-ee5e676d4d8a)
