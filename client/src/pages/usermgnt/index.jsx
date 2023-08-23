@@ -12,27 +12,29 @@ const Usermgnt = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const columns = [
-    { field: "id", headerName: "Id" },
     {
       field: "name",
       headerName: "Name",
-      width: 200,
-      cellClassName: "name-column--cell",
+      flex: 0.5,
     },
+    { field: "email", headerName: "Email", flex: 0.5,},
+    { field: "location", headerName: "Location", flex: 0.5,},
     {
-      field: "age",
-      headerName: "Age",
+      field: "dateJoined",
+      headerName: "Joined",
       type: "number",
       headerAlign: "left",
       align: "left",
+      flex: 0.3
+      
     },
-    { field: "phone", headerName: "Phone Number", width: 100 },
-    { field: "email", headerName: "Email", width: 200 },
+   
     {
-      field: "access",
-      headerName: "Access Llvel",
-      width: 100,
-      renderCell: ({ row: { access } }) => {
+      field: "role",
+      headerName: "Role",
+      flex: 0.15,
+      
+      renderCell: ({ row: { role } }) => {
         return (
           <Box
             width="100%"
@@ -41,27 +43,28 @@ const Usermgnt = () => {
             display="flex"
             justifyContent="center"
             backgroundColor={
-              access === "admin"
+              role === "admin"
                 ? colors.pinkAccents[600]
                 : colors.pinkAccents[800]
             }
             borderRadius="4px"
           >
-            {access === "admin" && <AdminPanelSettingsOutlinedIcon />}
-            {access === "manager" && <SecurityOutlinedIcon />}
-            {access === "user" && <LockOpenOutlinedIcon />}
+            {role === "admin" && <AdminPanelSettingsOutlinedIcon />}
+            {role === "manager" && <SecurityOutlinedIcon />}
+            {role === "user" && <LockOpenOutlinedIcon />}
             <Typography color={colors.grey[100]} sx={{ ml: "5px" }}>
-              {access}
+              {role}
             </Typography>
           </Box>
         );
       },
     },
+    
   ];
   return (
     <Box m="20px">
       <Box display="flex" justifyContent="space-between" alignItems="center">
-        <Header title="USER MANAGEMENT" subtitle="welcome to your User Management" />
+        <Header title="USER MANAGEMENT"/>
       </Box>
       <Box
         m="8px 0 0 0"
@@ -69,26 +72,45 @@ const Usermgnt = () => {
         sx={{
           "& .MuiDataGrid-root": {
             border: "none",
+            fontSize: "14px",
+            "& .MuiDataGrid-cell:focus": {
+              outline: "none", // Remove the focus outline
+            },
+            "& .MuiDataGrid-row.Mui-selected": {
+              backgroundColor: "#4f4f95",
+              "&:hover": {
+                backgroundColor: "#4f4f95", // Keep the same color on hover
+              },
+            },
           },
+         
           "& .MuiDataGrid-cell": {
             borderBottom: "none",
           },
           "& .name-column--cell": {
-            color: colors.pinkAccents[300],
+            color: "#8cd2c6",
           },
           "& .MuiDataGrid-columnHeaders": {
-            backgroundColor: colors.purpleAccent[700],
+            backgroundColor: "#7C7CEA",
             borderBottom: "none",
           },
+          "& .MuiDataGrid-columnHeaderTitle": {
+           
+            fontSize: "15px"
+          },
           "& .MuiDataGrid-virtualScroller": {
-            backgroundColor: colors.primary[400],
+            backgroundColor: "#26264F"
           },
           "& .MuiDataGrid-footerContainer": {
             borderTop: "none",
-            backgroundColor: colors.purpleAccent[700],
+            backgroundColor: "#7C7CEA",
           },
           "& .MuiCheckbox-root": {
             color: `${colors.pinkAccents[200]} !important`,
+          },
+          "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
+            color: `${colors.grey[100]} !important`,
+            fontSize: "14px",
           },
         }}
       >
