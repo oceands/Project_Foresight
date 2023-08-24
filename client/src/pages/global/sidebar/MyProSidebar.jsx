@@ -1,6 +1,5 @@
-// docs https://github.com/azouaoui-med/react-pro-sidebar
 import { useState } from "react";
-import { Menu, Sidebar, MenuItem } from "react-pro-sidebar";
+import { Menu, Sidebar, MenuItem, SubMenu } from "react-pro-sidebar";
 import { useProSidebar } from "react-pro-sidebar";
 
 import { useSidebarContext } from "./sidebarContext";
@@ -9,7 +8,6 @@ import { Link } from "react-router-dom";
 import { tokens } from "../../../theme";
 import { useTheme, Box, Typography, IconButton } from "@mui/material";
 
-//OUR IMPORTS
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
@@ -20,11 +18,17 @@ import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined';
 import HeadsetMicOutlinedIcon from '@mui/icons-material/HeadsetMicOutlined';
 
-//IMPORTS FOR SIDEBAR MANAGMENT
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import SwitchRightOutlinedIcon from "@mui/icons-material/SwitchRightOutlined";
 import SwitchLeftOutlinedIcon from "@mui/icons-material/SwitchLeftOutlined";
+
+import CameraAltOutlinedIcon from '@mui/icons-material/CameraAltOutlined';
+import LocalPoliceOutlinedIcon from '@mui/icons-material/LocalPoliceOutlined';
+import MapOutlinedIcon from '@mui/icons-material/MapOutlined';
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+import LockPersonOutlinedIcon from '@mui/icons-material/LockPersonOutlined';
+
 const Item = ({ title, to, icon, selected, setSelected }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -48,6 +52,7 @@ const MyProSidebar = () => {
   const [selected, setSelected] = useState("Dashboard");
   const { sidebarRTL, setSidebarRTL, sidebarImage } = useSidebarContext();
   const { collapseSidebar, toggleSidebar, collapsed, broken } = useProSidebar();
+
   return (
     <Box
       sx={{
@@ -64,7 +69,6 @@ const MyProSidebar = () => {
           backgroundColor: "transparent !important",
         },
         "& .menu-item": {
-          // padding: "5px 35px 5px 20px !important",
           backgroundColor: "transparent !important",
         },
         "& .menu-anchor": {
@@ -79,6 +83,11 @@ const MyProSidebar = () => {
           color: `${colors.pinkAccents[500]} !important`,
           backgroundColor: "transparent !important",
         },
+        "& .sub-menu-content": {
+          backgroundColor: `${colors.primary[450]} !important`,
+          
+        },
+
       }}
     >
       <Sidebar
@@ -152,7 +161,6 @@ const MyProSidebar = () => {
               <Box textAlign="center">
                 <Typography
                   variant="h3"
-                  //color={colors.pinkAccents[500]}
                   fontWeight="bold"
                   sx={{ m: "10px 0 0 0" }}
                 >
@@ -208,16 +216,63 @@ const MyProSidebar = () => {
               icon={<PsychologyOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
-            />    
-
-            <Item
-              title="Settings"
-              to="/settings"
+            />
+            </Box>
+            
+            {/*Here we are adding the new sub menue*/}
+            <Box paddingLeft={collapsed ? undefined : "10%"}>
+            <SubMenu // Add SubMenu component for the "Settings" menu item
+              label="Settings"
               icon={<SettingsOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
-            />
+            >
+              {/*Adding Sub menu items */}
+              
+               <Item
+              title="Camera"
+              to="/Settings/Camera"
+              icon={<CameraAltOutlinedIcon />}
+              selected={selected}
+              setSelected={setSelected}
+              />
 
+              <Item
+              title="Dispatch"
+              to="/Settings/Dispatch"
+              icon={<LocalPoliceOutlinedIcon />}
+              selected={selected}
+              setSelected={setSelected}
+              />
+
+              <Item
+              title="Floor Plan"
+              to="/Settings/FloorPlan"
+              icon={<MapOutlinedIcon />}
+              selected={selected}
+              setSelected={setSelected}
+              />
+
+              <Item
+              title="Version Info"
+              to="/Settings/VersionInfo"
+              icon={<InfoOutlinedIcon />}
+              selected={selected}
+              setSelected={setSelected}
+              />
+
+              <Item
+              title="Security"
+              to="/Settings/Security"
+              icon={<LockPersonOutlinedIcon />}
+              selected={selected}
+              setSelected={setSelected}
+              />
+
+            </SubMenu> 
+            </Box>
+
+            <Box paddingLeft={collapsed ? undefined : "10%"}>
             <Item
               title="FAQ Page"
               to="/faq"

@@ -22,6 +22,7 @@ export const tokens = (mode) => ({
           200: "#9b9ca9",
           300: "#696a7f",
           400: "#373954",
+          450: "#2c2e43", // manually added for sub-menu in side bar
           500: "#050729",
           600: "#040621",
           700: "#030419",
@@ -79,6 +80,7 @@ export const tokens = (mode) => ({
           200: "#020310",
           300: "#030419",
           400: "#f2f0f0", // manually changed
+          450: "#e7e3e3", // manually added for sub-menu in side bar
           500: "#050729",
           600: "#373954",
           700: "#696a7f",
