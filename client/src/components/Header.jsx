@@ -7,7 +7,14 @@ const Header = ({ title, subtitle }) => {
   const colors = tokens(theme.palette.mode);
 
   return (
-    <Box mb="30px">
+    <Box
+      mb="30px"
+      display="flex"
+      flexDirection="column"
+      alignItems="center"
+      justifyContent="center"
+      textAlign="center"
+    >
       <Typography
         variant="h2"
         color={colors.grey[100]}

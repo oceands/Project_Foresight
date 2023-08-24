@@ -12,7 +12,7 @@ import Usermgnt from "./pages/usermgnt";
 import Reports from "./pages/reports";
 import AI from "./pages/ai";
 import Settings from "./pages/settings";
-import Contact from "./pages/contact";
+import Contact from "./pages/contactUs";
 import FAQ from "./pages/faq";
 
 
