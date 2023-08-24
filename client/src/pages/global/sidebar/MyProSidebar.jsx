@@ -75,11 +75,8 @@ const MyProSidebar = () => {
           color: "inherit !important",
           backgroundColor: "transparent !important",
         },
-        "& .menu-item:hover": {
-          color: `${colors.pinkAccents[500]} !important`,
-          backgroundColor: "transparent !important",
-        },
-        "& .menu-item.active": {
+
+        "& .menu-item:not(.sub-menu):hover, & .menu-item:not(.sub-menu).active": {
           color: `${colors.pinkAccents[500]} !important`,
           backgroundColor: "transparent !important",
         },
@@ -87,6 +84,11 @@ const MyProSidebar = () => {
           backgroundColor: `${colors.primary[450]} !important`,
           
         },
+        "& .sub-menu-header .menu-anchor:hover": {
+          color: `${colors.pinkAccents[500]} !important`,
+          backgroundColor: "transparent !important",
+        }
+
 
       }}
     >
@@ -220,18 +222,19 @@ const MyProSidebar = () => {
             </Box>
             
             {/*Here we are adding the new sub menue*/}
-            <Box paddingLeft={collapsed ? undefined : "10%"}>
+            <Box paddingLeft={collapsed ? undefined : "10%"} className="sub-menu">
             <SubMenu // Add SubMenu component for the "Settings" menu item
               label="Settings"
               icon={<SettingsOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
+              className="sub-menu-header"
             >
               {/*Adding Sub menu items */}
               
                <Item
               title="Camera"
-              to="/Settings/Camera"
+              to="/settings/camera"
               icon={<CameraAltOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
@@ -239,7 +242,7 @@ const MyProSidebar = () => {
 
               <Item
               title="Dispatch"
-              to="/Settings/Dispatch"
+              to="/settings/dispatch"
               icon={<LocalPoliceOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
@@ -247,7 +250,7 @@ const MyProSidebar = () => {
 
               <Item
               title="Floor Plan"
-              to="/Settings/FloorPlan"
+              to="/settings/floorplan"
               icon={<MapOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
@@ -255,7 +258,7 @@ const MyProSidebar = () => {
 
               <Item
               title="Version Info"
-              to="/Settings/VersionInfo"
+              to="/settings/versioninfo"
               icon={<InfoOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
@@ -263,7 +266,7 @@ const MyProSidebar = () => {
 
               <Item
               title="Security"
-              to="/Settings/Security"
+              to="/settings/security"
               icon={<LockPersonOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
