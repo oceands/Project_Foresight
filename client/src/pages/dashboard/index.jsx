@@ -41,12 +41,15 @@ const Dashboard = () => {
         <Box>
           <Button
             sx={{
-              backgroundColor: colors.purpleAccent[700],
-              color: colors.grey[100],
-              fontSize: "14px",
-              fontWeight: "bold",
-              padding: "10px 20px",
-            }}
+          backgroundColor: colors.pinkAccents[500],
+          color: colors.grey[100],
+          fontSize: "14px",
+          fontWeight: "bold",
+          padding: "10px 20px",
+          '&:hover': {
+            backgroundColor: colors.pinkAccents[600], // New color on hover
+          },
+        }}
           >
             <DownloadOutlinedIcon sx={{ mr: "10px" }} />
             Download Reports
