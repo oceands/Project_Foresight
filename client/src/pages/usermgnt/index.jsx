@@ -76,12 +76,6 @@ const Usermgnt = () => {
             "& .MuiDataGrid-cell:focus": {
               outline: "none", // Remove the focus outline
             },
-            "& .MuiDataGrid-row.Mui-selected": {
-              backgroundColor: "#4f4f95",
-              "&:hover": {
-                backgroundColor: "#4f4f95", // Keep the same color on hover
-              },
-            },
           },
          
           "& .MuiDataGrid-cell": {
@@ -91,7 +85,7 @@ const Usermgnt = () => {
             color: "#8cd2c6",
           },
           "& .MuiDataGrid-columnHeaders": {
-            backgroundColor: "#7C7CEA",
+            backgroundColor: colors.purpleAccent[700],
             borderBottom: "none",
           },
           "& .MuiDataGrid-columnHeaderTitle": {
@@ -99,11 +93,11 @@ const Usermgnt = () => {
             fontSize: "15px"
           },
           "& .MuiDataGrid-virtualScroller": {
-            backgroundColor: "#26264F"
+            backgroundColor: colors.primary[400],
           },
           "& .MuiDataGrid-footerContainer": {
             borderTop: "none",
-            backgroundColor: "#7C7CEA",
+            backgroundColor: colors.purpleAccent[700],
           },
           "& .MuiCheckbox-root": {
             color: `${colors.pinkAccents[200]} !important`,
