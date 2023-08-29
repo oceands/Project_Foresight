@@ -11,7 +11,7 @@ import Incidents from "./pages/Incidents";
 import Usermgnt from "./pages/usermgnt";
 import Reports from "./pages/reports";
 import AI from "./pages/ai";
-import Settings from "./pages/settings";
+
 import Contact from "./pages/contactUs";
 import FAQ from "./pages/faq";
 import CamSetting from "./pages/settings/camsetting";
@@ -19,7 +19,7 @@ import DispatchSettings from "./pages/settings/dispatchsettings";
 import FloorplanSettings from "./pages/settings/floorplansettings";
 import VersionInfo from "./pages/settings/versioninfo";
 import Security from "./pages/settings/security";
-
+import CreateReport from "./pages/CreateReport"
 const App = () => {
   const [theme, colorMode] = useMode();
   return (
@@ -47,6 +47,7 @@ const App = () => {
                 {/*Newly added routes */}  
                 <Route path="/faq" element={<FAQ />} />
                 <Route path="/contact" element={<Contact />} />
+                <Route path="/CreateReport" element={<CreateReport/>} />
 
               </Routes>
             </main>
