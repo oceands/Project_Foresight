@@ -8,6 +8,8 @@ SELECT * FROM users;
 Drop TABLE roles, tokenblocklist, user_roles,users;
 Drop TABLE roles, tokenblocklist, user_roles,users;
 Drop TABLE roles, tokenblocklist, user_roles,users; --Saim making pull request here
+Drop TABLE roles, tokenblocklist, user_roles,users; --sims first commit
+Drop TABLE roles, tokenblocklist, user_roles,users; --sims second commit
 --MANUALLY LINK USERS AND ROLES
 INSERT INTO user_roles (user_id, role_id) VALUES (1, 1); -- Admin user
 INSERT INTO user_roles (user_id, role_id) VALUES (2, 2); -- Regular user
