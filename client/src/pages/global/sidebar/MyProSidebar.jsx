@@ -291,8 +291,19 @@ const MyProSidebar = () => {
               selected={selected}
               setSelected={setSelected}
             />   
+  
           </Box>
         </Menu>
+        <Typography 
+               textAlign="center"
+               padding="10px" // Add some padding for spacing
+               backgroundColor={colors.primary[400]} // Match the sidebar background
+               color={colors.grey[100]} // Text color
+               position="absolute"
+               bottom="0"
+               width="100%"
+               fontWeight="bold"
+        >Version 1.0.0</Typography>
       </Sidebar>
     </Box>
   );
