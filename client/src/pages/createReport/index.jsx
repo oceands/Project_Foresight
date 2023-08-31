@@ -43,24 +43,25 @@ const CreateReport = () => {
       flex="1"
       p={2}
       display="flex"
-      flexDirection="column"
       alignItems="center"
       justifyContent="center"
-      minHeight="100vh"
+      width="100%"
+      //minWidth="100vh"
     >
       <Box
         bgcolor={colors.primary[400]}
-        maxWidth="1600px" // Increase the maxWidth for a larger background box
+        width="500px" // Increase the maxWidth for a larger background box
         borderRadius="8px"
         boxShadow="0 0 8px rgba(0, 0, 0, 0.1)"
         padding="20px" // Add padding for spacing
       >
-        <Header title="Create Report" subtitle="Creating a report using Formik" />
+        <Header title="Create Report" />
         <Formik onSubmit={handleFormSubmit} initialValues={initialValues} validationSchema={checkoutSchema}>
           {({ values, errors, touched, handleBlur, handleChange, handleSubmit }) => (
             <form onSubmit={handleSubmit}>
               <Box sx={{ marginBottom: '15px' }}>
                 <TextField
+                  fullWidth
                   variant="filled"
                   type="text"
                   label="Type"
@@ -74,6 +75,7 @@ const CreateReport = () => {
               </Box>
               <Box sx={{ marginBottom: '15px' }}>
                 <TextField
+                fullWidth
                   variant="filled"
                   type="text"
                   label="Template"
@@ -85,12 +87,13 @@ const CreateReport = () => {
                   helperText={touched.template && errors.template}
                 />
               </Box>
-              <Box sx={{ marginBottom: '15px' }}>
+              <Box sx={{ marginBottom: '15px' }}
+              display="flex"
+              justifyContent="space-between">
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DatePicker />
                 </LocalizationProvider>
-              </Box>
-              <Box sx={{ marginBottom: '15px' }}>
+
                 <TextField
                   variant="filled"
                   type="text"

@@ -19,7 +19,7 @@ import DispatchSettings from "./pages/settings/dispatchsettings";
 import FloorplanSettings from "./pages/settings/floorplansettings";
 import VersionInfo from "./pages/settings/versioninfo";
 import Security from "./pages/settings/security";
-import CreateReport from "./pages/CreateReport"
+import CreateReport from "./pages/createReport"
 const App = () => {
   const [theme, colorMode] = useMode();
   return (
@@ -47,7 +47,7 @@ const App = () => {
                 {/*Newly added routes */}  
                 <Route path="/faq" element={<FAQ />} />
                 <Route path="/contact" element={<Contact />} />
-                <Route path="/CreateReport" element={<CreateReport/>} />
+                <Route path="/createreport" element={<CreateReport/>} />
 
               </Routes>
             </main>
