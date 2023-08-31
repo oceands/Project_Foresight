@@ -74,7 +74,21 @@ export const mockDataTeam = [
     role: "admin"
   }
 ];
+export const mockDataDispatch = [
 
+
+  {
+    id:1,
+    name: "Police",
+    type: "Authorities",
+    number: "911",
+    location: "000000",
+    description: "Office Room",
+    autoDispatch: "Active",
+    action: null,
+  },
+  
+]
 export const mockDataContacts = [
   {
     id: 1,
