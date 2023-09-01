@@ -135,7 +135,7 @@ const Report = () => {
               <Formik onSubmit={handleFormSubmit} initialValues={initialValues} validationSchema={checkoutSchema}>
             {({ values, errors, touched, handleBlur, handleChange }) => (
               <form onSubmit={handleFormSubmit}>
-                   <Header title="Report Forms" />
+                   <Header title="Report Form" />
                 <Box display="grid" gap="30px" gridTemplateColumns="repeat(4, minmax(0, 1fr))">
                 <TextField
                     fullWidth
