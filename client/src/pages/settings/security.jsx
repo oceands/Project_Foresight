@@ -61,8 +61,9 @@ const Security = () => {
                 </Button>
               </Grid>
             </Grid>
+            <Divider />
           </Grid>
-          <Divider />
+          
 
           {/* Row 2 */}
           <Grid item xs={12}>
@@ -76,9 +77,10 @@ const Security = () => {
                   Update
                 </Button>
               </Grid>
-            </Grid>
-          </Grid>
+            </Grid> 
           <Divider />
+          </Grid>
+         
 
           {/* Row 3 */}
           <Grid item xs={12}>
@@ -93,8 +95,9 @@ const Security = () => {
                 </Button>
               </Grid>
             </Grid>
+            <Divider />
           </Grid>
-          <Divider />
+          
 
           {/* Row 4 */}
           <Grid item xs={12}>
