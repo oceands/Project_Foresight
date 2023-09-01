@@ -1,5 +1,23 @@
 import { tokens } from "../theme";
 
+
+export const mockDataCamera = [
+
+
+  {
+    id:1,
+    name: "CAM-1",
+    type: "CCTV",
+    IP: "128.256.168.1",
+    MAC: "000000",
+    Owner: "Office Room",
+    description: "Office Room",
+    Status: "Active",
+    action: null,
+  },
+  
+]
+
 export const mockDataTeam = [
   {
     id: 1,
