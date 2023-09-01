@@ -39,10 +39,10 @@ const App = () => {
                 <Route path="/reports" element={<Reports />} />
                 <Route path="/ai" element={<AI />} />
                 {/*Removed index.jsx for settings since we need seperate routes */}
-                  <Route path="/settings/camera" element={<CamSetting/>} />
-                  <Route path="/settings/dispatch" element={<DispatchSettings/>} />
-                  <Route path="/settings/floorplan" element={<FloorplanSettings/>} />
-                  <Route path="/settings/versioninfo" element={<VersionInfo/>} />
+                <Route path="/settings/camera" element={<CamSetting/>} />
+                <Route path="/settings/dispatch" element={<DispatchSettings/>} />
+                <Route path="/settings/floorplan" element={<FloorplanSettings/>} />
+                <Route path="/settings/versioninfo" element={<VersionInfo/>} />
                   <Route path="/settings/security" element={<Security/>} />
                 {/*Newly added routes */}  
                 <Route path="/faq" element={<FAQ />} />
