@@ -20,6 +20,7 @@ import FloorplanSettings from "./pages/settings/floorplansettings";
 import VersionInfo from "./pages/settings/versioninfo";
 import Security from "./pages/settings/security";
 import CreateReport from "./pages/createReport"
+import Login from "./pages/login";
 const App = () => {
   const [theme, colorMode] = useMode();
   return (
@@ -48,6 +49,7 @@ const App = () => {
                 <Route path="/faq" element={<FAQ />} />
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/createreport" element={<CreateReport/>} />
+                <Route path="/login" element={<Login/>} />
 
               </Routes>
             </main>
