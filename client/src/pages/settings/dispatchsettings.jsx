@@ -123,7 +123,7 @@ const DispatchSettings = () => {
             
             <Box
               onClick={(e) => e.stopPropagation()}
-              backgroundColor="#373954"
+              backgroundColor={colors.primary[400]}
               borderRadius="8px"
               padding="20px"
               width="100%"
@@ -257,7 +257,7 @@ const DispatchSettings = () => {
             color: "#8cd2c6",
           },
           "& .MuiDataGrid-columnHeaders": {
-            backgroundColor: "#7C7CEA",
+            backgroundColor: colors.purpleAccent[700],
             borderBottom: "none",
           },
           "& .MuiDataGrid-columnHeaderTitle": {
@@ -269,7 +269,7 @@ const DispatchSettings = () => {
           },
           "& .MuiDataGrid-footerContainer": {
             borderTop: "none",
-            backgroundColor: "#7C7CEA",
+            backgroundColor: colors.purpleAccent[700],
           },
           "& .MuiCheckbox-root": {
             color: `${colors.pinkAccents[200]} !important`,

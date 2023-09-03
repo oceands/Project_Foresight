@@ -35,7 +35,6 @@ const CameraSettings = () => {
         console.log(`Editing row with id ${id}`);
       };
 
-    const isNonMobile = useMediaQuery('(min-width:600px)');
     const phoneRegExp = /^((\+[1-9]{1,4}[ -]?)|(\([0-9]{2,3}\)[ -]?)|([0-9]{2,4})[ -]?)*?[0-9]{3,4}[ -]?[0-9]{3,4}$/;
     const handleFormSubmit = (values) => {
       console.log(values);
@@ -124,7 +123,7 @@ const CameraSettings = () => {
             
             <Box
               onClick={(e) => e.stopPropagation()}
-              backgroundColor="#373954"
+              backgroundColor={colors.primary[400]}
               borderRadius="8px"
               padding="20px"
               width="100%"
@@ -243,7 +242,8 @@ const CameraSettings = () => {
         <Header title="CAMERA SETTINGS"/>
     
       </Box>
-      <Box display="flex">
+      
+    <Box display="flex">
         
       <Box
         m="8px 0 0 0"
@@ -330,9 +330,7 @@ const CameraSettings = () => {
         onSubmit={handleFormSubmit}
         
         initialValues={initialValues}
-        validationSchema={checkoutSchema}
-      
-      />
+        validationSchema={checkoutSchema}/>
             )}
               </Box>
       

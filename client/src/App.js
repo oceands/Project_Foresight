@@ -19,7 +19,7 @@ import DispatchSettings from "./pages/settings/dispatchsettings";
 import FloorplanSettings from "./pages/settings/floorplansettings";
 import VersionInfo from "./pages/settings/versioninfo";
 import Security from "./pages/settings/security";
-
+import Login from "./pages/login"
 const App = () => {
   const [theme, colorMode] = useMode();
   return (
@@ -47,7 +47,7 @@ const App = () => {
                 {/*Newly added routes */}  
                 <Route path="/faq" element={<FAQ />} />
                 <Route path="/contact" element={<Contact />} />
-              
+                <Route path="/login" element={<Login/>} />
 
               </Routes>
             </main>
