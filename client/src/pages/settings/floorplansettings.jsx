@@ -7,7 +7,7 @@ import { mockDataContacts } from "../../data/mockData";
 import Header from "../../components/Header";
 
 const FloorplanSettings = () => {
-//fill code here
+
 };
 
 export default FloorplanSettings;
