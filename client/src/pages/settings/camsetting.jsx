@@ -283,7 +283,7 @@ const CameraSettings = () => {
           },
           "& .MuiDataGrid-footerContainer": {
             borderTop: "none",
-            backgroundColor: "#7C7CEA",
+            backgroundColor:  colors.purpleAccent[700],
           },
           "& .MuiCheckbox-root": {
             color: `${colors.pinkAccents[200]} !important`,
