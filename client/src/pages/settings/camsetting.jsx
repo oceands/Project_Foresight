@@ -271,7 +271,7 @@ const CameraSettings = () => {
             color: "#8cd2c6",
           },
           "& .MuiDataGrid-columnHeaders": {
-            backgroundColor: "#7C7CEA",
+            backgroundColor: colors.purpleAccent[700],
             borderBottom: "none",
           },
           "& .MuiDataGrid-columnHeaderTitle": {
