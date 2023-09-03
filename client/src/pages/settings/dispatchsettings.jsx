@@ -123,7 +123,7 @@ const DispatchSettings = () => {
             
             <Box
               onClick={(e) => e.stopPropagation()}
-              backgroundColor="#373954"
+              backgroundColor={colors.primary[400]}
               borderRadius="8px"
               padding="20px"
               width="100%"
