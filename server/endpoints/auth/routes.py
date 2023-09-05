@@ -1,6 +1,6 @@
 from datetime import datetime, timezone, timedelta
 from flask import request
-from flask_restx import Api, Resource, fields
+from flask_restx import Namespace, Resource, fields
 
 #JWT imports
 from flask_jwt_extended import create_refresh_token, get_jwt, get_jwt_identity, create_access_token, jwt_required
@@ -17,7 +17,7 @@ from .helpers import add_token_to_database, revoke_token, is_token_revoked
 from extensions import db, jwt
 
 
-rest_api= Api(version="1.0", title="UserApi")
+rest_api= Namespace("auth",version="1.0", description="Authentication related operations")
 
 #Required Feilds/Models while using the flask_restex APIs
 
@@ -40,6 +40,10 @@ user_edit_model = rest_api.model('UserEditModel', {
 })
 
 
+
+
+
+
 #Signup Api Creates new user by using the signup template above.
 @rest_api.route('/api/users/register')
 class Register(Resource):
@@ -47,7 +51,7 @@ class Register(Resource):
     @rest_api.expect(signup_model, validate=True)
     def post(self):
 
-        
+        print("touched!")
         request_data=request.get_json()
         _Fname =request_data.get("Fname")
         _Lname =request_data.get("Lname")
@@ -233,6 +237,3 @@ class EditUser(Resource):
      #   user_id = jwt_payload[.get("JWT_IDENTITY_CLAIM")]
       #  return User.query.get(user_id)
 
-
-    
-     

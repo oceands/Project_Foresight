@@ -1,5 +1,3 @@
-
-#Changes newly added
 from datetime import datetime
 
 from flask import current_app as app

@@ -1,10 +1,10 @@
 import json
 from flask import Flask
 from flask_cors import CORS
+import logging
 
 # Importing the rest_api from routes.py
-from auth.routes import rest_api
-
+from endpoints import Foresight_API
 # Importing the extensions
 from extensions import db, jwt
 
@@ -18,7 +18,8 @@ app.config.from_object('config.BaseConfig')
 db.init_app(app)
 
 # Initializing the rest_api with the app instance
-rest_api.init_app(app)
+Foresight_API.init_app(app)
+
 
 # Initializing the JWTManager extension with the app instance
 jwt.init_app(app)
@@ -38,13 +39,20 @@ def initialize_database():
 # Custom response for debugging
 @app.after_request
 def after_request(response):
-    if int(response.status_code) >= 400:
-        response_data = json.loads(response.get_data())
-        if "errors" in response_data:
-            response_data = {"success": False,
-                             "msg": list(response_data["errors"].items())[0][1]}
-            response.set_data(json.dumps(response_data))
-        response.headers.add('Content-Type', 'application/json')
+    # Check if the response status code indicates an error (400 or higher)
+    if response.status_code >= 400:
+        try:
+            response_data = json.loads(response.get_data())
+            if "errors" in response_data:
+                # If "errors" key exists in the response data, transform it
+                response_data = {"success": False,
+                                 "msg": list(response_data["errors"].items())[0][1]}
+                response.set_data(json.dumps(response_data))
+            response.headers.add('Content-Type', 'application/json')
+        except json.JSONDecodeError as e:
+            # If JSON decoding fails, log the error and leave the response unchanged
+            logging.error(f"JSON decoding error: {e}")
+
     return response
 
 # This part runs the Flask app if this script is being executed directly
