@@ -1,2 +1,4 @@
 # Ignore Visual Studio Code directory
 .venv/
+__pycache__/
+
