@@ -36,7 +36,7 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
   return (
     <MenuItem
       active={selected === title}
-      style={{ color: colors.grey[100] }}
+      style={{ color: colors.grey[100], position: "relative" }}
       onClick={() => setSelected(title)}
       icon={icon}
       routerLink={<Link to={to} />}
@@ -65,6 +65,9 @@ const MyProSidebar = () => {
         "& .sidebar": {
           border: "none",
         },
+        /* Add this CSS to your stylesheet or in a separate CSS file */
+
+
         "& .menu-icon": {
           backgroundColor: "transparent !important",
         },
@@ -75,20 +78,29 @@ const MyProSidebar = () => {
           color: "inherit !important",
           backgroundColor: "transparent !important",
         },
+/* Exclude the "admin-box" from the background color rule */
+"& .menu-item:not(.admin-box):hover, & .menu-item:not(.sub-menu).active:not(.admin-box)": {
+  backgroundColor: "rgba(255, 87, 34, 0.3) !important",
+  boxShadow: "0px 5px 15px rgba(0,0,0,0.3) !important"
+},
 
-        "& .menu-item:not(.sub-menu):hover, & .menu-item:not(.sub-menu).active": {
-          color: `${colors.pinkAccents[500]} !important`,
-          backgroundColor: "transparent !important",
-        },
+
+
         "& .sub-menu-content": {
           backgroundColor: `${colors.primary[450]} !important`,
           
         },
-        "& .sub-menu-header .menu-anchor:hover": {
-          color: `${colors.pinkAccents[500]} !important`,
-          backgroundColor: "transparent !important",
+       
+        "& .menu-item.active::after": {
+          content: '""',
+          position: 'absolute',
+          right: 0,
+          top: '50%',
+          transform: 'translateY(-50%)',
+          width: '5px',
+          height: '50px',
+          backgroundColor: '#FF5722'
         }
-
 
       }}
     >
@@ -99,80 +111,40 @@ const MyProSidebar = () => {
         image={sidebarImage}
       >
         <Menu iconshape="square">
-          <MenuItem
-            icon={
-              collapsed ? (
-                <MenuOutlinedIcon onClick={() => collapseSidebar()} />
-              ) : sidebarRTL ? (
-                <SwitchLeftOutlinedIcon
-                  onClick={() => setSidebarRTL(!sidebarRTL)}
-                />
-              ) : (
-                <SwitchRightOutlinedIcon
-                  onClick={() => setSidebarRTL(!sidebarRTL)}
-                />
-              )
-            }
-            style={{
-              margin: "10px 0 20px 0",
-              color: colors.grey[100],
-            }}
-          >
-            {!collapsed && (
-              <Box
-                display="flex"
-                justifyContent="space-between"
-                alignItems="center"
-                ml="15px"
-              >
-                <Typography variant="h3" color={colors.grey[100]}>
-                  ADMIN
-                </Typography>
-                <IconButton
-                  onClick={
-                    broken ? () => toggleSidebar() : () => collapseSidebar()
-                  }
-                >
-                  <CloseOutlinedIcon />
-                </IconButton>
-              </Box>
-            )}
-          </MenuItem>
+          
+       
           {!collapsed && (
             <Box mb="25px">
               <Box
                 display="flex"
                 justifyContent="center"
                 alignItems="center"
+                paddingTop="40px"
+                paddingBottom="40px"
                 sx={{
                   "& .avater-image": {
-                    backgroundColor: colors.primary[500],
+                    backgroundColor: colors.primary[400],
                   },
                 }}
               >
                 <img
                   className="avater-image"
                   alt="profile user"
-                  width="100px"
-                  height="100px"
+                  width="124px"
+                  height="102px"
                   backgroundColor="white"
-                  src={"../../assets/logo.png"}
-                  style={{ cursor: "pointer", borderRadius: "50%" }}
+                  src={"../../assets/logo5.png"}
+                  style={{ cursor: "pointer", padding: "10px" }}
                 />
               </Box>
               <Box textAlign="center">
-                <Typography
-                  variant="h3"
-                  fontWeight="bold"
-                  sx={{ m: "10px 0 0 0" }}
-                >
-                  <span style={{ color: colors.pinkAccents[600] }}>Fore</span>sight
-                </Typography>
+              
               </Box>
             </Box>
           )}
-          <Box paddingLeft={collapsed ? undefined : "10%"}>
+          <Box paddingLeft={collapsed ? undefined : "0"}>
             <Item
+              
               title="Dashboard"
               to="/"
               icon={<HomeOutlinedIcon />}
@@ -222,7 +194,7 @@ const MyProSidebar = () => {
             </Box>
             
             {/*Here we are adding the new sub menue*/}
-            <Box paddingLeft={collapsed ? undefined : "10%"} className="sub-menu">
+            <Box paddingLeft={collapsed ? undefined : "0"} className="sub-menu">
             <SubMenu // Add SubMenu component for the "Settings" menu item
               label="Settings"
               icon={<SettingsOutlinedIcon />}
@@ -275,7 +247,7 @@ const MyProSidebar = () => {
             </SubMenu> 
             </Box>
 
-            <Box paddingLeft={collapsed ? undefined : "10%"}>
+            <Box paddingLeft={collapsed ? undefined : "0"}>
             <Item
               title="FAQ Page"
               to="/faq"
@@ -298,12 +270,13 @@ const MyProSidebar = () => {
                textAlign="center"
                padding="10px" // Add some padding for spacing
                backgroundColor={colors.primary[400]} // Match the sidebar background
-               color={colors.grey[100]} // Text color
+               color= "#FF5722 !important" // Text color
                position="absolute"
                bottom="0"
                width="100%"
                fontWeight="bold"
-        >Version 1.0.0</Typography>
+               
+        >Version 1.0</Typography>
       </Sidebar>
     </Box>
   );

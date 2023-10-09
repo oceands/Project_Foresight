@@ -36,25 +36,8 @@ const Dashboard = () => {
         alignItems={smScreen ? "center" : "start"}
         m="10px 0"
       >
-        <Header title="WELCOME TO YOUR DASHBOARD ☀️ " subtitle="Harvey Spectre" />
+        <Header title="Welcome Back, Admin!" />
 
-        <Box>
-          <Button
-            sx={{
-          backgroundColor: colors.pinkAccents[500],
-          color: colors.grey[100],
-          fontSize: "14px",
-          fontWeight: "bold",
-          padding: "10px 20px",
-          '&:hover': {
-            backgroundColor: colors.pinkAccents[600], // New color on hover
-          },
-        }}
-          >
-            <DownloadOutlinedIcon sx={{ mr: "10px" }} />
-            Download Reports
-          </Button>
-        </Box>
       </Box>
 
       {/* GRID & CHARTS */}
@@ -62,7 +45,7 @@ const Dashboard = () => {
         <Grid xs={12} sm={12} md={6} lg={3} xl={3}>
           <Box
             width="100%"
-            backgroundColor={colors.primary[400]}
+            backgroundColor={colors.primary[475]}
             display="flex"
             alignItems="center"
             justifyContent="center"

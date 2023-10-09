@@ -66,6 +66,7 @@ export const tokens = (mode) => ({
     : {
         grey: {
           100: "#141414",
+          150:"FF5722",
           200: "#292929",
           300: "#3d3d3d",
           400: "#525252",
@@ -79,8 +80,9 @@ export const tokens = (mode) => ({
           100: "#010108",
           200: "#020310",
           300: "#030419",
-          400: "#f2f0f0", // manually changed
-          450: "#e7e3e3", // manually added for sub-menu in side bar
+          400: "#FFFFFF", // manually changed
+          450: "#FAF8F8", // manually added for sub-menu in side bar
+          475: "FAF8F8",
           500: "#050729",
           600: "#373954",
           700: "#696a7f",
