@@ -23,9 +23,10 @@ export const tokens = (mode) => ({
           300: "#696a7f",
           400: "#373954",
           450: "#2c2e43", // manually added for sub-menu in side bar
+          460: "EAEAEA",
           500: "#050729",
-          600: "#040621",
-          700: "#030419",
+          600: "#3F51B5",
+          700: "#3F51B5",
           800: "#020310",
           900: "#010108"
         },
@@ -37,7 +38,7 @@ export const tokens = (mode) => ({
           500: "#d791bc",
           600: "#ac7496",
           700: "#815771",
-          800: "#563a4b",
+          800: "#FF5722",
           900: "#2b1d26"
         },
         yellowAccent: {
@@ -82,6 +83,7 @@ export const tokens = (mode) => ({
           300: "#030419",
           400: "#FFFFFF", // manually changed
           450: "#FAF8F8", // manually added for sub-menu in side bar
+          460: "EAEAEA",
           475: "FAF8F8",
           500: "#050729",
           600: "#373954",
@@ -95,9 +97,9 @@ export const tokens = (mode) => ({
           300: "#815771",
           400: "#ac7496",
           500: "#d791bc",
-          600: "#dfa7c9",
-          700: "#e7bdd7",
-          800: "#efd3e4",
+          600: "#3F51B5",
+          700: "#3F51B5",
+          800: "#FF5722",
           900: "#f7e9f2"
         },
         yellowAccent: {
@@ -163,7 +165,7 @@ export const themeSettings = (mode) => {
               light: colors.grey[100]
             },
             background: {
-              default: "#fcfcfc"
+              default: "#F5F5F5"
             }
           })
     },

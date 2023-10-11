@@ -45,7 +45,7 @@ const Dashboard = () => {
         <Grid xs={12} sm={12} md={6} lg={3} xl={3}>
           <Box
             width="100%"
-            backgroundColor={colors.primary[475]}
+            backgroundColor={colors.primary[460]}
             display="flex"
             alignItems="center"
             justifyContent="center"
