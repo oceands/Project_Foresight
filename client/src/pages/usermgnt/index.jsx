@@ -199,7 +199,7 @@ const Usermgnt = () => {
         },
         
           "& .name-padding-left": {
-            paddingLeft: "40px",
+            paddingLeft: "50px",
           },
           "& .name-header-padding-left": {
             paddingLeft: "50px",
