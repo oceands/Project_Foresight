@@ -1,33 +1,30 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { Menu, Sidebar, MenuItem, SubMenu } from "react-pro-sidebar";
 import { useProSidebar } from "react-pro-sidebar";
-
 import { useSidebarContext } from "./sidebarContext";
-
 import { Link } from "react-router-dom";
 import { tokens } from "../../../theme";
 import { useTheme, Box, Typography, IconButton } from "@mui/material";
 
-import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
-import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined';
-import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
-import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
-import FeedOutlinedIcon from '@mui/icons-material/FeedOutlined';
-import PsychologyOutlinedIcon from '@mui/icons-material/PsychologyOutlined';
-import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
-import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined';
-import HeadsetMicOutlinedIcon from '@mui/icons-material/HeadsetMicOutlined';
+// MAIN SIDEBAR ICONS
+//MAIN MENUE ICONS
+import {FaChartPie} from 'react-icons/fa';
+import {MdOutlineNotificationAdd} from 'react-icons/md';
+import {FaRegEye} from 'react-icons/fa'
+import {LuUsers} from 'react-icons/lu'
+import {TbReport} from 'react-icons/tb'
+import {BiChip} from 'react-icons/bi'
+import {LuSettings} from 'react-icons/lu'
+import {AiOutlineQuestionCircle} from 'react-icons/ai'
+import {FiHeadphones} from 'react-icons/fi'
 
-import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
-import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
-import SwitchRightOutlinedIcon from "@mui/icons-material/SwitchRightOutlined";
-import SwitchLeftOutlinedIcon from "@mui/icons-material/SwitchLeftOutlined";
 
+// SUB SETTINGS ICONS
 import CameraAltOutlinedIcon from '@mui/icons-material/CameraAltOutlined';
 import LocalPoliceOutlinedIcon from '@mui/icons-material/LocalPoliceOutlined';
 import MapOutlinedIcon from '@mui/icons-material/MapOutlined';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
-import LockPersonOutlinedIcon from '@mui/icons-material/LockPersonOutlined';
+import LockPersonOutlinedIcon from '@mui/icons-material/LockPersonOutlined'
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
   const theme = useTheme();
@@ -81,7 +78,8 @@ const MyProSidebar = () => {
 /* Exclude the "admin-box" from the background color rule */
 "& .menu-item:not(.admin-box):hover, & .menu-item:not(.sub-menu).active:not(.admin-box)": {
   backgroundColor: "rgba(255, 87, 34, 0.3) !important",
-  boxShadow: "0px 5px 15px rgba(0,0,0,0.3) !important"
+  //boxShadow: "0 8px 8px -4px !important"
+  boxShadow: "rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px !important"
 },
 
 
@@ -147,7 +145,7 @@ const MyProSidebar = () => {
               
               title="Dashboard"
               to="/"
-              icon={<HomeOutlinedIcon />}
+              icon={<FaChartPie />}
               selected={selected}
               setSelected={setSelected}
             />
@@ -155,7 +153,7 @@ const MyProSidebar = () => {
             <Item
               title="Notifications"
               to="/notifications"
-              icon={<NotificationsOutlinedIcon/>}
+              icon={<MdOutlineNotificationAdd/>}
               selected={selected}
               setSelected={setSelected}
             />
@@ -163,7 +161,7 @@ const MyProSidebar = () => {
             <Item
               title="Incidents"
               to="/incidents"
-              icon={<VisibilityOutlinedIcon/>}
+              icon={<FaRegEye/>}
               selected={selected}
               setSelected={setSelected}
             />
@@ -171,7 +169,7 @@ const MyProSidebar = () => {
             <Item
               title="User Management"
               to="/usermgnt"
-              icon={<PeopleOutlinedIcon />}
+              icon={<LuUsers />}
               selected={selected}
               setSelected={setSelected}
             />
@@ -179,7 +177,7 @@ const MyProSidebar = () => {
             <Item
               title="Reports"
               to="/reports"
-              icon={<FeedOutlinedIcon />}
+              icon={<TbReport />}
               selected={selected}
               setSelected={setSelected}
             />
@@ -187,22 +185,22 @@ const MyProSidebar = () => {
             <Item
               title="AI Models"
               to="/ai"
-              icon={<PsychologyOutlinedIcon />}
+              icon={<BiChip />}
               selected={selected}
               setSelected={setSelected}
             />
             </Box>
             
-            {/*Here we are adding the new sub menue*/}
+            {/*SUB - MENU */}
             <Box paddingLeft={collapsed ? undefined : "0"} className="sub-menu">
             <SubMenu // Add SubMenu component for the "Settings" menu item
               label="Settings"
-              icon={<SettingsOutlinedIcon />}
+              icon={<LuSettings />}
               selected={selected}
               setSelected={setSelected}
               className="sub-menu-header"
             >
-              {/*Adding Sub menu items */}
+              {/*SUB MENU ITEMS */}
               
                <Item
               title="Camera"
@@ -251,7 +249,7 @@ const MyProSidebar = () => {
             <Item
               title="FAQ Page"
               to="/faq"
-              icon={<HelpOutlineOutlinedIcon />}
+              icon={<AiOutlineQuestionCircle />}
               selected={selected}
               setSelected={setSelected}
             />
@@ -259,7 +257,7 @@ const MyProSidebar = () => {
             <Item
               title="Contact Us"
               to="/contact"
-              icon={<HeadsetMicOutlinedIcon />}
+              icon={<FiHeadphones />}
               selected={selected}
               setSelected={setSelected}
             />   
