@@ -56,17 +56,19 @@ const MyProSidebar = () => {
   return (
     <Box
       sx={{
+       
+      borderRight: '1px solid #DCDDDD !important',
         position: "sticky",
         display: "flex",
         height: "100vh",
         top: 0,
         bottom: 0,
+        
         zIndex: 10000,
         "& .sidebar": {
           border: "none",
         },
         /* Add this CSS to your stylesheet or in a separate CSS file */
-
 
         "& .menu-icon": {
           backgroundColor: "transparent !important",
@@ -108,6 +110,7 @@ const MyProSidebar = () => {
         breakPoint="md"
         rtl={sidebarRTL}
         backgroundColor={colors.primary[400]}
+      
         image={sidebarImage}
       >
         <Menu iconshape="square">

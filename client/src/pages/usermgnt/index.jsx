@@ -1,7 +1,8 @@
 import React from "react";
+import { useContext } from "react";
 import { Box,Button, Typography, useTheme } from "@mui/material";
-import { DataGrid } from "@mui/x-data-grid";
-import { tokens } from "../../theme";
+import { DataGrid, GridToolbar } from "@mui/x-data-grid";
+import { ColorModeContext, tokens} from "../../theme";
 import { mockDataTeam } from "../../data/mockData";
 import AdminPanelSettingsOutlinedIcon from "@mui/icons-material/AdminPanelSettingsOutlined";
 import LockOpenOutlinedIcon from "@mui/icons-material/LockOpenOutlined";
@@ -11,10 +12,24 @@ import InputBase from "@mui/material/InputBase";
 import IconButton from "@mui/material/IconButton";
 import SearchIcon from "@mui/icons-material/Search";
 
+import LightModeOutlinedIcon from "@mui/icons-material/LightModeOutlined";
+import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
+import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined";
+import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
+
+import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
+
+
+import { useProSidebar } from "react-pro-sidebar";
+
 
 const Usermgnt = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+
+  const colorMode = useContext(ColorModeContext);
+
+  const { toggleSidebar, broken, rtl } = useProSidebar();
   const columns = [
     {
       field: "name",
@@ -33,7 +48,7 @@ const Usermgnt = () => {
       type: "number",
       headerAlign: "left",
       align: "left",
-      flex: 0.25
+      flex: 0.20
       
     },
    
@@ -41,6 +56,8 @@ const Usermgnt = () => {
       field: "role",
       headerName: "ROLE",
       flex: 0.20,
+      className: 'role-padding-right',
+      
       
       renderCell: ({ row: { role } }) => {
         return (
@@ -71,14 +88,67 @@ const Usermgnt = () => {
     
   ];
   return (
-    <Box m="20px">
-      <Box display="flex" justifyContent="space-between" alignItems="center">
-        <Header  title="USER MANAGEMENT" />
-      </Box>
+    
+    <Box>
+       <Box display="flex" justifyContent="space-between" 
+
+       
+       sx={{ backgroundColor: colors.primary[400], 
+        paddingTop: '20px',  // Increase the top padding to 20px
+        paddingLeft: '20px', // Increase the left padding to 20px
+        paddingRight: '20px', // Increase the right padding to 20px
+        paddingBottom: '40px',
+
+      borderBottom: '1px solid #DCDDDD !important',
+    
+    }}>
+      
+    <Box display="flex" >
+      {broken && !rtl && (
+        <IconButton
+          sx={{ margin: "0 6 0 2" }}
+          onClick={() => toggleSidebar()}
+        >
+          <MenuOutlinedIcon />
+        </IconButton>
+        
+      )}
+   
+    </Box>
+    <Box display="flex">
+
+      <IconButton onClick={colorMode.toggleColorMode}>
+        {theme.palette.mode === "dark" ? (
+          
+         <LightModeOutlinedIcon />
+        ) : (
+          <DarkModeOutlinedIcon />
+        )}
+      </IconButton>
+      <IconButton>
+        <NotificationsOutlinedIcon />
+      </IconButton>
+      <IconButton>
+        <PersonOutlinedIcon />
+      </IconButton>
+      {broken && rtl && (
+        <IconButton
+          sx={{ margin: "0 6 0 2" }}
+          onClick={() => toggleSidebar()}
+        >
+          <MenuOutlinedIcon />
+        </IconButton>
+      )}
+    </Box>
+  </Box>
+     
       <Box
         m="8px 0 0 0"
         height="80vh"
         sx={{
+          marginLeft: "25px",
+          marginRight: "30px",
+          marginTop: "100px",
           "& .MuiDataGrid-root": {
             border: "none",
             fontSize: "15px",
@@ -124,8 +194,12 @@ const Usermgnt = () => {
             color: `${colors.grey[100]} !important`,
             fontSize: "14px",
           },
+          "& .MuiDataGrid-cell--withRenderer": {
+            paddingRight: "30px",
+        },
+        
           "& .name-padding-left": {
-            paddingLeft: "50px",
+            paddingLeft: "40px",
           },
           "& .name-header-padding-left": {
             paddingLeft: "50px",
@@ -149,7 +223,7 @@ const Usermgnt = () => {
           },
           "& .MuiTablePagination-actions": {
             marginLeft: "11cm",
-            fontSize: "15px"
+            fontSize: "15px",
 
           },
           "& .admin-icon": {
@@ -161,23 +235,44 @@ const Usermgnt = () => {
            "& .lock-icon": {
             color: colors.primary[400]
            },
-           '.MuiDataGrid-columnSeparator': {
+           '& .MuiDataGrid-columnSeparator': {
             display: 'none',
           },
           "& .MuiDataGrid-cell": {
             
   borderBottom: "1px solid #E0E0E0", 
           },
+          "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
+            fontSize: "13px",
+            padding: "20px 4px 20px"
+            
+          },
 // ...
 
           
         }}
       >
-        <Box display="flex" justifyContent="flex-end" width="99%" paddingBottom="30px">
-        <InputBase sx={{ ml: 1, flex: 1 }} placeholder="Search" />
-           <IconButton type="button">
-             <SearchIcon />
-           </IconButton>
+
+        <Box display="flex" justifyContent="space-between" width="99%" paddingBottom="30px">
+        {broken && !rtl && (
+          <IconButton
+            sx={{ margin: "0 6 0 2" }}
+            onClick={() => toggleSidebar()}
+          >
+            <MenuOutlinedIcon />
+          </IconButton>
+        )}
+        <Box
+          display="flex"
+          backgroundColor={colors.primary[400]}
+          p={0.2}
+          borderRadius={1}
+        >  <IconButton type="button">
+        <SearchIcon />
+      </IconButton>
+          <InputBase sx={{ flex: 1 }} placeholder="Search" />
+        
+        </Box>
     <Button
      
      type="addcamera"
@@ -197,7 +292,8 @@ const Usermgnt = () => {
     </Button>
 </Box>
 
-        <DataGrid rows={mockDataTeam} columns={columns} />
+        <DataGrid rows={mockDataTeam} columns={columns} 
+          components={{ Toolbar: GridToolbar }}/>
       </Box>
     </Box>
   );
