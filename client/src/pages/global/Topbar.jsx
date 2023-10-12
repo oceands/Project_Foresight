@@ -16,7 +16,10 @@ const Topbar = () => {
   const { toggleSidebar, broken, rtl } = useProSidebar();
 
   return (
-    <Box display="flex" justifyContent="space-between" p={2}>
+    <Box display="flex" justifyContent="space-between" p={4} sx={{ backgroundColor: colors.primary[400], 
+    
+      borderBottom: '1px solid #DCDDDD',
+      }}>
       <Box display="flex">
         {broken && !rtl && (
           <IconButton
