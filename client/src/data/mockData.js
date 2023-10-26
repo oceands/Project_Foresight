@@ -1,3 +1,4 @@
+import { colors } from "@mui/material";
 import { tokens } from "../theme";
 
 
@@ -18,80 +19,6 @@ export const mockDataCamera = [
   
 ]
 
-export const mockDataTeam = [
-  {
-    id: 1,
-    name: "Jon Snow",
-    email: "jonsnow@gmail.com",
-    dateJoined: "20-06-2023",
-    location: "Los Angeles, CA",
-    role: "admin"
-  },
-  {
-    id: 2,
-    name: "Cersei Lannister",
-    email: "cerseilannister@gmail.com",
-    dateJoined: "20-06-2023",
-    location: "Los Angeles, CA",
-    role: "manager"
-  },
-  {
-    id: 3,
-    name: "Jaime Lannister",
-    email: "jaimelannister@gmail.com",
-    dateJoined: "20-06-2023",
-    location: "Lagos, NG",
-    role: "user"
-  },
-  {
-    id: 4,
-    name: "Anya Stark",
-    email: "anyastark@gmail.com",
-    dateJoined: "20-06-2023",
-    location: "Lagos, NG",
-    role: "admin"
-  },
-  {
-    id: 5,
-    name: "Daenerys Targaryen",
-    email: "daenerystargaryen@gmail.com",
-    dateJoined: "20-06-2023",
-    location: "Cupertino, CA",
-    role: "user"
-  },
-  {
-    id: 6,
-    name: "Ever Melisandre",
-    email: "evermelisandre@gmail.com",
-    dateJoined: "20-06-2023",
-    location: "Cupertino, CA",
-    role: "manager"
-  },
-  {
-    id: 7,
-    name: "Ferrara Clifford",
-    email: "ferraraclifford@gmail.com",
-    dateJoined: "20-06-2023",
-    location: "Austin, TX",
-    role: "user"
-  },
-  {
-    id: 8,
-    name: "Rossini Frances",
-    email: "rossinifrances@gmail.com",
-    dateJoined: "20-06-2023",
-    location: "Austin, TX",
-    role: "user"
-  },
-  {
-    id: 9,
-    name: "Harvey Roxie",
-    email: "harveyroxie@gmail.com",
-    dateJoined: "20-06-2023",
-    location: "Cupertino, CA",
-    role: "admin"
-  }
-];
 export const mockDataDispatch = [
 
 
@@ -107,107 +34,345 @@ export const mockDataDispatch = [
   },
   
 ]
-export const mockDataContacts = [
+export const mockDataNotification = [
   {
     id: 1,
-    incidentDateTime: "20-06-2023 09:55",
-    incidentType: "Verified",
-    incidentModule: "Fire",
-    incidentCamera: "0912 Won Street, Alabama, SY 10001",
-    incidentStatus: "Active",
-    incidentID: 123512,
+    date: new Date().toISOString(),
+    type: Math.random() > 0.5 ? "Verified" : "Pending",
+    module: Math.random() > 0.5 ? "Fire Detection" : "Weapon Detection",
+    camera: "Hallway Camera 1",
+    status: Math.random() > 0.5 ? "Active" : "Reviewed",
   },
   {
     id: 2,
-    incidentDateTime: "20-06-2023 09:55",
-    incidentType: "Verified",
-    incidentModule: "Fire",
-    incidentCamera: "1234 Main Street, New York, NY 10001",
-    incidentStatus: "Active",
-    incidentID: 123512,
+    date: new Date().toISOString(),
+    type: Math.random() > 0.5 ? "Verified" : "Pending",
+    module: Math.random() > 0.5 ? "Fire Detection" : "Weapon Detection",
+    camera: "Room 101 Camera",
+    status: Math.random() > 0.5 ? "Active" : "Reviewed",
   },
   {
     id: 3,
-    incidentDateTime: "20-06-2023 09:55",
-    incidentType: "Verified",
-    incidentModule: "Fire",
-    incidentCamera: "3333 Want Blvd, Estanza, NAY 42125",
-    incidentStatus: "Active",
-    incidentID: 4132513,
+    date: new Date().toISOString(),
+    type: Math.random() > 0.5 ? "Verified" : "Pending",
+    module: Math.random() > 0.5 ? "Fire Detection" : "Weapon Detection",
+    camera: "Canteen Camera 1",
+    status: Math.random() > 0.5 ? "Active" : "Reviewed",
   },
   {
     id: 4,
-    incidentDateTime: "20-06-2023 09:55",
-    incidentType: "Verified",
-    incidentModule: "Fire",
-    incidentCamera: "1514 Main Street, New York, NY 22298",
-    incidentStatus: "Active",
-    incidentID: 123512,
+    date: new Date().toISOString(),
+    type: Math.random() > 0.5 ? "Verified" : "Pending",
+    module: Math.random() > 0.5 ? "Fire Detection" : "Weapon Detection",
+    camera: "Stairwell Camera 1",
+    status: Math.random() > 0.5 ? "Active" : "Reviewed",
   },
   {
     id: 5,
-    incidentDateTime: "20-06-2023 09:55",
-    incidentType: "Verified",
-    incidentModule: "Fire",
-    incidentCamera: "11122 Welping Ave, Tenting, CD 21321",
-    incidentStatus: "Active",
-    incidentID: 123512,
+    date: new Date().toISOString(),
+    type: Math.random() > 0.5 ? "Verified" : "Pending",
+    module: Math.random() > 0.5 ? "Fire Detection" : "Weapon Detection",
+    camera: "Elevator Camera 1",
+    status: Math.random() > 0.5 ? "Active" : "Reviewed",
   },
   {
     id: 6,
-    incidentDateTime: "20-06-2023 09:55",
-    incidentType: "Verified",
-    incidentModule: "Fire",
-    incidentCamera: "1234 Canvile Street, Esvazark, NY 10001",
-    incidentStatus: "Active",
-    incidentID: 123512,
+    date: new Date().toISOString(),
+    type: Math.random() > 0.5 ? "Verified" : "Pending",
+    module: Math.random() > 0.5 ? "Fire Detection" : "Weapon Detection",
+    camera: "Parking Garage Camera 1",
+    status: Math.random() > 0.5 ? "Active" : "Reviewed",
   },
   {
     id: 7,
-    incidentDateTime: "20-06-2023 09:55",
-    incidentType: "Verified",
-    incidentModule: "Fire",
-    incidentCamera: "22215 Super Street, Everting, ZO 515234",
-    incidentStatus: "Active",
-    incidentID: 123512,
+    date: new Date().toISOString(),
+    type: Math.random() > 0.5 ? "Verified" : "Pending",
+    module: Math.random() > 0.5 ? "Fire Detection" : "Weapon Detection",
+    camera: "Perimeter Camera 1",
+    status: Math.random() > 0.5 ? "Active" : "Reviewed",
   },
   {
     id: 8,
-    incidentDateTime: "20-06-2023 09:55",
-    incidentType: "Verified",
-    incidentModule: "Fire",
-    incidentCamera: "4123 Ever Blvd, Wentington, AD 142213",
-    incidentStatus: "Active",
-    incidentID: 512315,
+    date: new Date().toISOString(),
+    type: Math.random() > 0.5 ? "Verified" : "Pending",
+    module: Math.random() > 0.5 ? "Fire Detection" : "Weapon Detection",
+    camera: "Loading Dock Camera 1",
+    status: Math.random() > 0.5 ? "Active" : "Reviewed",
   },
   {
     id: 9,
-    incidentDateTime: "20-06-2023 09:55",
-    incidentType: "Verified",
-    incidentModule: "Fire",
-    incidentCamera: "51234 Avery Street, Cantory, ND 212412",
-    incidentStatus: "Active",
-    incidentID: 928397,
+    date: new Date().toISOString(),
+    type: Math.random() > 0.5 ? "Verified" : "Pending",
+    module: Math.random() > 0.5 ? "Fire Detection" : "Weapon Detection",
+    camera: "Server Room Camera 1",
+    status: Math.random() > 0.5 ? "Active" : "Reviewed",
   },
   {
     id: 10,
-    incidentDateTime: "20-06-2023 09:55",
-    incidentType: "Verified",
-    incidentModule: "Fire",
-    incidentCamera: "4123 Easer Blvd, Wentington, AD 142213",
-    incidentStatus: "Active",
-    incidentID: 533215,
-  },
-  {
-    id: 11,
-    incidentDateTime: "20-06-2023 09:55",
-    incidentType: "Verified",
-    incidentModule: "Fire",
-    incidentCamera: "51234 Fiveton Street, CunFory, ND 212412",
-    incidentStatus: "Active",
-    incidentID: 92197,
+    date: new Date().toISOString(),
+    type: Math.random() > 0.5 ? "Verified" : "Pending",
+    module: Math.random() > 0.5 ? "Fire Detection" : "Weapon Detection",
+    camera: "Storage Room Camera 1",
+    status: Math.random() > 0.5 ? "Active" : "Reviewed",
   },
 ];
+
+
+
+export const mockDataIncidents = [
+  {
+    id: 1,
+    date: new Date().toISOString(),
+    type: "Verified",
+    module: "Fire Detection",
+    camera: "Hallway Camera 1",
+    status: "Active",
+  },
+  {
+    id: 2,
+    date: new Date().toISOString(),
+    type: "Verified",
+    module: "Weapon Detection",
+    camera: "Room 101 Camera",
+    status: "Reviewed",
+  },
+  {
+    id: 3,
+    date: new Date().toISOString(),
+    type: "Verified",
+    module: "Fire Detection",
+    camera: "Canteen Camera 1",
+    status: "Active",
+  },
+  {
+    id: 4,
+    date: new Date().toISOString(),
+    type: "Verified",
+    module: "Weapon Detection",
+    camera: "Stairwell Camera 1",
+    status: "Reviewed",
+  },
+  {
+    id: 5,
+    date: new Date().toISOString(),
+    type: "Verified",
+    module: "Fire Detection",
+    camera: "Elevator Camera 1",
+    status: "Active",
+  },
+  {
+    id: 6,
+    date: new Date().toISOString(),
+    type: "Verified",
+    module: "Weapon Detection",
+    camera: "Parking Garage Camera 1",
+    status: "Reviewed",
+  },
+  {
+    id: 7,
+    date: new Date().toISOString(),
+    type: "Verified",
+    module: "Fire Detection",
+    camera: "Perimeter Camera 1",
+    status: "Active",
+  },
+  {
+    id: 8,
+    date: new Date().toISOString(),
+    type: "Verified",
+    module: "Weapon Detection",
+    camera: "Loading Dock Camera 1",
+    status: "Reviewed",
+  },
+  {
+    id: 9,
+    date: new Date().toISOString(),
+    type: "Verified",
+    module: "Fire Detection",
+    camera: "Server Room Camera 1",
+    status: "Active",
+  },
+  {
+    id: 10,
+    date: new Date().toISOString(),
+    type: "Verified",
+    module: "Weapon Detection",
+    camera: "Storage Room Camera 1",
+    status: "Reviewed",
+  },
+];
+
+export const mockUserManagement = [
+  {
+    id: 1,
+    name: "John Doe",
+    email: "johndoe@example.com",
+    joiningDate: "2022-01-15",
+    roleAccess: "Admin",
+  },
+  {
+    id: 2,
+    name: "Jane Smith",
+    email: "janesmith@example.com",
+    joiningDate: "2022-02-20",
+    roleAccess: "User",
+  },
+  {
+    id: 3,
+    name: "Robert Johnson",
+    email: "robertjohnson@example.com",
+    joiningDate: "2022-03-10",
+    roleAccess: "User",
+  },
+  {
+    id: 4,
+    name: "Emily Wilson",
+    email: "emilywilson@example.com",
+    joiningDate: "2022-04-05",
+    roleAccess: "Admin",
+  },
+  {
+    id: 5,
+    name: "Michael Brown",
+    email: "michaelbrown@example.com",
+    joiningDate: "2022-05-12",
+    roleAccess: "User",
+  },
+  {
+    id: 6,
+    name: "Olivia Davis",
+    email: "oliviadavis@example.com",
+    joiningDate: "2022-06-28",
+    roleAccess: "User",
+  },
+  {
+    id: 7,
+    name: "William White",
+    email: "williamwhite@example.com",
+    joiningDate: "2022-07-15",
+    roleAccess: "Admin",
+  },
+  {
+    id: 8,
+    name: "Sophia Lee",
+    email: "sophialee@example.com",
+    joiningDate: "2022-08-03",
+    roleAccess: "User",
+  },
+  {
+    id: 9,
+    name: "James Taylor",
+    email: "jamestaylor@example.com",
+    joiningDate: "2022-09-21",
+    roleAccess: "User",
+  },
+  {
+    id: 10,
+    name: "Lily Johnson",
+    email: "lilyjohnson@example.com",
+    joiningDate: "2022-10-17",
+    roleAccess: "Admin",
+  },
+];
+
+export const mockDataReports = [
+  {
+    id: 100012,
+    title: "Attempted Burglary",
+    IncidentID: 100190,
+    createdBy: "Adnan M",
+    DateCreated: "10-12-2000",
+    Status: "In-progress",
+  },
+  {
+    id: 100013,
+    title: "False Positive Fire",
+    IncidentID: 100191,
+    createdBy: "Simran P",
+    DateCreated: "10-12-2000",
+    Status: "Complete",
+  },
+  {
+    id: 100014,
+    title: "Attempted Burglary",
+    IncidentID: 100192,
+    createdBy: "Ocean D",
+    DateCreated: "10-12-2000",
+    Status: "Complete",
+  },
+  {
+    id: 100015,
+    title: "Stage 4 Fire Incident",
+    IncidentID: 100193,
+    createdBy: "Saim A",
+    DateCreated: "10-12-2000",
+    Status: "Complete",
+  },
+  {
+    id: 100016,
+    title: "Physical Assault",
+    IncidentID: 100194,
+    createdBy: "Saim A",
+    DateCreated: "10-12-2000",
+    Status: "Complete",
+  },
+  {
+    id: 100017,
+    title: "Stage 2 Fire Incident",
+    IncidentID: 100195,
+    createdBy: "Uzair N",
+    DateCreated: "10-12-2000",
+    Status: "Complete",
+  },
+  {
+    id: 100018,
+    title: "False Alarm",
+    IncidentID: 100196,
+    createdBy: "Saim A",
+    DateCreated: "10-12-2000",
+    Status: "In-progress",
+  },
+  {
+    id: 100019,
+    title: "Knife Detection",
+    IncidentID: 100197,
+    createdBy: "Ocean D",
+    DateCreated: "10-12-2000",
+    Status: "Complete",
+  },
+  {
+    id: 100020,
+    title: "Stage 1 Fire Alarm",
+    IncidentID: 100198,
+    createdBy: "Simran P",
+    DateCreated: "10-12-2000",
+    Status: "In-progress",
+  },
+  {
+    id: 100021,
+    title: "Attempted Robbery",
+    IncidentID: 100199,
+    createdBy: "Adnan M",
+    DateCreated: "10-12-2000",
+    Status: "In-progress",
+  },
+];
+
+export const mockDataContacts = [
+  {
+    id: 1,
+    city: "Dubai, United Arab Emirates",
+    email: "oceands@hotmail.com",
+    phone: "+971 50 3605417",
+  },
+  {
+    id: 2,
+    city: "Sharjah, United Arab Emirates",
+    email: "simranpatt@hotmail.com",
+    phone: "+971 54 5762036",
+  },
+];
+
 
 export const mockDataInvoices = [
   {
@@ -407,202 +572,50 @@ export const mockBarData = [
   }
 ];
 
+//This data shows when we pull numbers from our DB and display.
 export const mockPieData = [
   {
-    id: "hack",
-    label: "hack",
-    value: 239,
-    color: "hsl(104, 70%, 50%)"
+    id: "fire_related",
+    label: "Fire Related",
+    value: 100,
+    color: tokens.blueAccents[500],  // Corrected color
   },
   {
-    id: "make",
-    label: "make",
-    value: 170,
-    color: "hsl(162, 70%, 50%)"
+    id: "weapon_related",
+    label: "Weapon Related",
+    value: 100,
+    color: tokens.orangeAccents[500],   // Corrected color
   },
   {
-    id: "go",
-    label: "go",
-    value: 322,
-    color: "hsl(291, 70%, 50%)"
+    id: "others",
+    label: "Others",
+    value: 100,
+    color: tokens.blackAccents[500],   // Corrected color
   },
-  {
-    id: "lisp",
-    label: "lisp",
-    value: 503,
-    color: "hsl(229, 70%, 50%)"
-  },
-  {
-    id: "scala",
-    label: "scala",
-    value: 584,
-    color: "hsl(344, 70%, 50%)"
-  }
 ];
 
+
+
+//This data shows when we pull numbers from our DB and display.
 export const mockLineData = [
   {
-    id: "japan",
-    color: tokens("dark").pinkAccents[500],
+    id: "Incidents",
+    color: tokens.blueAccents[500],
     data: [
-      {
-        x: "plane",
-        y: 101
-      },
-      {
-        x: "helicopter",
-        y: 75
-      },
-      {
-        x: "boat",
-        y: 36
-      },
-      {
-        x: "train",
-        y: 216
-      },
-      {
-        x: "subway",
-        y: 35
-      },
-      {
-        x: "bus",
-        y: 236
-      },
-      {
-        x: "car",
-        y: 88
-      },
-      {
-        x: "moto",
-        y: 232
-      },
-      {
-        x: "bicycle",
-        y: 281
-      },
-      {
-        x: "horse",
-        y: 1
-      },
-      {
-        x: "skateboard",
-        y: 35
-      },
-      {
-        x: "others",
-        y: 14
-      }
-    ]
+      { x: "Jan", y: Math.floor(Math.random() * 201) },
+      { x: "Feb", y: Math.floor(Math.random() * 201) },
+      { x: "Mar", y: Math.floor(Math.random() * 201) },
+      { x: "Apr", y: Math.floor(Math.random() * 201) },
+      { x: "May", y: Math.floor(Math.random() * 201) },
+      { x: "Jun", y: Math.floor(Math.random() * 201) },
+      { x: "Jul", y: Math.floor(Math.random() * 201) },
+      { x: "Aug", y: Math.floor(Math.random() * 201) },
+      { x: "Sep", y: Math.floor(Math.random() * 201) },
+      { x: "Oct", y: Math.floor(Math.random() * 201) },
+      { x: "Nov", y: Math.floor(Math.random() * 201) },
+      { x: "Dec", y: Math.floor(Math.random() * 201) },
+    ],
   },
-  {
-    id: "france",
-    color: tokens("dark").purpleAccent[300],
-    data: [
-      {
-        x: "plane",
-        y: 212
-      },
-      {
-        x: "helicopter",
-        y: 190
-      },
-      {
-        x: "boat",
-        y: 270
-      },
-      {
-        x: "train",
-        y: 9
-      },
-      {
-        x: "subway",
-        y: 75
-      },
-      {
-        x: "bus",
-        y: 175
-      },
-      {
-        x: "car",
-        y: 33
-      },
-      {
-        x: "moto",
-        y: 189
-      },
-      {
-        x: "bicycle",
-        y: 97
-      },
-      {
-        x: "horse",
-        y: 87
-      },
-      {
-        x: "skateboard",
-        y: 299
-      },
-      {
-        x: "others",
-        y: 251
-      }
-    ]
-  },
-  {
-    id: "us",
-    color: tokens("dark").yellowAccent[500],
-    data: [
-      {
-        x: "plane",
-        y: 191
-      },
-      {
-        x: "helicopter",
-        y: 136
-      },
-      {
-        x: "boat",
-        y: 91
-      },
-      {
-        x: "train",
-        y: 190
-      },
-      {
-        x: "subway",
-        y: 211
-      },
-      {
-        x: "bus",
-        y: 152
-      },
-      {
-        x: "car",
-        y: 189
-      },
-      {
-        x: "moto",
-        y: 152
-      },
-      {
-        x: "bicycle",
-        y: 8
-      },
-      {
-        x: "horse",
-        y: 197
-      },
-      {
-        x: "skateboard",
-        y: 107
-      },
-      {
-        x: "others",
-        y: 170
-      }
-    ]
-  }
 ];
 
 export const mockGeographyData = [

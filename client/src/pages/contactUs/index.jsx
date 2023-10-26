@@ -5,11 +5,23 @@ import * as yup from 'yup';
 import { useMediaQuery } from '@mui/material';
 import Header from '../../components/Header';
 import { tokens } from "../../theme";
+import { useEffect } from 'react';
+import { mockDataContacts } from '../../data/mockData';
 
-const Contact = () => {
-    const theme = useTheme();
-    const colors = tokens(theme.palette.mode);
-    const isNonMobile = useMediaQuery('(min-width:600px)');
+
+//icons
+import {IoLocationSharp} from 'react-icons/io5'
+import {IoMailSharp} from 'react-icons/io5'
+import {BsTelephoneFill} from 'react-icons/bs'
+
+
+const Contact = ({ changeWelcomeText }) => {
+  useEffect(() => {
+    changeWelcomeText("Contact Us");
+  }, []);
+
+    const colors = tokens;
+
     const phoneRegExp = /^((\+[1-9]{1,4}[ -]?)|(\([0-9]{2,3}\)[ -]?)|([0-9]{2,4})[ -]?)*?[0-9]{3,4}[ -]?[0-9]{3,4}$/;
     const handleFormSubmit = (values) => {
       console.log(values);
@@ -31,66 +43,70 @@ const Contact = () => {
       address2: yup.string().required('Required'),
     });
     
-    const contactInfo1 = `
-    City:Sharjah, United Arab Emirates
-    Name: Simran patt
-    Branch type: Headquarters
-    Address: Al Wahda Street, Al Qasimia, Sharjah, UAE
-    Phone: +971 6 123 4567
-    Email: al-falah.electronics@example.com
-  `;
-  const contactInfo2 = `
-  City:Dubai, United Arab Emirates
-  Name:Saim Ali
-  Branch type: Customer service office
-  Address: Sheikh Zayed Road, Al Barsha, Dubai, UAE
-  Phone: +971 4 987 6543
-  Email: oasis.pharmacy@example.com
-  
-`;
-const contactInfo3 = `
-Ajman:Dubai, United Arab Emirates
-Name: Uzair Naeem
-Branch type: Foresight Industry 
-Address: Al Jurf Area, Ajman, UAE
-Phone: +971 6 789 0123
-Email: elite.fitness@example.com
-`;
+
+
+
+
     return (
-      <Box m="20px" display="flex">
-        <Box flex="1" p={2}>
+      <Box display="flex" height={"100vh"} backgroundColor={colors.primary[500]} minHeight={"100vh"}>
+        <Box flex="1"
+         p={2}
+         style={{
+          backgroundImage: "url('../../assets/ContactUsBackground.png')",
+          backgroundSize: 'cover', // Cover the entire Box
+          backgroundPosition: 'center', // Center the image
+          display: 'flex',              // Set display to flex
+          flexDirection: 'column',     // Stack items vertically
+          alignItems: 'center',        // Center items horizontally
+          justifyContent: 'center',    // Center items vertically
+          textAlign: 'left',           // Left align text inside the Box
+
+        }}>
+          
         
-        <Typography variant="h6" gutterBottom>
-          Contact Details
+
+    <Box>
+    <Typography variant="h5" fontWeight={"bold"} gutterBottom paddingBottom={3}>
+          Our Contacts
+    </Typography>
+    {mockDataContacts.map((contact, index) => (
+    <Box key={contact.id} mb={2}>
+      <Box display="flex" alignItems="center">
+        <IoLocationSharp style={{ fontSize: 20, marginRight: 10, color: colors.blueAccents[500] }} />
+        <Typography variant="h6" whiteSpace="pre-line">
+          {contact.city}
         </Typography>
-        <Typography variant="body1" whiteSpace="pre-line">
-          {contactInfo1}
+      </Box>
+      <Box display="flex" alignItems="center">
+        <IoMailSharp style={{ fontSize: 20, marginRight: 10, color: colors.blueAccents[500] }} />
+        <Typography variant="h6" whiteSpace="pre-line">
+          {contact.email}
         </Typography>
-       
-        <Typography variant="h6" gutterBottom>
-          Contact Details
+      </Box>
+      <Box display="flex" alignItems="center">
+        <BsTelephoneFill style={{ fontSize: 20, marginRight: 10, color: colors.blueAccents[500] }} />
+        <Typography variant="h6" whiteSpace="pre-line">
+          {contact.phone}
         </Typography>
-        <Typography variant="body1" whiteSpace="pre-line">
-          {contactInfo2}
-        </Typography>
-        
-        <Typography variant="h6" gutterBottom>
-          Contact Details
-        </Typography>
-        <Typography variant="body1" whiteSpace="pre-line">
-          {contactInfo3}
-        </Typography>
-        
+      </Box>
+      {index < mockDataContacts.length - 1 && <Box mb={8} />}
+    </Box>
+  ))}
+  </Box>    
+
         </Box>
+
+
+        <Box flex="0.8" padding={5}>
         <Box 
-        flex="1" p={2} 
-        backgroundColor={colors.primary[400]}>
-          <Header
-          title="CONTACT US"
-          subtitle="Example contact Form using Formik"
-        
-        />
-          <Formik onSubmit={handleFormSubmit} initialValues={initialValues} validationSchema={checkoutSchema}>
+         p={10} 
+        backgroundColor={colors.secondary[500]}
+        borderRadius="8px">
+
+         <Typography variant='h5' textAlign={"center"} paddingBottom={3}>Get in touch!</Typography>
+         <Typography variant='h7' paddingBottom={3} >Fill in the form with your details and our team will get reach out to you!</Typography>
+
+          <Formik onSubmit={handleFormSubmit} initialValues={initialValues} validationSchema={checkoutSchema} >
             {({ values, errors, touched, handleBlur, handleChange, handleSubmit }) => (
               <form onSubmit={handleSubmit}>
                 <Box display="grid" 
@@ -174,16 +190,16 @@ Email: elite.fitness@example.com
                     helperText={touched.address2 && errors.address2}
                     sx={{ gridColumn: "span 4" }}
                   />
-                  {/* Continue with other form fields */}
-                </Box>
-                <Box display="flex" justifyContent="end" mt="20px">
-                  <Button type="submit" color="secondary" variant="contained">
-                    Submit
+
+                  <Button type="submit"  variant="contained" style={{ gridColumn: "span 4", backgroundColor: colors.orangeAccents[500] }}>
+                    Send  🡲
                   </Button>
+
                 </Box>
               </form>
             )}
           </Formik>
+        </Box>
         </Box>
       </Box>
     );

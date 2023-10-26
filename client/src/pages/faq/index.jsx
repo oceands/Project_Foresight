@@ -4,19 +4,24 @@ import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import Typography from "@mui/material/Typography";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import {MdExpandMore} from "react-icons/md";
 import { tokens } from "../../theme";
+import { useEffect } from "react";
 
-const FAQ = () => {
-  const theme = useTheme();
-  const colors = tokens(theme.palette.mode);
+const FAQ = ({ changeWelcomeText }) => {
+
+  useEffect(() => {
+    changeWelcomeText("FAQ");
+  }, []);
+
+  const colors = tokens;
   return (
+    <Box backgroundColor={colors.primary[500]} p={3} minHeight={"100vh"}>
     <Box m="20px">
-      <Header title="FAQ" subtitle="Frequently Asked Questions Page" />
 
       <Accordion defaultExpanded>
-        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <Typography color={colors.pinkAccents[500]} variant="h5">
+        <AccordionSummary expandIcon={<MdExpandMore fontSize={25}/>}>
+          <Typography color={colors.blackAccents[500]} variant="h5">
             An Important Question
           </Typography>
         </AccordionSummary>
@@ -28,8 +33,8 @@ const FAQ = () => {
         </AccordionDetails>
       </Accordion>
       <Accordion defaultExpanded>
-        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <Typography color={colors.pinkAccents[500]} variant="h5">
+        <AccordionSummary expandIcon={<MdExpandMore fontSize={25} />}>
+          <Typography color={colors.blackAccents[500]} variant="h5">
             Another Important Question
           </Typography>
         </AccordionSummary>
@@ -41,8 +46,8 @@ const FAQ = () => {
         </AccordionDetails>
       </Accordion>
       <Accordion defaultExpanded>
-        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <Typography color={colors.pinkAccents[500]} variant="h5">
+        <AccordionSummary expandIcon={<MdExpandMore fontSize={25} />}>
+          <Typography color={colors.blackAccents[500]} variant="h5">
             Your Favorite Question
           </Typography>
         </AccordionSummary>
@@ -54,8 +59,8 @@ const FAQ = () => {
         </AccordionDetails>
       </Accordion>
       <Accordion defaultExpanded>
-        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <Typography color={colors.pinkAccents[500]} variant="h5">
+        <AccordionSummary expandIcon={<MdExpandMore fontSize={25} />}>
+          <Typography color={colors.blackAccents[500]} variant="h5">
             Some Random Question
           </Typography>
         </AccordionSummary>
@@ -67,8 +72,8 @@ const FAQ = () => {
         </AccordionDetails>
       </Accordion>
       <Accordion defaultExpanded>
-        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <Typography color={colors.pinkAccents[500]} variant="h5">
+        <AccordionSummary expandIcon={<MdExpandMore fontSize={25} />}>
+          <Typography color={colors.blackAccents[500]} variant="h5">
             The Final Question
           </Typography>
         </AccordionSummary>
@@ -79,6 +84,7 @@ const FAQ = () => {
           </Typography>
         </AccordionDetails>
       </Accordion>
+    </Box>
     </Box>
   );
 };

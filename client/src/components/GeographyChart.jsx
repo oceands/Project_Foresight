@@ -7,40 +7,40 @@ import { mockGeographyData } from "../data/mockData";
 
 const GeographyChart = ({ isDashboard = false }) => {
   const theme = useTheme();
-  const colors = tokens(theme.palette.mode);
+  const colors = tokens;
   return (
         <ResponsiveChoropleth
         theme={{
             axis: {
             domain: {
                 line: {
-                stroke: colors.grey[100],
+                stroke: colors.primary[100],
                 },
             },
             legend: {
                 text: {
-                fill: colors.grey[100],
+                fill: colors.primary[100],
                 },
             },
             ticks: {
                 line: {
-                stroke: colors.grey[100],
+                stroke: colors.primary[100],
                 strokeWidth: 1,
                 },
                 text: {
-                fill: colors.grey[100],
+                fill: colors.primary[100],
                 },
             },
             },
             legends: {
             text: {
-                fill: colors.grey[100],
+                fill: colors.primary[100],
             },
             },
             tooltip: {
             container: {
                 background: colors.primary[400],
-                color: colors.grey[100],
+                color: colors.primary[100],
             },
             },
         }}
@@ -73,14 +73,14 @@ const GeographyChart = ({ isDashboard = false }) => {
                     itemWidth: 94,
                     itemHeight: 18,
                     itemDirection: 'left-to-right',
-                    itemTextColor: colors.grey[100],
+                    itemTextColor: colors.primary[100],
                     itemOpacity: 0.85,
                     symbolSize: 18,
                     effects: [
                         {
                             on: 'hover',
                             style: {
-                                itemTextColor: colors.pinkAccents[500],
+                                itemTextColor: colors.blueAccents[500],
                                 itemOpacity: 1
                             }
                         }

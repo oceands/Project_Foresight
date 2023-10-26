@@ -6,287 +6,347 @@ import {
   useTheme,
   useMediaQuery,
 } from "@mui/material";
+import { useEffect } from "react";
 import Grid from "@mui/material/Unstable_Grid2";
 import { tokens } from "../../theme";
-import { mockTransactions } from "../../data/mockData";
-import DownloadOutlinedIcon from "@mui/icons-material/DownloadOutlined";
-import EmailIcon from "@mui/icons-material/Email";
-import PointOfSaleIcon from "@mui/icons-material/PointOfSale";
-import PersonAddIcon from "@mui/icons-material/PersonAdd";
-import TrafficIcon from "@mui/icons-material/Traffic";
-import Header from "../../components/Header";
+import { mockPieData } from "../../data/mockData";
+import {AiOutlineArrowRight} from "react-icons/ai"
+import {AiFillFire} from "react-icons/ai";
+import {FaGun} from "react-icons/fa6";
+import {MdVerified} from "react-icons/md"
+import {FaChartPie} from "react-icons/fa"
+import {BsFillCameraFill} from "react-icons/bs"
+import {Stack} from "@mui/material";
 import LineChart from "../../components/LineChart";
-import GeographyChart from "../../components/GeographyChart";
-import BarChart from "../../components/BarChart";
 import StatBox from "../../components/StatBox";
-import ProgressCircle from "../../components/ProgressCircle";
+import PieChart from "../../components/PieChart";
 
-const Dashboard = () => {
+const Dashboard = ({ changeWelcomeText }) => {
+  useEffect(() => {
+    changeWelcomeText("Welcome Back, Admin");
+  }, []);
   const theme = useTheme();
-  const smScreen = useMediaQuery(theme.breakpoints.up("sm"));
-  const colors = tokens(theme.palette.mode);
+  const colors = tokens;
+  const totalValue = mockPieData.reduce((total, item) => total + item.value, 0);
+  const progressPercent = mockPieData.map((item) => (item.value / totalValue) * 100);
+  const progressValues = mockPieData.map((item) => item.value);
   return (
-    <Box m="20px">
-      {/* HEADER */}
+    // STATS, GRAPHS AND FEED
+    
+<Box backgroundColor={colors.primary[500]} p={3} minHeight={"100vh"}>
 
-      <Box
-        display={smScreen ? "flex" : "block"}
-        flexDirection={smScreen ? "row" : "column"}
-        justifyContent={smScreen ? "space-between" : "start"}
-        alignItems={smScreen ? "center" : "start"}
-        m="10px 0"
-      >
-        <Header title="Welcome Back, Admin!" />
-
-      </Box>
-
-      {/* GRID & CHARTS */}
-      <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-        <Grid xs={12} sm={12} md={6} lg={3} xl={3}>
+<Grid container spacing={1}>
+    <Grid container xs={12} sm={7} lg={9} >
+        <Stack spacing={1} flex="1 1 0"   direction={{ xs: 'column', sm: 'column' ,md: 'row', lg: 'row', xl:'row' }} p={2}>
+        
+        <Grid item xs={12} sm={12} md={3} lg={3} xl={4}>
           <Box
-            width="100%"
-            backgroundColor={colors.primary[460]}
+            
+            backgroundColor={colors.secondary[400]}
             display="flex"
             alignItems="center"
             justifyContent="center"
+            borderRadius="8px"
           >
             <StatBox
+            
               title="12,361"
-              subtitle="Emails Sent"
-              progress="0.75"
-              increase="+14%"
+              subtitle="Total Fire Incidents"
               icon={
-                <EmailIcon
-                  sx={{ color: colors.pinkAccents[600], fontSize: "26px" }}
+                <AiFillFire
+                  style={{ color: colors.orangeAccents[500], fontSize: "26px" }}
                 />
               }
             />
           </Box>
         </Grid>
-        <Grid xs={12} sm={12} md={6} lg={3} xl={3}>
+        
+        {/* GRID ITEM 1.2*/}
+        <Grid item xs={12} sm={12} md={3} lg={3} xl={4}>
           <Box
-            width="100%"
-            backgroundColor={colors.primary[400]}
+            
+            backgroundColor={colors.secondary[400]}
             display="flex"
             alignItems="center"
             justifyContent="center"
+            borderRadius="8px"
           >
             <StatBox
               title="431,225"
-              subtitle="Sales Obtained"
-              progress="0.50"
-              increase="+21%"
+              subtitle="Total Weapon Incidents"
               icon={
-                <PointOfSaleIcon
-                  sx={{ color: colors.pinkAccents[600], fontSize: "26px" }}
-                />
-              }
-            />
-          </Box>
-        </Grid>
-        <Grid xs={12} sm={12} md={6} lg={3} xl={3}>
-          <Box
-            width="100%"
-            backgroundColor={colors.primary[400]}
-            display="flex"
-            alignItems="center"
-            justifyContent="center"
-          >
-            <StatBox
-              title="32,441"
-              subtitle="New Clients"
-              progress="0.30"
-              increase="+5%"
-              icon={
-                <PersonAddIcon
-                  sx={{ color: colors.pinkAccents[600], fontSize: "26px" }}
-                />
-              }
-            />
-          </Box>
-        </Grid>
-        <Grid xs={12} sm={12} md={6} lg={3} xl={3}>
-          <Box
-            width="100%"
-            backgroundColor={colors.primary[400]}
-            display="flex"
-            alignItems="center"
-            justifyContent="center"
-          >
-            <StatBox
-              title="1,325,134"
-              subtitle="Traffic Received"
-              progress="0.80"
-              increase="+43%"
-              icon={
-                <TrafficIcon
-                  sx={{ color: colors.pinkAccents[600], fontSize: "26px" }}
+                <FaGun
+                style={{ color: colors.orangeAccents[500], fontSize: "26px" }}
                 />
               }
             />
           </Box>
         </Grid>
 
-        <Grid
-          xs={12}
-          sm={12}
-          md={8}
-          lg={8}
-          container
-          rowSpacing={1}
-          columnSpacing={{ xs: 1, sm: 2, md: 3 }}
-        >
-          <Grid xs={12}>
-            <Box backgroundColor={colors.primary[400]}>
-              <Box
-                mt="25px"
-                p="0 30px"
-                display="flex"
-                justifyContent="space-between"
-                alignItems="center"
-              >
-                <Box>
-                  <Typography
-                    variant="h5"
-                    fontWeight="600"
-                    color={colors.grey[100]}
-                  >
-                    Revenue Generated
-                  </Typography>
-                  <Typography
-                    variant="h5"
-                    fontWeight="600"
-                    color={colors.pinkAccents[500]}
-                  >
-                    $58,373,698
-                  </Typography>
-                </Box>
-                <Box>
-                  <IconButton>
-                    <DownloadOutlinedIcon
-                      sx={{ fontSize: "26px", color: colors.pinkAccents[500] }}
-                    />
-                  </IconButton>
-                </Box>
-              </Box>
-              <Box height="250px" m="-20px 0 0 0">
-                <LineChart isDashboard={true} />
-              </Box>
-            </Box>
-          </Grid>
-          <Grid xs={12} sm={12} md={6}>
-            <Box backgroundColor={colors.primary[400]} p="30px">
-              <Typography variant="h5" fontWeight="600">
-                Campaign
-              </Typography>
-              <Box
-                display="flex"
-                flexDirection="column"
-                alignItems="center"
-                mt="25px"
-              >
-                <ProgressCircle size="125" />
-                <Typography
-                  variant="h5"
-                  color={colors.pinkAccents[500]}
-                  sx={{ mt: "15px" }}
-                >
-                  $48,352 revenue generated
-                </Typography>
-                <Typography>
-                  Includes extra misc expenditures and costs
-                </Typography>
-              </Box>
-            </Box>
-          </Grid>
-          <Grid xs={12} sm={12} md={6}>
-            <Box backgroundColor={colors.primary[400]}>
-              <Typography
-                variant="h5"
-                fontWeight="600"
-                sx={{ padding: "30px 30px 0 30px" }}
-              >
-                Sales Quantity
-              </Typography>
-              <Box height="250px" mt="-20px">
-                <BarChart isDashboard={true} />
-              </Box>
-            </Box>
-          </Grid>
-          <Grid xs={12}>
-            <Box backgroundColor={colors.primary[400]} padding="30px">
-              <Typography
-                variant="h5"
-                fontWeight="600"
-                sx={{ marginBottom: "15px" }}
-              >
-                Geography Based Traffic
-              </Typography>
-              <Box height="200px">
-                <GeographyChart isDashboard={true} />
-              </Box>
-            </Box>
-          </Grid>
-        </Grid>
-        <Grid xs={12} sm={12} md={4} lg={4} xl={4}>
+        {/* GRID ITEM 1.3*/}
+        <Grid item xs={12} sm={12} md={3} lg={3} xl={4}>
           <Box
-            backgroundColor={colors.primary[400]}
-            maxHeight="100vh"
-            overflow="auto"
-            m="25px 0 0 0"
+            
+            backgroundColor={colors.secondary[400]}
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            borderRadius="8px"
           >
+            <StatBox
+              title="32,441"
+              subtitle="Total Verified Incidents"
+              progress="0.30"
+              increase="+5%"
+              icon={
+                <MdVerified
+                style={{ color: colors.orangeAccents[500], fontSize: "26px" }}
+                />
+              }
+            />
+          </Box>
+        </Grid> 
+        </Stack>
+
+        <Stack spacing={1} p={2}  >
+
+         {/*FEED AND VIDEOS */}
+          {/*THIS IS THE WHITE CONTAINER WHICH WILL STORE THE ITEMS */}
+
+          <Box backgroundColor={colors.secondary[500]} borderRadius="8px">
+
             <Box
+              mt="25px"
+              p="0 30px"
               display="flex"
               justifyContent="space-between"
               alignItems="center"
-              borderBottom={`4px solid ${colors.primary[500]}`}
-              color={colors.grey[100]}
-              p="15px"
+              
             >
-              <Typography
-                variant="h5"
-                fontWeight="600"
-                color={colors.grey[100]}
-              >
-                Resent Transaction
-              </Typography>
-            </Box>
-            {mockTransactions.map((transaction, i) => {
-              return (
-                <Box
-                  key={`${transaction}-${i}`}
-                  display="flex"
-                  justifyContent="space-between"
-                  alignItems="center"
-                  borderBottom={`4px solid ${colors.primary[500]}`}
-                  p="15px"
-                >
-                  <Box>
-                    <Typography
-                      variant="h5"
-                      fontWeight="600"
-                      color={colors.pinkAccents[100]}
-                    >
-                      {transaction.txId}
-                    </Typography>
-                    <Typography color={colors.grey[100]}>
-                      {transaction.user}
-                    </Typography>
-                  </Box>
-                  <Box color={colors.grey[100]}>{transaction.date}</Box>
-                  <Box
-                    color={colors.pinkAccents[500]}
-                    p="5px 10px"
-                    borderRadius="4px"
+              {/*THIS IS THE CONTAINER WHICH WILL STORE THE lOGO AND NAME */}
+              <Box display="flex" alignItems="center" > 
+                <BsFillCameraFill
+                style={{ color: colors.orangeAccents[500], fontSize: "26px" }}/>
+                <Typography
+                  variant="h7"
+                  fontWeight="bold" 
+                  paddingLeft={1}
+                  sx={{ color: colors.blackAccents[500] }}
                   >
-                    ${transaction.cost}
-                  </Box>
-                </Box>
-              );
-            })}
+                  View Live Feed
+                </Typography>
+              </Box>
+
+              {/*THIS IS THE CONTAINER WHICH WILL HOLD THE ARROW */}
+              <Box >
+                <IconButton>
+                  <AiOutlineArrowRight
+                    sx={{ fontSize: "26px", color: colors.blackAccents[500] }}
+                  />
+                </IconButton>
+              </Box>
+            </Box>
+
+            <Box p={1} >
+              {/*GRID 2 */}
+              <Grid container rowSpacing={1} columnSpacing={1}>
+              {/*GRID item 2.1 */}
+              <Grid item xs={12} sm={12} md={3} lg={3} xl={4}>
+              <Box
+                  width="100%"
+                  backgroundColor={colors.primary[400]}
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="center"
+                >
+                  {/*Insert the video / RTSP FEED HERE */}
+                  <img
+                src={"../../assets/vid-evidence.jpg"}
+                alt="sample"
+                style={{ maxWidth: '100%', height: 'auto' }}  // Controlling image dimensions
+              />
+              </Box>
+              </Grid>
+              {/*GRID item 2.2 */}
+              <Grid item xs={12} sm={12} md={3} lg={3} xl={4}>
+              <Box
+                  width="100%"
+                  backgroundColor={colors.primary[400]}
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="center"
+                >
+                  {/*Insert the video / RTSP FEED HERE */}
+                  <img
+                src={"../../assets/vid-evidence.jpg"}
+                alt="sample"
+                style={{ maxWidth: '100%', height: 'auto' }}  // Controlling image dimensions
+              />
+              </Box>
+              </Grid>
+              {/*GRID item 2.3 */}
+              <Grid item xs={12} sm={12} md={3} lg={3} xl={4}>
+              <Box
+                  width="100%"
+                  backgroundColor={colors.primary[400]}
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="center"
+                >
+                  {/*Insert the video / RTSP FEED HERE */}
+                  <img
+                src={"../../assets/vid-evidence.jpg"}
+                alt="sample"
+                style={{ maxWidth: '100%', height: 'auto' }}  // Controlling image dimensions
+              />
+              </Box>
+              </Grid>
+              </Grid>
+              {/*END OF THE GRID 2 */}
+              </Box>
+
+
           </Box>
-        </Grid>
-      </Grid>
+
+          </Stack>
+
+    </Grid>
+
+    <Grid container item xs={12} sm={12} lg={3}  p={3} >
+    <Box backgroundColor={colors.secondary[500]} width={"100%"} borderRadius="8px" >
+    <Box
+              mt="10px"
+              p="0 30px"
+              display="flex"
+              justifyContent="space-between"
+              alignItems="center"
+              
+            >
+              {/*THIS IS THE CONTAINER WHICH WILL STORE THE lOGO AND NAME */}
+              <Box display="flex" alignItems="center" > 
+              <FaChartPie
+  style={{
+    color: colors.orangeAccents[500],
+    fontSize: "26px",
+    transform: "scaleX(-1)",
+  }}/>
+                <Typography
+                  variant="h7"
+                  fontWeight="bold" 
+                  paddingLeft={1}
+                  sx={{ color: colors.blackAccents[500] }}
+                  >
+                  Weekly Analytics
+                </Typography>
+              </Box>
+
+              {/*THIS IS THE CONTAINER WHICH WILL HOLD THE ARROW */}
+              <Box >
+                <IconButton>
+                  <AiOutlineArrowRight
+                    sx={{ fontSize: "26px", color: colors.blackAccents[500] }}
+                  />
+                </IconButton>
+              </Box>
+      </Box>
+      {/*This is the Box which will contain the pie chart */}
+      <Box m="20px">
+
+      <Box height="25vh">
+        <PieChart isDashboard={true} />
+      </Box>
+
+      <Box
+      display="flex"
+      flexDirection="column"
+      alignItems="center"
+      justifyContent="center"
+
+    >
+      {mockPieData.map((item, index) => (
+        <Box
+          key={item.id}
+          display="flex"
+          flexDirection="column"
+          alignItems="center"
+          mb={2}
+        >
+          <Box display="flex" justifyContent="space-between" width="100%">
+            <Typography fontWeight="medium">{item.label}</Typography>
+            <Typography fontWeight="medium">{progressValues[index]}</Typography>
+          </Box>
+          <progress
+  value={progressPercent[index]}
+  max={100}
+  style={{
+    width: "250px",
+    backgroundColor: item.color + " !important",
+  }}
+/>
+
+
+
+        </Box>
+      ))}
+    </Box>
+    </Box>
+ 
+
+                 
+    </Box>
+    </Grid>
+
+
+
+    <Grid container item xs={12} sm={12} lg={12}  p={3} >
+    <Box backgroundColor={colors.secondary[400]} borderRadius="8px" width={"100%"}>
+            <Box
+              mt="25px"
+              p="0 30px"
+              display="flex"
+              justifyContent="space-between"
+              alignItems="center"
+              
+            >
+              <Box display="flex" alignItems="center" > 
+              <FaChartPie
+  style={{
+    color: colors.orangeAccents[500],
+    fontSize: "26px",
+    transform: "scaleX(-1)",
+  }}
+/>
+                <Typography
+                  variant="h7"
+                  fontWeight="bold" 
+                  paddingLeft={1}
+                  sx={{ color: colors.blackAccents[500] }}
+                  >
+                  Dashboard Analytics
+                </Typography>
+
+              </Box>
+              <Box>
+                <IconButton>
+                  <AiOutlineArrowRight
+                    sx={{ fontSize: "26px", color: colors.blackAccents[500] }}
+                  />
+                </IconButton>
+              </Box>
+            </Box>
+            <Box height="250px" m="-20px 0 0 0">
+              <LineChart isDashboard={true} />
+            </Box>
+          </Box>
+      
+    </Grid>
+    </Grid>
+
+
+
+
+
+
     </Box>
   );
 };

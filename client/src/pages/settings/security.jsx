@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useEffect } from 'react';
 import {
   Box,
   Button,
@@ -13,10 +14,14 @@ import { Formik } from 'formik';
 import * as yup from 'yup';
 import Header from '../../components/Header';
 import { tokens } from '../../theme';
+import {Typography} from '@mui/material';
 
-const Security = () => {
+const Security = ({ changeWelcomeText }) => {
+  useEffect(() => {
+    changeWelcomeText("Settings / Security Settings");
+  }, []);
   const theme = useTheme();
-  const colors = tokens(theme.palette.mode);
+  const colors = tokens;
 
   // Security: Update Password Const's
   const passRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,}$/;
@@ -106,14 +111,16 @@ const Security = () => {
 
   // Button Preloaded settings
   const buttonSx = {
-    backgroundColor: colors.pinkAccents[500],
-    color: colors.grey[100],
+    backgroundColor: colors.orangeAccents[500],
+    color: colors.primary[500],
     fontSize: '14px',
     fontWeight: 'bold',
-    padding: '10px 0', // Remove horizontal padding
-    minWidth: '150px', // Set a fixed width for all buttons
+    padding: '10px', // Remove horizontal padding
+    minWidth: '130px', // Set a fixed width for all buttons
     '&:hover': {
-      backgroundColor: colors.pinkAccents[600], // New color on hover
+      backgroundColor: colors.primary[500], // New color on hover
+      color: colors.orangeAccents[500],
+      boxShadow:' rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;',
     },
   };
 
@@ -145,6 +152,7 @@ const handleSecTimerOverlayClick = (e) => {
   // Update Password Form Function
   const UpdatePasswd = ({ onClose, onSubmit, initialValues, validationSchema, setShowForm }) => {
     return (
+      
       <Box
         position="fixed"
         top={0}
@@ -160,7 +168,7 @@ const handleSecTimerOverlayClick = (e) => {
       >
         <Box
           onClick={(e) => e.stopPropagation()}
-          backgroundColor="#373954"
+          backgroundColor={colors.primary[500]}
           borderRadius="8px"
           padding="20px"
           width="100%"
@@ -170,7 +178,11 @@ const handleSecTimerOverlayClick = (e) => {
           <Formik onSubmit={handleFormSubmit} initialValues={updatePassVals} validationSchema={updatePassSchema}>
             {({ values, errors, touched, handleBlur, handleChange }) => (
               <form onSubmit={handleFormSubmit} method='POST'>
-                <Header title="Update Password Form" />
+                <Box p={1} display={'flex'} alignItems={'center'} justifyContent={'center'}>
+                  <Typography variant="h6" p={2} fontWeight={"bold"}>
+                    Update Password
+                  </Typography>
+                </Box>
                 <Box display="grid" gap="30px" gridTemplateColumns="repeat(4, minmax(0, 1fr))">
                   <TextField
                     fullWidth
@@ -200,11 +212,10 @@ const handleSecTimerOverlayClick = (e) => {
                   />
                   <Box gridColumn="span 4" display="flex" justifyContent="center">
                     <Button
-                      type="submit"
-                      color="secondary"
+                      type="submit"        
                       variant="contained"
-                      fullWidth
-                      sx={{ color: 'white', padding: '10px' }}
+                      size="small"
+                      sx={{ color: 'white', padding: '10px', backgroundColor: colors.orangeAccents[500] }}
                       onClick={() => {
                         console.log('Update Password Form Values:', values); // Log the input values
                       }}
@@ -239,7 +250,7 @@ const handleSecTimerOverlayClick = (e) => {
       >
         <Box
           onClick={(e) => e.stopPropagation()}
-          backgroundColor="#373954"
+          backgroundColor={colors.primary[500]}
           borderRadius="8px"
           padding="20px"
           width="100%"
@@ -253,8 +264,11 @@ const handleSecTimerOverlayClick = (e) => {
           validationSchema={secQuestionsSchema}>
             {({ values, errors, touched, handleBlur, handleChange }) => (
               <form onSubmit={handleFormSubmit} method='POST'>
-                <Header title="Update Security Question Form" />
-
+                <Box p={1} display={'flex'} alignItems={'center'} justifyContent={'center'}>
+                  <Typography variant="h6" p={2} fontWeight={"bold"}>
+                    Update Security Question
+                  </Typography>
+                </Box>
                 <FormControl fullWidth sx={{ marginBottom: '20px' }}>
                 
                 <TextField
@@ -290,10 +304,9 @@ const handleSecTimerOverlayClick = (e) => {
                 <Box gridColumn="span 4" display="flex" justifyContent="center" >
                   <Button
                     type="submit"
-                    color="secondary"
                     variant="contained"
-                    fullWidth
-                    sx={{ color: 'white', padding: '10px' }}
+                    size="small"
+                    sx={{ color: 'white', padding: '10px', backgroundColor: colors.orangeAccents[500] }}
                     onClick={() => {
                       console.log('Update Password Form Values:', values); // Log the input values
                     }}
@@ -332,7 +345,7 @@ const handleSecTimerOverlayClick = (e) => {
       >
         <Box
           onClick={(e) => e.stopPropagation()}
-          backgroundColor="#373954"
+          backgroundColor={colors.primary[500]}
           borderRadius="8px"
           padding="20px"
           width="100%"
@@ -347,13 +360,18 @@ const handleSecTimerOverlayClick = (e) => {
         >
           {({ values, errors, touched }) => (
             <form>
+               <Box p={1} display={'flex'} alignItems={'center'} justifyContent={'center'}>
+                  <Typography variant="h6" p={2} fontWeight={"bold"}>
+                    Auto-Logout Timer
+                  </Typography>
+                </Box>
               <FormControl fullWidth sx={{ marginBottom: '20px' }}>
                 <TextField
                   value={values.timeSelected}
                   onChange={handleTimeChange}
                   sx={{ zIndex: 1000 }}
                   select
-                  label="Select a Question"
+                  label="Select a Duration"
                 >
                   {secTimeOptions.map((time, index) => (
                       <MenuItem key={index} value={time}>
@@ -366,10 +384,9 @@ const handleSecTimerOverlayClick = (e) => {
               <Box gridColumn="span 4" display="flex" justifyContent="center" >
                   <Button
                     type="submit"
-                    color="secondary"
                     variant="contained"
-                    fullWidth
-                    sx={{ color: 'white', padding: '10px' }}
+                    size="small"
+                    sx={{ color: 'white', padding: '10px', backgroundColor: colors.orangeAccents[500] }}
                     onClick={() => {
                       console.log('Update Time Form Values:', values); // Log the input values
                     }}
@@ -391,12 +408,10 @@ const handleSecTimerOverlayClick = (e) => {
 
 
   return (
+    <Box backgroundColor={colors.primary[500]} p={3} minHeight={"100vh"}>
     <Box m="20px">
-      <Box display="flex" justifyContent="space-between" alignItems="center">
-        <Header title="SECURITY SETTINGS" />
-      </Box>
 
-      <Box p={2} backgroundColor={colors.primary[400]}>
+      <Box p={2} borderRadius={"8px"} backgroundColor={colors.secondary[500]}>
         <Grid container spacing={2}>
           {/* Row 1 */}
           <Grid item xs={12}>
@@ -406,7 +421,7 @@ const handleSecTimerOverlayClick = (e) => {
                 <p>Change your account password for added security.</p>
               </Grid>
               <Grid item>
-                <Button sx={buttonSx} onClick={() => setShowUpdatePassForm(!showUpdatePassForm)}>
+                <Button size={"small"} sx={buttonSx} onClick={() => setShowUpdatePassForm(!showUpdatePassForm)}>
                   Update
                 </Button>
               </Grid>
@@ -422,7 +437,7 @@ const handleSecTimerOverlayClick = (e) => {
                 <p>Set up or change your security question for account recovery.</p>
               </Grid>
               <Grid item>
-                <Button sx={buttonSx} onClick={() => setShowSecQuestionForm(!showSecTimerForm)}>
+                <Button size={"small"} sx={buttonSx} onClick={() => setShowSecQuestionForm(!showSecTimerForm)}>
                   Update
                 </Button>
               </Grid>
@@ -438,7 +453,7 @@ const handleSecTimerOverlayClick = (e) => {
                 <p>Configure auto-logout settings for enhanced security.</p>
               </Grid>
               <Grid item>
-                <Button sx={buttonSx} onClick={() => setShowSecTimerForm(!showSecQuestionForm)}>
+                <Button  size={"small"} sx={buttonSx} onClick={() => setShowSecTimerForm(!showSecQuestionForm)}>
                   Update
                 </Button>
               </Grid>
@@ -454,7 +469,7 @@ const handleSecTimerOverlayClick = (e) => {
                 <p>Read our terms of service and privacy policy for more information.</p>
               </Grid>
               <Grid item>
-                <Button sx={buttonSx}>More Info</Button>
+                <Button size={"small"} sx={buttonSx}>More Info</Button>
               </Grid>
             </Grid>
           </Grid>
@@ -492,6 +507,7 @@ const handleSecTimerOverlayClick = (e) => {
           />
         )}
       </Box>
+    </Box>
     </Box>
   );
 };

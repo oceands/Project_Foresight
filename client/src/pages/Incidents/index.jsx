@@ -1,132 +1,202 @@
 import React from "react";
-import { Box, useTheme } from "@mui/material";
-import { DataGrid, GridToolbar } from "@mui/x-data-grid";
+import { useEffect } from "react";
+import { Box, useTheme, Grid, Button ,Toolbar, colors} from "@mui/material";
+import { DataGrid, GridToolbar,GridToolbarQuickFilter , GridToolbarContainer, GridToolbarFilterButton, GridToolbarQuickFilterButton} from "@mui/x-data-grid";
 import { tokens } from "../../theme";
-import { mockDataContacts } from "../../data/mockData";
-import Icon from '@mui/icons-material/LocalFireDepartmentOutlined';
-import CalendarIcon from '@mui/icons-material/DateRangeOutlined';
+import { mockDataIncidents } from "../../data/mockData";
+import {AiFillFire} from 'react-icons/ai';
+import {FaGun} from 'react-icons/fa6';
+import {FaRegEye} from 'react-icons/fa'
+import {Typography} from "@mui/material";
 import Header from "../../components/Header";
+import { useState } from "react";
 
-const Incidents = () => {
+function CustomToolbar({ setFilterButtonEl }) {
+  return (
+
+    
+    <Box sx={{ flexGrow: 1, borderRadius: '8px 8px 0 0' }} backgroundColor={"#fefffe"}>
+     
+      <Toolbar variant="dense" disableGutters >
+
+      <Box p={2} display={'flex'} alignItems={'center'} >
+      <FaRegEye style={{ fontSize: '2rem' }} />          
+      <Typography variant="h6" p={2} fontWeight={"bold"}>All Incidents</Typography>
+      </Box>
+
+        <Box sx={{ flexGrow: 1 }} />
+            <GridToolbarContainer sx={{ p: 1, display: 'flex', alignItems: 'center' }}>
+              <Box p={2} >
+                <GridToolbarQuickFilter variant="outlined" size={"small"}sx={{ padding: '4', borderColor:"#DCDDDD" ,color:"#202020"
+                    }} />
+              </Box>
+              <Box p={2} >
+                <GridToolbarFilterButton variant="outlined"  sx={{ padding: '4' , height:"3.125em", borderColor:"#bcbdbd", color:"#202020", '&:hover': {borderColor:"black"}, }} ref={setFilterButtonEl} />
+              </Box>
+            </GridToolbarContainer>
+
+      </Toolbar>
+    </Box>
+  );
+}
+
+const Incidents = ({ changeWelcomeText }) => {
+  useEffect(() => {
+    changeWelcomeText("Incidents");
+  }, []);
   const theme = useTheme();
-  const colors = tokens(theme.palette.mode);
+  const colors = tokens;
+
+  const [filterButtonEl, setFilterButtonEl] = useState(null);
+  
   
   const columns = [
     
-    { field: "incidentID", headerName: "ID", disableColumnMenu: true,},
-    {
-      field: "incidentDateTime",
-      headerName: "Date/Time",
-      renderCell: (params) => (
-        <div style={{ display: "flex", alignItems: "center" }}>
-          <CalendarIcon style={{ marginRight: "4px" }}>your_icon_name_here</CalendarIcon>
-          {params.value}
-        </div>
-      ),
-      flex: 1,
-      disableColumnMenu: true,
+    { field: "id", 
+    headerName: "ID", 
+    disableColumnMenu: true,
+    cellClassName: "name-column--cell",
     },
     {
-      field: "incidentType",
+      field: "date",
+      headerName: "Date/Time",
+      flex: 1,
+      disableColumnMenu: true,
+      cellClassName: "name-column--cell",
+    },
+    {
+      field: "type",
       headerName: "Type",
       type: "number",
       headerAlign: "left",
       align: "left",
       disableColumnMenu: true,
+      cellClassName: "name-column--cell",
     },
     
     {
-      field: "incidentModule",
+      field: "module",
       headerName: "Module",
       renderCell: (params) => (
         <div style={{ display: "flex", alignItems: "center" }}>
           {params.value}
-          {params.value === "Fire" && (
-            <Icon style={{ marginLeft: "4px", color: "#FFB133" }}>fire</Icon>
+          {params.value === "Fire Detection" && (
+            <AiFillFire style={{ marginLeft: "4px", color: "#FFB133" }}>fire</AiFillFire>
           )}
-          {/* Add more conditions for other icons */}
+          {params.value === "Weapon Detection" && (
+            <FaGun style={{ marginLeft: "4px", color: "#FFB133" }}>fire</FaGun>
+          )}
         </div>
       ),
       flex: 1,
       disableColumnMenu: true,
+      cellClassName: "name-column--cell",
     },
     {
-      field: "incidentCamera",
+      field: "camera",
       headerName: "Camera Location",
       flex: 1,
       disableColumnMenu: true,
+      cellClassName: "name-column--cell",
     },
     {
-      field: "incidentStatus",
+      field: "status",
       headerName: "Status",
+      renderCell: (params) => (
+        <div style={{ display: "flex", alignItems: "center" }}>
+          <span
+            style={{
+              color:
+                params.value === "Active"
+                  ? "green"
+                  : params.value === "Reviewed"
+                  ? "blue"
+                  : "inherit", // Use the default color if none of the conditions match
+            }}
+          >
+            {params.value}
+          </span>
+        </div>
+      ),
       flex: 1,
-      cellClassName: "name-column--cell",
       disableColumnMenu: true,
-
-    },
-    
+      cellClassName: "name-column--cell",
+    },      
   ];
   return (
-    <Box m="20px">
-      <Box display="flex" justifyContent="space-between" alignItems="center">
-        <Header title="INCIDENTS"/>
-      </Box>
-      <Box
-        m="8px 0 0 0"
-        width="100%"
-        height="80vh"
-        sx={{
-          "& .MuiDataGrid-root": {
-            border: "none",
-            fontSize: "14px",
-            "& .MuiDataGrid-cell:focus": {
-              outline: "none", // Remove the focus outline
-            },
-          },
-         
-          "& .MuiDataGrid-cell": {
-            borderBottom: "none",
-          },
-          "& .name-column--cell": {
-            color: "#8cd2c6",
-          },
-          "& .MuiDataGrid-columnHeaders": {
-            backgroundColor: colors.purpleAccent[700],
-            borderBottom: "none",
-          },
-          "& .MuiDataGrid-columnHeaderTitle": {
-           
-            fontSize: "15px"
-          },
-          "& .MuiDataGrid-virtualScroller": {
-            backgroundColor: colors.primary[400],
-          },
-          "& .MuiDataGrid-footerContainer": {
-            borderTop: "none",
-            backgroundColor: colors.purpleAccent[700],
-          },
-          "& .MuiCheckbox-root": {
-            color: `${colors.pinkAccents[200]} !important`,
-          },
-          "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
-            color: `${colors.grey[100]} !important`,
-            fontSize: "14px",
-          },
-        }}
-      >
-         <DataGrid
-          rows={mockDataContacts}
-          columns={columns}
-          components={{ Toolbar: GridToolbar }}
-          onRowClick={(params) => {
-            // Handle row click here
-            console.log("Row clicked:", params.row);
+    <Box backgroundColor={colors.primary[500]} p={3} minHeight={"100vh"}>
+    <Box p={1}
+    m="8px 0 0 0"
+    width="100%"
+    height="80vh"
+    sx={{
+      "& .MuiDataGrid-root": {
+        border: "none",
+        fontSize: "14px",
+        "& .MuiDataGrid-cell:focus": {
+          outline: "none", // Remove the focus outline
+        },
+      
+      },
+     
+      "& .MuiDataGrid-cell": {
+        borderBottom: "none",
 
-          }}
-          
-        />
-      </Box>
-    </Box>
+        
+      },
+      "& .name-column--cell": {
+        backgroundColor: colors.secondary[500],
+      },
+      "& .MuiDataGrid-columnHeaders": {
+        backgroundColor: colors.secondary[500],
+        borderBottom: "none",
+        color: colors.blackAccents[300]
+      },
+      "& .MuiDataGrid-columnHeaderTitle": {
+       
+        fontSize: "15px"
+      },
+      "& .MuiDataGrid-virtualScroller": {
+        backgroundColor: colors.secondary[500],
+      },
+      "& .MuiDataGrid-footerContainer": {
+        borderTop: "none",
+        backgroundColor: colors.secondary[500],
+        borderRadius: '0 0 8px 8px',
+      },
+      "& .MuiCheckbox-root": {
+        color: `${colors.primary[500]} !important`,
+      },
+      "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
+        color: `${colors.blackAccents[100]} !important`,
+        fontSize: "14px",
+      },
+    }}
+  >
+
+     <DataGrid
+      
+      disableColumnSelector
+      disableDensitySelector
+      
+      rows={mockDataIncidents}
+      columns={columns}
+      components={{ Toolbar: CustomToolbar }}
+      componentsProps={{
+        panel: {
+          anchorEl: filterButtonEl,
+          placement: "bottom-end",
+        },
+        toolbar: {
+          setFilterButtonEl,
+
+        }
+      }}
+
+      />
+
+  </Box>
+  </Box>
   );
 };
 

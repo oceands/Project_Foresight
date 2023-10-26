@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { ColorModeContext, useMode } from "./theme";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { Routes, Route } from "react-router-dom";
@@ -22,6 +23,12 @@ import Security from "./pages/settings/security";
 import Login from "./pages/login"
 const App = () => {
   const [theme, colorMode] = useMode();
+  const [welcomeText, setWelcomeText] = useState("Welcome Back, Admin");
+
+  // Function to change the welcome text
+  const changeWelcomeText = (newText) => {
+    setWelcomeText(newText);
+  };
   return (
     <ColorModeContext.Provider value={colorMode}>
       <ThemeProvider theme={theme}>
@@ -29,23 +36,24 @@ const App = () => {
         <MyProSidebarProvider>
           <div style={{ height: "100%", width: "100%" }}>
             <main>
+            <Topbar welcomeText={welcomeText} />
               <Routes>
                 
-                <Route path="/" element={<Dashboard />} />
-                <Route path="/notifications" element={<Notifications />} />
-                <Route path="/incidents" element={<Incidents />} />
-                <Route path="/usermgnt" element={<Usermgnt />} />
-                <Route path="/reports" element={<Reports />} />
-                <Route path="/ai" element={<AI />} />
+                <Route path="/" element={<Dashboard changeWelcomeText={changeWelcomeText}/>} />
+                <Route path="/notifications" element={<Notifications changeWelcomeText={changeWelcomeText} />} />
+                <Route path="/incidents" element={<Incidents changeWelcomeText={changeWelcomeText}/>} />
+                <Route path="/usermgnt" element={<Usermgnt changeWelcomeText={changeWelcomeText}/>} />
+                <Route path="/reports" element={<Reports changeWelcomeText={changeWelcomeText}/>} />
+                <Route path="/ai" element={<AI/>} />
                 {/*Removed index.jsx for settings since we need seperate routes */}
-                <Route path="/settings/camera" element={<CamSetting/>} />
-                <Route path="/settings/dispatch" element={<DispatchSettings/>} />
-                <Route path="/settings/floorplan" element={<FloorplanSettings/>} />
-                <Route path="/settings/versioninfo" element={<VersionInfo/>} />
-                  <Route path="/settings/security" element={<Security/>} />
+                <Route path="/settings/camera" element={<CamSetting changeWelcomeText={changeWelcomeText}/>} />
+                <Route path="/settings/dispatch" element={<DispatchSettings changeWelcomeText={changeWelcomeText}/>} />
+                <Route path="/settings/floorplan" element={<FloorplanSettings changeWelcomeText={changeWelcomeText}/>} />
+                <Route path="/settings/versioninfo" element={<VersionInfo changeWelcomeText={changeWelcomeText}/>} />
+                  <Route path="/settings/security" element={<Security changeWelcomeText={changeWelcomeText}/>} />
                 {/*Newly added routes */}  
-                <Route path="/faq" element={<FAQ />} />
-                <Route path="/contact" element={<Contact />} />
+                <Route path="/faq" element={<FAQ changeWelcomeText={changeWelcomeText} />} />
+                <Route path="/contact" element={<Contact changeWelcomeText={changeWelcomeText}/>} />
                 <Route path="/login" element={<Login/>} />
 
               </Routes>
