@@ -9,23 +9,23 @@ import { useTheme } from '@emotion/react';
 import { Link } from 'react-router-dom';
 
 const Login = () => {
-    const isNonMobile = useMediaQuery("(min-width:600px)");
-    const passwordRegEx = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@#$%^&+=!])(?!.*\s).{8,}$/;
-    const handleFormSubmit = (values) => {
+    const isNonMobile = useMediaQuery("(min-width:600px)");// Check if it's not a mobile view based on screen width
+    const passwordRegEx = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@#$%^&+=!])(?!.*\s).{8,}$/;// Regular expression for password validation
+    const handleFormSubmit = (values) => {  // Function to handle form submission
     console.log(values);
 }
-const theme = useTheme();
+const theme = useTheme();  // Access theme and colors from the Material-UI theme
 const colors = tokens(theme.palette.mode)
 
-const initialValues = {
+const initialValues = { // Initial form values
     userName: "",
     password: "",
 };
-
+ // Function to handle checkbox value
 const getValue = () => {
 
 }
- 
+// Form validation schema
 const loginSchema = yup.object().shape({
     userName: yup.string().required("Required"),
     password: yup.string().matches(passwordRegEx, "Invalid Password!").required("Required"),

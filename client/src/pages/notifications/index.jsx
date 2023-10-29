@@ -1,14 +1,13 @@
 import React from "react";
 import { useEffect } from "react";
-import { Box, useTheme, Grid, Button ,Toolbar, colors} from "@mui/material";
-import { DataGrid, GridToolbar,GridToolbarQuickFilter , GridToolbarContainer, GridToolbarFilterButton, GridToolbarQuickFilterButton} from "@mui/x-data-grid";
+import { Box, useTheme, Grid, Button ,Toolbar} from "@mui/material";
+import { DataGrid,GridToolbarQuickFilter , GridToolbarContainer, GridToolbarFilterButton} from "@mui/x-data-grid";
 import { tokens } from "../../theme";
 import { mockDataNotification } from "../../data/mockData";
 import {AiFillFire} from 'react-icons/ai';
 import {FaGun} from 'react-icons/fa6';
 import {VscBellDot} from 'react-icons/vsc'
 import {Typography} from "@mui/material";
-import Header from "../../components/Header";
 import { useState } from "react";
 
 
@@ -18,7 +17,7 @@ import NotificationsOffIcon from '@mui/icons-material/NotificationsOff';
 
 
 
-
+// Custom toolbar for the DataGrid
 function CustomToolbar({ setFilterButtonEl }) {
   return (
     <Box sx={{ flexGrow: 1 , borderRadius:"8px"}} backgroundColor={"#fefffe"}>
@@ -52,14 +51,14 @@ const Notifications = ({ changeWelcomeText }) => {
   useEffect(() => {
     changeWelcomeText("Notifications");
   }, []);
-    const theme = useTheme();
+    const theme = useTheme();// Extract theme and colors from the MUI theme
     const colors = tokens;
 
     const [filterButtonEl, setFilterButtonEl] = useState(null);
     
     
     const columns = [
-      
+      // Define the columns for the DataGrid
       { field: "id", 
       headerName: "ID", 
       disableColumnMenu: true,
@@ -85,7 +84,8 @@ const Notifications = ({ changeWelcomeText }) => {
       {
         field: "module",
         headerName: "Module",
-        renderCell: (params) => (
+        renderCell: (params) => ( 
+          // Customize the rendering of the 'Module' column
           <div style={{ display: "flex", alignItems: "center" }}>
             {params.value}
             {params.value === "Fire Detection" && (

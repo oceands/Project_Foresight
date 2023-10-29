@@ -4,7 +4,7 @@ import { useProSidebar } from "react-pro-sidebar";
 import { useSidebarContext } from "./sidebarContext";
 import { Link } from "react-router-dom";
 import { tokens } from "../../../theme";
-import { useTheme, Box, Typography, IconButton } from "@mui/material";
+import { useTheme, Box, Typography } from "@mui/material";
 
 
 //MAIN MENUE ICONS
@@ -53,7 +53,7 @@ const MyProSidebar = () => {
   return (
     <Box
       sx={{
-       
+       // Styling for the outer sidebar container
         borderRight: '2px solid #DCDDDD !important',
         position: "sticky",
         display: "flex",
@@ -62,7 +62,7 @@ const MyProSidebar = () => {
         bottom: 0,
         
         zIndex: 10000,
-        "& .sidebar": {
+        "& .sidebar": { // Sidebar configuration
           border: "none",
         },
 

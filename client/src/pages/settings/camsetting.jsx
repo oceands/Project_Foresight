@@ -1,21 +1,15 @@
 import React from "react";
 import { useEffect } from "react";
 import { Box,Button,TextField, useTheme, Toolbar } from "@mui/material";
-import { DataGrid, GridToolbar,GridToolbarQuickFilter , GridToolbarContainer, GridToolbarFilterButton, GridToolbarQuickFilterButton} from "@mui/x-data-grid";
+import { DataGrid, GridToolbar,GridToolbarQuickFilter , GridToolbarContainer, GridToolbarFilterButton} from "@mui/x-data-grid";
 import { tokens } from "../../theme";
-import Header from "../../components/Header";
 import { Formik } from 'formik';
 import * as yup from 'yup';
 import {Typography} from "@mui/material";
-
 import IconButton from "@mui/material/IconButton";
-import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit"; // Import the Edit icon
 import { mockDataCamera} from "../../data/mockData";
 import { useState } from "react";
-
 import {AiOutlineCamera} from 'react-icons/ai';
-
 import {MdEdit} from 'react-icons/md';
 import {BsTrash3Fill} from 'react-icons/bs';
 
@@ -33,7 +27,7 @@ function CustomToolbar({ setFilterButtonEl }) {
   const [showForm, setShowForm] = React.useState(false);
 
  
-
+   // Regular expression for IP validation
   const phoneRegExp = /^((\+[1-9]{1,4}[ -]?)|(\([0-9]{2,3}\)[ -]?)|([0-9]{2,4})[ -]?)*?[0-9]{3,4}[ -]?[0-9]{3,4}$/;
   
   //Event in case the form is submitted
@@ -78,8 +72,7 @@ function CustomToolbar({ setFilterButtonEl }) {
   };
   //Adding the Camera Form
   const AddCameraForm = ({ onClose, onSubmit, initialValues, validationSchema, setShowForm}) => 
-  {
-        
+  {      
   return (
     
     <Box

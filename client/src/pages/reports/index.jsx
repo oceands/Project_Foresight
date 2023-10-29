@@ -1,7 +1,7 @@
 import React from "react";
 import { useEffect } from "react";
 import { Box, useTheme ,Toolbar, IconButton, Button} from "@mui/material";
-import { DataGrid, GridToolbarQuickFilter , GridToolbarContainer, GridToolbarFilterButton, GridToolbarQuickFilterButton} from "@mui/x-data-grid";
+import { DataGrid, GridToolbarQuickFilter , GridToolbarContainer, GridToolbarFilterButton} from "@mui/x-data-grid";
 import { tokens } from "../../theme";
 import { mockDataReports } from "../../data/mockData";
 import {MdEdit} from 'react-icons/md';
@@ -12,7 +12,7 @@ import { useState } from "react";
 function CustomToolbar({ setFilterButtonEl }) {
   const colors = tokens;
 
-  const buttonSx = {
+  const buttonSx = { // Styling for the "Create Reports" button in the toolbar
     backgroundColor: colors.orangeAccents[500],
     color: colors.primary[500],
     fontSize: '14px',

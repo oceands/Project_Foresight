@@ -1,20 +1,18 @@
 import React from "react";
 import { useEffect } from "react";
-import { Box, useTheme, Grid, Button ,Toolbar, colors} from "@mui/material";
-import { DataGrid, GridToolbar,GridToolbarQuickFilter , GridToolbarContainer, GridToolbarFilterButton, GridToolbarQuickFilterButton} from "@mui/x-data-grid";
+import { Box, useTheme,Toolbar} from "@mui/material";
+import { DataGrid,GridToolbarQuickFilter , GridToolbarContainer, GridToolbarFilterButton} from "@mui/x-data-grid";
 import { tokens } from "../../theme";
 import { mockDataIncidents } from "../../data/mockData";
 import {AiFillFire} from 'react-icons/ai';
 import {FaGun} from 'react-icons/fa6';
 import {FaRegEye} from 'react-icons/fa'
 import {Typography} from "@mui/material";
-import Header from "../../components/Header";
 import { useState } from "react";
 
+// Custom toolbar for the data grid
 function CustomToolbar({ setFilterButtonEl }) {
   return (
-
-    
     <Box sx={{ flexGrow: 1, borderRadius: '8px 8px 0 0' }} backgroundColor={"#fefffe"}>
      
       <Toolbar variant="dense" disableGutters >
@@ -40,16 +38,16 @@ function CustomToolbar({ setFilterButtonEl }) {
   );
 }
 
-const Incidents = ({ changeWelcomeText }) => {
+  const Incidents = ({ changeWelcomeText }) => {
   useEffect(() => {
     changeWelcomeText("Incidents");
   }, []);
-  const theme = useTheme();
+  const theme = useTheme();// Access theme and colors from Material-UI
   const colors = tokens;
 
-  const [filterButtonEl, setFilterButtonEl] = useState(null);
+  const [filterButtonEl, setFilterButtonEl] = useState(null);// State to track the filter button element
   
-  
+   // Columns configuration for the data grid
   const columns = [
     
     { field: "id", 

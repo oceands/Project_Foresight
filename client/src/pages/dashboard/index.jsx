@@ -1,10 +1,8 @@
 import {
-  Box,
-  Button,
+  Box, 
   IconButton,
   Typography,
   useTheme,
-  useMediaQuery,
 } from "@mui/material";
 import { useEffect } from "react";
 import Grid from "@mui/material/Unstable_Grid2";
@@ -27,8 +25,8 @@ const Dashboard = ({ changeWelcomeText }) => {
   }, []);
   const theme = useTheme();
   const colors = tokens;
-  const totalValue = mockPieData.reduce((total, item) => total + item.value, 0);
-  const progressPercent = mockPieData.map((item) => (item.value / totalValue) * 100);
+  const totalValue = mockPieData.reduce((total, item) => total + item.value, 0);// Calculate total value for pie chart data
+  const progressPercent = mockPieData.map((item) => (item.value / totalValue) * 100);// Calculate progress percentage and progress values for pie chart
   const progressValues = mockPieData.map((item) => item.value);
   return (
     // STATS, GRAPHS AND FEED

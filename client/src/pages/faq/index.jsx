@@ -1,5 +1,4 @@
-import { Box, useTheme } from "@mui/material";
-import Header from "../../components/Header";
+import { Box} from "@mui/material";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
@@ -13,13 +12,11 @@ const FAQ = ({ changeWelcomeText }) => {
   useEffect(() => {
     changeWelcomeText("FAQ");
   }, []);
-
   const colors = tokens;
   return (
     <Box backgroundColor={colors.primary[500]} p={3} minHeight={"100vh"}>
-    <Box m="20px">
-
-      <Accordion defaultExpanded>
+    <Box m="20px"> 
+      <Accordion defaultExpanded>             
         <AccordionSummary expandIcon={<MdExpandMore fontSize={25}/>}>
           <Typography color={colors.blackAccents[500]} variant="h5">
             An Important Question

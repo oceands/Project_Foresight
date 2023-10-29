@@ -1,15 +1,13 @@
- import React from 'react';
+import React from 'react';
 import { Box, Button, TextField, Typography, useTheme  } from '@mui/material';
 import { Formik } from 'formik';
 import * as yup from 'yup';
-import { useMediaQuery } from '@mui/material';
-import Header from '../../components/Header';
 import { tokens } from "../../theme";
 import { useEffect } from 'react';
 import { mockDataContacts } from '../../data/mockData';
 
 
-//icons
+// Import icons for contact information
 import {IoLocationSharp} from 'react-icons/io5'
 import {IoMailSharp} from 'react-icons/io5'
 import {BsTelephoneFill} from 'react-icons/bs'
@@ -21,11 +19,13 @@ const Contact = ({ changeWelcomeText }) => {
   }, []);
 
     const colors = tokens;
-
+    // Define a regular expression for validating phone numbers
     const phoneRegExp = /^((\+[1-9]{1,4}[ -]?)|(\([0-9]{2,3}\)[ -]?)|([0-9]{2,4})[ -]?)*?[0-9]{3,4}[ -]?[0-9]{3,4}$/;
+    // Function to handle form submission
     const handleFormSubmit = (values) => {
       console.log(values);
     };
+    //Initial form field values
     const initialValues = {
       firstName: '',
       lastName: '',
@@ -34,6 +34,7 @@ const Contact = ({ changeWelcomeText }) => {
       address1: '',
       address2: '',
     };
+     //Define the validation schema for form fields
     const checkoutSchema = yup.object().shape({
       firstName: yup.string().required('Required'),
       lastName: yup.string().required('Required'),
@@ -46,7 +47,7 @@ const Contact = ({ changeWelcomeText }) => {
 
 
 
-
+    //Render the component 
     return (
       <Box display="flex" height={"100vh"} backgroundColor={colors.primary[500]} minHeight={"100vh"}>
         <Box flex="1"
@@ -111,8 +112,8 @@ const Contact = ({ changeWelcomeText }) => {
               <form onSubmit={handleSubmit}>
                 <Box display="grid" 
                 gap="30px" 
-                gridTemplateColumns="repeat(4, minmax(0, 1fr))">
-                <TextField
+                gridTemplateColumns="repeat(4, minmax(0, 1fr))"> 
+                <TextField     //Labling the textboxes
                     fullWidth
                     variant="filled"
                     type="text"
@@ -190,8 +191,8 @@ const Contact = ({ changeWelcomeText }) => {
                     helperText={touched.address2 && errors.address2}
                     sx={{ gridColumn: "span 4" }}
                   />
-
-                  <Button type="submit"  variant="contained" style={{ gridColumn: "span 4", backgroundColor: colors.orangeAccents[500] }}>
+                   
+                  <Button type="submit"  variant="contained" style={{ gridColumn: "span 4", backgroundColor: colors.orangeAccents[500] }}> 
                     Send  🡲
                   </Button>
 
