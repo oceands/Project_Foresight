@@ -1,7 +1,7 @@
 import React from "react";
 import { useEffect } from "react";
-import { Box,Button,TextField, useTheme, Toolbar } from "@mui/material";
-import { DataGrid, GridToolbar,GridToolbarQuickFilter , GridToolbarContainer, GridToolbarFilterButton} from "@mui/x-data-grid";
+import { Box,Button,TextField, Toolbar } from "@mui/material";
+import { DataGrid,GridToolbarQuickFilter , GridToolbarContainer, GridToolbarFilterButton} from "@mui/x-data-grid";
 import { tokens } from "../../theme";
 import { Formik } from 'formik';
 import * as yup from 'yup';
@@ -26,7 +26,6 @@ function CustomToolbar({ setFilterButtonEl }) {
   //State for showing/ hiding the form
   const [showForm, setShowForm] = React.useState(false);
 
- 
    // Regular expression for IP validation
   const phoneRegExp = /^((\+[1-9]{1,4}[ -]?)|(\([0-9]{2,3}\)[ -]?)|([0-9]{2,4})[ -]?)*?[0-9]{3,4}[ -]?[0-9]{3,4}$/;
   
@@ -349,12 +348,13 @@ const CameraSettings = ({ changeWelcomeText }) => {
         disableColumnMenu: true,
         renderCell: (params) => (
           <Box display="flex">
-            <IconButton >
+            <IconButton>
               <MdEdit style={{ color: colors.blueAccents[500], width: "15px", height: "15px" }}/>
             </IconButton>
             <IconButton>
               <BsTrash3Fill  style={{ color: colors.blueAccents[500], width: "15px", height: "15px" }}/>
             </IconButton>
+            
           </Box>
         ),
         }
@@ -410,8 +410,9 @@ const CameraSettings = ({ changeWelcomeText }) => {
           fontSize: "14px",
         },
       }}
+      
+      
     >
-  
        <DataGrid
         
         disableColumnSelector

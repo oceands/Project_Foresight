@@ -5,7 +5,6 @@ import {
   Button,
   Grid,
   TextField,
-  useTheme,
   Divider,
   MenuItem,
   FormControl,
@@ -19,7 +18,6 @@ const Security = ({ changeWelcomeText }) => {
   useEffect(() => {
     changeWelcomeText("Settings / Security Settings");
   }, []);
-  const theme = useTheme();
   const colors = tokens;
 
   // Security: Update Password Const's
@@ -60,7 +58,7 @@ const Security = ({ changeWelcomeText }) => {
   ];
 
   const [selectedQuestion, setSelectedQuestion] = useState(''); // State to hold the selected question
-  const [answer, setAnswer] = useState(''); // State to hold the user's answer
+  const [answer] = useState(''); // State to hold the user's answer
 
   const handleQuestionChange = (event) => {
     setSelectedQuestion(event.target.value);
@@ -149,7 +147,7 @@ const handleSecTimerOverlayClick = (e) => {
 
 
   // Update Password Form Function
-  const UpdatePasswd = ({ onClose, onSubmit, initialValues, validationSchema, setShowForm }) => {
+  const UpdatePasswd = ({onClose, onSubmit, initialValues, validationSchema, setShowForm  }) => {
     return (
       
       <Box
@@ -325,7 +323,7 @@ const handleSecTimerOverlayClick = (e) => {
 
 
 
-  const UpdateLogoutTimer = ({ onClose, onSubmit, initialValues, validationSchema, setShowForm }) => {
+  const UpdateLogoutTimer = ({onClose, onSubmit, initialValues, validationSchema, setShowForm  }) => {
 
     return (
 
@@ -357,7 +355,7 @@ const handleSecTimerOverlayClick = (e) => {
           validationSchema={secTimerSchema} // Define your validation schema here
           onSubmit={handleFormSubmit} // Specify the submission function
         >
-          {({ values, errors, touched }) => (
+          {({ values }) => (
             <form>
                <Box p={1} display={'flex'} alignItems={'center'} justifyContent={'center'}>
                   <Typography variant="h6" p={2} fontWeight={"bold"}>
