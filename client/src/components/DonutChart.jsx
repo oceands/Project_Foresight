@@ -1,11 +1,9 @@
 import React from "react";
 import { Doughnut } from "react-chartjs-2";
 import { Box } from "@mui/material";
-import { useTheme } from "@mui/material";
 import { tokens } from "../theme";
 
 const DonutChart = ({ data, size = 100 }) => {
-  const theme = useTheme();
   const colors = tokens;
 
   const chartData = {
@@ -13,7 +11,7 @@ const DonutChart = ({ data, size = 100 }) => {
     datasets: [
       {
         data: data.map((item) => item.value),
-        backgroundColor: data.map((item, index) =>
+        backgroundColor: data.map(( index) =>
           index === 0 ? colors.blueAccents[500] : "transparent"
         ),
         borderWidth: 0,

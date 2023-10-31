@@ -1,13 +1,11 @@
 import React from "react";
 import { useEffect } from "react";
-import { Box, useTheme ,Toolbar, IconButton, Button} from "@mui/material";
-import { DataGrid, GridToolbarQuickFilter , GridToolbarContainer, GridToolbarFilterButton, GridToolbarQuickFilterButton} from "@mui/x-data-grid";
+import { Box,Toolbar, IconButton, Button} from "@mui/material";
+import { DataGrid, GridToolbarQuickFilter , GridToolbarContainer, GridToolbarFilterButton} from "@mui/x-data-grid";
 import { tokens } from "../../theme";
 import { mockUserManagement } from "../../data/mockData";
 import {MdEdit} from 'react-icons/md';
 import {BsTrash3Fill} from 'react-icons/bs';
-import {LuUsers} from 'react-icons/lu'
-import {Typography} from "@mui/material";
 import { useState } from "react";
 
 function CustomToolbar({ setFilterButtonEl }) {
@@ -62,7 +60,6 @@ const Usermgnt = ({ changeWelcomeText }) => {
   useEffect(() => {
     changeWelcomeText("User Management");
   }, []);
-  const theme = useTheme();
   const colors = tokens;
 
   const [filterButtonEl, setFilterButtonEl] = useState(null);

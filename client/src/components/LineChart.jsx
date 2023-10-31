@@ -1,7 +1,6 @@
 import React from "react";
 import { ResponsiveLine } from "@nivo/line";
 import { linearGradientDef } from "@nivo/core";
-import { useTheme } from "@mui/material";
 import { tokens } from "../theme";
 import { mockLineData } from "../data/mockData";
 
