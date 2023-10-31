@@ -12,6 +12,7 @@ import Incidents from "./pages/Incidents";
 import Usermgnt from "./pages/usermgnt";
 import Reports from "./pages/reports";
 import AI from "./pages/ai";
+import UserProfile from "./pages/userprofile";
 
 import Contact from "./pages/contactUs";
 import FAQ from "./pages/faq";
@@ -55,7 +56,7 @@ const App = () => {
                 <Route path="/faq" element={<FAQ changeWelcomeText={changeWelcomeText} />} />
                 <Route path="/contact" element={<Contact changeWelcomeText={changeWelcomeText}/>} />
                 <Route path="/login" element={<Login/>} />
-
+                <Route path="/userprofile" element={<UserProfile changeWelcomeText={changeWelcomeText}/>} />
               </Routes>
             </main>
           </div>
