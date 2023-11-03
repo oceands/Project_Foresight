@@ -8,9 +8,10 @@ import {
   Menu,
   MenuItem,
   Avatar,
+  Badge, // Added import for Badge component
 } from "@mui/material";
 import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined";
-import PersonIcon from '@mui/icons-material/Person';
+import PersonIcon from "@mui/icons-material/Person";
 import ExitToAppOutlinedIcon from "@mui/icons-material/ExitToAppOutlined";
 import FireIcon from "@mui/icons-material/LocalFireDepartmentOutlined";
 import SmokeIcon from "@mui/icons-material/SmokeFreeOutlined";
@@ -22,6 +23,7 @@ const Topbar = ({ welcomeText }) => {
 
   const [anchorEl, setAnchorEl] = useState(null);
   const [alertAnchorEl, setAlertAnchorEl] = useState(null);
+  const [alertCount, setAlertCount] = useState(0); // Added state for alertCount
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -44,6 +46,15 @@ const Topbar = ({ welcomeText }) => {
     // Add your logout logic here
   };
 
+  /*
+  const handleNewAlert = () => {
+    // Simulate receiving 1 or 2 alerts randomly
+    const randomAlerts = Math.random() < 0.5 ? 1 : 2;
+
+    setAlertCount(alertCount + randomAlerts);
+    // Add other logic to handle the new alert
+  };
+*/
   return (
     <Box
       display="flex"
@@ -62,7 +73,9 @@ const Topbar = ({ welcomeText }) => {
       <Box display="flex">
         <Box borderRight="1px solid #DCDDDD !important" p="0px 8px 0px 8px">
           <IconButton onClick={handleAlertClick}>
-            <NotificationsOutlinedIcon />
+            <Badge badgeContent={alertCount} color="secondary"> {/* Display alert count */}
+              <NotificationsOutlinedIcon />
+            </Badge>
           </IconButton>
           <Menu
             anchorEl={alertAnchorEl}
@@ -77,15 +90,15 @@ const Topbar = ({ welcomeText }) => {
             }}
           >
             <MenuItem onClick={handleAlertClose}>
-              <FireIcon />
+              <FireIcon style={{ marginRight: '8px' }}/>
               Fire Alert
             </MenuItem>
             <MenuItem onClick={handleAlertClose}>
-              <SmokeIcon />
+              <SmokeIcon style={{ marginRight: '8px' }}/>
               Smoke Alert
             </MenuItem>
             <MenuItem onClick={handleAlertClose}>
-              <GunAlertOutlinedIcon />
+              <GunAlertOutlinedIcon style={{ marginRight: '8px' }}/>
               Gun Alert
             </MenuItem>
           </Menu>
@@ -111,13 +124,13 @@ const Topbar = ({ welcomeText }) => {
             }}
           >
             <MenuItem onClick={handleClose}>
-              <Avatar>
+              <Avatar style={{ marginRight: '8px' }}>
                 <PersonIcon />
               </Avatar>
               My Profile
             </MenuItem>
             <MenuItem onClick={handleLogout}>
-              <Avatar>
+              <Avatar style={{ marginRight: '8px' }}>
                 <ExitToAppOutlinedIcon />
               </Avatar>
               Logout
