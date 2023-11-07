@@ -8,9 +8,14 @@ import {
   Menu,
   MenuItem,
   Avatar,
+  Button,
+  Select,
+  FormControl,
+  InputLabel,
+  Grid,
 } from "@mui/material";
 import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined";
-import PersonIcon from '@mui/icons-material/Person';
+import PersonIcon from "@mui/icons-material/Person";
 import ExitToAppOutlinedIcon from "@mui/icons-material/ExitToAppOutlined";
 import FireIcon from "@mui/icons-material/LocalFireDepartmentOutlined";
 import SmokeIcon from "@mui/icons-material/SmokeFreeOutlined";
@@ -22,6 +27,14 @@ const Topbar = ({ welcomeText }) => {
 
   const [anchorEl, setAnchorEl] = useState(null);
   const [alertAnchorEl, setAlertAnchorEl] = useState(null);
+  const [selectedFilter, setSelectedFilter] = useState("all");
+
+  const notifications = [
+    { type: "fire", message: "Fire alert message", unread: true },
+    { type: "smoke", message: "Smoke alert message", unread: false },
+    { type: "gun", message: "Gun alert message", unread: true },
+    { type: "fire", message: "Another fire alert message", unread: false },
+  ];
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -44,6 +57,24 @@ const Topbar = ({ welcomeText }) => {
     // Add your logout logic here
   };
 
+  const handleFilterChange = (event) => {
+    setSelectedFilter(event.target.value);
+  };
+
+  const handleMarkAllAsRead = () => {
+    const updatedNotifications = notifications.map((notification) => ({
+      ...notification,
+      unread: false,
+    }));
+    // Update the state with the new notifications array
+    // You can use a state management library like Redux, MobX, or React Context for this.
+  };
+
+  const filteredNotifications = notifications.filter((notification) => {
+    if (selectedFilter === "all") return true;
+    return notification.type === selectedFilter;
+  });
+
   return (
     <Box
       display="flex"
@@ -52,14 +83,16 @@ const Topbar = ({ welcomeText }) => {
       borderBottom="2px solid #DCDDDD !important"
       alignItems="center"
     >
-      {/* Left Section */}
-      <Box display="flex" p={0.2}>
-        <Typography variant="h5" color={colors.blueAccents[500]} fontWeight="bold">
+      <Box display="flex" alignItems="center" p={0.2}>
+        <Typography
+          variant="h5"
+          color={colors.blueAccents[500]}
+          fontWeight="bold"
+        >
           {welcomeText}
         </Typography>
       </Box>
-      {/* Right Section */}
-      <Box display="flex">
+      <Box display="flex" alignItems="center">
         <Box borderRight="1px solid #DCDDDD !important" p="0px 8px 0px 8px">
           <IconButton onClick={handleAlertClick}>
             <NotificationsOutlinedIcon />
@@ -73,30 +106,79 @@ const Topbar = ({ welcomeText }) => {
                 backgroundColor: theme.palette.background.paper,
                 boxShadow: theme.shadows[1],
                 borderRadius: "8px",
+                width: "300px",
+                maxHeight: "400px",
+                overflowY: "auto",
               },
             }}
           >
+            <Grid container alignItems="center" justifyContent="space-between" p={2}>
+              <Grid item>
+                <Typography variant="subtitle1" fontWeight="bold" color="black">
+                  Notifications
+                </Typography>
+              </Grid>
+              <Grid item>
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  size="small"
+                  onClick={handleMarkAllAsRead}
+                >
+                  Mark All as Read
+                </Button>
+              </Grid>
+            </Grid>
+            <FormControl fullWidth variant="outlined" sx={{ p: 2 }}>
+              <InputLabel>Filter</InputLabel>
+              <Select
+                value={selectedFilter}
+                onChange={handleFilterChange}
+                label="Filter"
+              >
+                <MenuItem value="all">All Notifications</MenuItem>
+                <MenuItem value="unread">Unread</MenuItem>
+                <MenuItem value="fire">Fire</MenuItem>
+                <MenuItem value="smoke">Smoke</MenuItem>
+                <MenuItem value="gun">Gun</MenuItem>
+                <MenuItem value="weapon">Weapon</MenuItem>
+              </Select>
+            </FormControl>
+            {filteredNotifications.map((notification, index) => (
+              <MenuItem key={index} onClick={handleAlertClose}>
+                {notification.type === "fire" && <FireIcon />}
+                {notification.type === "smoke" && <SmokeIcon />}
+                {notification.type === "gun" && <GunAlertOutlinedIcon />}
+                <div>
+                  <Typography variant="subtitle1">
+                    {notification.type.charAt(0).toUpperCase() +
+                      notification.type.slice(1)}{" "}
+                    Alert
+                  </Typography>
+                  <Typography variant="body2">
+                    {notification.message}
+                  </Typography>
+                  {notification.unread ? (
+                    <span style={{ color: "red" }}>Unread</span>
+                  ) : null}
+                </div>
+              </MenuItem>
+            ))}
             <MenuItem onClick={handleAlertClose}>
-              <FireIcon />
-              Fire Alert
-            </MenuItem>
-            <MenuItem onClick={handleAlertClose}>
-              <SmokeIcon />
-              Smoke Alert
-            </MenuItem>
-            <MenuItem onClick={handleAlertClose}>
-              <GunAlertOutlinedIcon />
-              Gun Alert
+              <div style={{ textAlign: "center", width: "100%" }}>
+                <Button variant="outlined" color="primary">
+                  View All
+                </Button>
+              </div>
             </MenuItem>
           </Menu>
         </Box>
-        {/* User Icon Button and Username */}
         <Box borderLeft="1px solid #DCDDDD !important" p="0px 8px 0px 8px" display="flex" alignItems="center">
           <IconButton
             sx={{ border: "2px solid #DCDDDD !important", backgroundColor: colors.orangeAccents[300] }}
             onClick={handleClick}
           >
-            <PersonIcon/>
+            <PersonIcon />
           </IconButton>
           <Menu
             anchorEl={anchorEl}
