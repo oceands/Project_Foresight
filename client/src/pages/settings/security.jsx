@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useTheme } from "@mui/material";
 
 import {
   Box,
@@ -16,7 +15,6 @@ import { tokens } from "../../theme";
 import { Typography } from "@mui/material";
 
 const Security = () => {
-  const theme = useTheme();
   const colors = tokens;
 
   // Security: Update Password Const's

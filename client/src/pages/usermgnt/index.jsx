@@ -1,6 +1,5 @@
 import React from "react";
-import { useEffect } from "react";
-import { Box, Toolbar, IconButton, Button, useTheme } from "@mui/material";
+import { Box, Toolbar, IconButton, Button } from "@mui/material";
 import {
   DataGrid,
   GridToolbarQuickFilter,
@@ -72,7 +71,6 @@ function CustomToolbar({ setFilterButtonEl }) {
 }
 
 const Usermgnt = () => {
-  const theme = useTheme();
   const colors = tokens;
 
   const [filterButtonEl, setFilterButtonEl] = useState(null);

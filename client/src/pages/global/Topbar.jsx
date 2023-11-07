@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { tokens } from "../../theme";
 import {
   useTheme,
@@ -15,7 +15,6 @@ import {
   Grid,
 } from "@mui/material";
 import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined";
-import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 
 import PersonIcon from "@mui/icons-material/Person";
 import ExitToAppOutlinedIcon from "@mui/icons-material/ExitToAppOutlined";

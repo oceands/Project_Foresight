@@ -36,8 +36,6 @@ import { MdVisibilityOff } from "react-icons/md";
 const Login = (props, { ...others }) => {
   const dispatcher = useDispatch();
 
-  const [checked, setChecked] = React.useState(true);
-
   const [showPassword, setShowPassword] = React.useState(false);
 
   const handleClickShowPassword = () => {
@@ -47,8 +45,6 @@ const Login = (props, { ...others }) => {
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
-
-  const isNonMobile = useMediaQuery("(min-width:600px)"); // Check if it's not a mobile view based on screen width
 
   const passwordRegEx =
     /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@#$%^&+=!])(?!.*\s).{8,}$/; // Regular expression for password validation

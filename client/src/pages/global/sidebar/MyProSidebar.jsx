@@ -4,7 +4,7 @@ import { useProSidebar } from "react-pro-sidebar";
 import { useSidebarContext } from "./sidebarContext";
 import { Link } from "react-router-dom";
 import { tokens } from "../../../theme";
-import { useTheme, Box, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 
 //MAIN MENUE ICONS
 import { FaChartPie } from "react-icons/fa";
@@ -25,7 +25,6 @@ import { FiInfo } from "react-icons/fi";
 import { BsShieldLock } from "react-icons/bs";
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
-  const theme = useTheme();
   const colors = tokens;
 
   return (
@@ -42,7 +41,6 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
 };
 
 const MyProSidebar = () => {
-  const theme = useTheme();
   const colors = tokens;
   const [selected, setSelected] = useState("Dashboard");
   const { sidebarRTL, setSidebarRTL, sidebarImage } = useSidebarContext();
