@@ -65,7 +65,7 @@ function CustomToolbar({ setFilterButtonEl }) {
   };
 
   //Adding the Dispatch Form
-  const AddDispatchForm = ({ onClose, onSubmit, initialValues, validationSchema, setShowForm}) => {
+  const AddDispatchForm = ({onClose, onSubmit, initialValues, validationSchema, setShowForm}) => {
        
     return (
       <Box

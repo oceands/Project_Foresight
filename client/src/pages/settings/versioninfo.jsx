@@ -1,13 +1,12 @@
-import React from "react";
-import { Box, useTheme } from "@mui/material";
-import { DataGrid, GridToolbar } from "@mui/x-data-grid";
-import { tokens } from "../../theme";
-import { mockDataContacts } from "../../data/mockData";
 import { useEffect } from "react";
 
+<<<<<<< HEAD
 import Header from "../../components/Header";
 
 const VersionInfo = () => {
+=======
+const VersionInfo = ({ changeWelcomeText }) => {
+>>>>>>> 2eafb8dfee2919df82c8615139bef8a85d113850
 
 };
 

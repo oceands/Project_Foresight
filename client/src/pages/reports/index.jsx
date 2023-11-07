@@ -8,6 +8,21 @@ import {MdEdit} from 'react-icons/md';
 import {BsTrash3Fill} from 'react-icons/bs';
 import {HiDownload} from 'react-icons/hi'
 import { useState } from "react";
+import { Dialog, DialogTitle, DialogContent,DialogActions,LinearProgress } from "@mui/material";
+
+function DownloadPopup({ open, onClose }) {
+  return (
+    <Dialog open={open} onClose={onClose}>
+      <DialogTitle>Download Report</DialogTitle>
+      <DialogContent>
+        {/* Add content for the download pop-up here */}
+        <p>Click the button to start the download...</p>
+        <Button onClick={onClose}>Close</Button>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
 
 function CustomToolbar({ setFilterButtonEl }) {
   const colors = tokens;
@@ -25,6 +40,7 @@ function CustomToolbar({ setFilterButtonEl }) {
       boxShadow:' rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;',
     },
   };
+
 
   return (
 
@@ -63,7 +79,51 @@ const Reports = () => {
   const colors = tokens;
 
   const [filterButtonEl, setFilterButtonEl] = useState(null);
-  
+  //const [downloadPopupOpen, setDownloadPopupOpen] = useState(false);
+  const [downloadProgressOpen, setDownloadProgressOpen] = useState(false);
+  const [downloadProgress, setDownloadProgress] = useState(0);
+
+  const [deleteConfirmationOpen, setDeleteConfirmationOpen] = useState(false);
+
+  // Function to open the delete confirmation dialog
+  const openDeleteConfirmation = () => {
+    setDeleteConfirmationOpen(true);
+  };
+
+  // Function to close the delete confirmation dialog
+  const closeDeleteConfirmation = () => {
+    setDeleteConfirmationOpen(false);
+  };
+  const handleDownloadClick = () => {
+    // Open the download progress pop-up
+    setDownloadProgressOpen(true);
+
+    // Simulate a download process for demonstration purposes
+    const downloadInterval = setInterval(() => {
+      setDownloadProgress(prevProgress => {
+        if (prevProgress < 100) {
+          return prevProgress + 10;
+        } else {
+          clearInterval(downloadInterval);
+          setDownloadProgressOpen(false);
+          return 0;
+        }
+      });
+    }, 1000);
+  };
+ // const openDownloadPopup = () => {
+   // setDownloadPopupOpen(true);
+ // };
+ // const closeDownloadPopup = () => {
+   // setDownloadPopupOpen(false);
+ // };
+
+  const handleDeleteConfirmed = () => {
+    // Perform the deletion logic here
+    // You can remove the item from your data source
+    // Example: Delete the item with an API call or update the state
+    closeDeleteConfirmation();
+ };
   
   const columns = [
     {
@@ -119,12 +179,45 @@ const Reports = () => {
           <IconButton >
             <MdEdit style={{ color: colors.blueAccents[500], width: "15px", height: "15px" }}/>
           </IconButton>
-          <IconButton>
+          <IconButton onClick={openDeleteConfirmation}>
             <BsTrash3Fill  style={{ color: colors.blueAccents[500], width: "15px", height: "15px" }}/>
           </IconButton>
-          <IconButton>
-            <HiDownload  style={{ color: colors.blueAccents[500], width: "15px", height: "15px" }}/>
-          </IconButton>
+        
+          <div>
+      <IconButton onClick={handleDownloadClick}>
+        <HiDownload  style={{ color: colors.blueAccents[500], width: "15px", height: "15px" }} />
+      </IconButton>
+
+      <Dialog open={downloadProgressOpen} onClose={() => setDownloadProgressOpen(false)}  BackdropProps={{ style: { backgroundColor: "rgba(0, 0, 0, 0.1)"  } }}  >
+        <DialogContent>
+          <p>Downloading Report...</p>
+          <LinearProgress variant="determinate" value={downloadProgress} />
+          <Button onClick={() => setDownloadProgressOpen(false)}>Close</Button>
+        </DialogContent>
+      </Dialog>
+
+    </div>
+
+  
+          {/* Delete Confirmation Dialog */}
+          <Dialog open={deleteConfirmationOpen} onClose={closeDeleteConfirmation}  BackdropProps={{ style: { backgroundColor: "rgba(0, 0, 0, 0.1)"  } }} >
+          
+          <DialogTitle>Delete Report Confirmation</DialogTitle>
+
+            <DialogContent>
+             <p>Are you sure you want to delete this Report?</p>
+            </DialogContent>
+
+          <DialogActions>
+             <Button onClick={handleDeleteConfirmed} variant="contained" color="error">
+               Yes
+            </Button>
+              <Button onClick={closeDeleteConfirmation} variant="contained" color="primary">
+              Cancel
+            </Button>
+        </DialogActions>
+
+      </Dialog>
         </Box>
       ),
     },
@@ -132,6 +225,8 @@ const Reports = () => {
   
   
   return (
+    
+    
     <Box backgroundColor={colors.primary[500]} p={3} minHeight={"100vh"}>
     <Box p={1}
     m="8px 0 0 0"

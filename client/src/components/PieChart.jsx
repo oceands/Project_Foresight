@@ -1,6 +1,5 @@
 import React from "react";
 import { ResponsivePie } from "@nivo/pie";
-import { colors, useTheme } from "@mui/material";
 import { tokens } from "../theme";
 import { mockPieData as data } from "../data/mockData";
 
