@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-import React, {useEffect, useState} from "react";
-=======
-import React, { useState } from "react";
->>>>>>> 2eafb8dfee2919df82c8615139bef8a85d113850
+import React, { useEffect, useState } from "react";
 import { tokens } from "../../theme";
 import {
   useTheme,
@@ -19,51 +15,41 @@ import {
   Grid,
 } from "@mui/material";
 import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined";
-<<<<<<< HEAD
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
-import axios from "axios";
-import configData from "../../config";
-import { useSelector } from "react-redux";
 
-
-
-const Topbar = () => {
-=======
 import PersonIcon from "@mui/icons-material/Person";
 import ExitToAppOutlinedIcon from "@mui/icons-material/ExitToAppOutlined";
 import FireIcon from "@mui/icons-material/LocalFireDepartmentOutlined";
 import SmokeIcon from "@mui/icons-material/SmokeFreeOutlined";
 import GunAlertOutlinedIcon from "@mui/icons-material/ReportOutlined";
->>>>>>> 2eafb8dfee2919df82c8615139bef8a85d113850
+import { useSelector } from "react-redux";
 
+const Topbar = () => {
+  const theme = useTheme();
   const colors = tokens;
   const currentRoute = window.location.pathname;
-  const user = useSelector (state => state.account.user)
-  const username = JSON.stringify(user.username)
-  let firstName = username.replace(/['"]+/g, '').split('.')[0]
-  firstName  = firstName.charAt(0).toUpperCase() + firstName.slice(1);
+  const user = useSelector((state) => state.account.user);
+  const username = JSON.stringify(user.username);
+  let firstName = username.replace(/['"]+/g, "").split(".")[0];
+  firstName = firstName.charAt(0).toUpperCase() + firstName.slice(1);
 
+  const routeTextMap = {
+    "/dashboard": "Welcome Back, " + firstName,
+    "/notifications": "Notifications",
+    "/incidents": "Incidents",
+    "/usermgnt": "User Management",
+    "/reports": "Reports",
+    "/ai": "Artificial Intelligence",
+    "/contact": "Contact",
+    "/faq": "FAQ",
+    "/settings/camsetting": "Camera Settings",
+    "/settings/dispatchsettings": "Dispatch Settings",
+    "/settings/floorplan": "Floor Plan",
+    "/settings/versioninfo": "Version Info",
+    "/settings/security": "Security",
+  };
 
-  
-const routeTextMap = {
-  '/dashboard': "Welcome Back, " + firstName,
-  '/notifications': "Notifications",
-  '/incidents': "Incidents",
-  '/usermgnt': "User Management",
-  '/reports': "Reports",
-  '/ai': "Artificial Intelligence",
-  '/contact': "Contact",
-  '/faq': "FAQ",
-  '/settings/camsetting': "Camera Settings",
-  '/settings/dispatchsettings': "Dispatch Settings",
-  '/settings/floorplan': "Floor Plan",
-  '/settings/versioninfo': "Version Info",
-  '/settings/security': "Security",
-};
-
-
-const welcomeText = routeTextMap[currentRoute];
-
+  const welcomeText = routeTextMap[currentRoute];
 
   const [anchorEl, setAnchorEl] = useState(null);
   const [alertAnchorEl, setAlertAnchorEl] = useState(null);
@@ -100,7 +86,7 @@ const welcomeText = routeTextMap[currentRoute];
   const handleFilterChange = (event) => {
     setSelectedFilter(event.target.value);
   };
-/*
+  /*
   const handleMarkAllAsRead = () => {
     const updatedNotifications = notifications.map((notification) => ({
       ...notification,
@@ -116,19 +102,6 @@ const welcomeText = routeTextMap[currentRoute];
   });
 
   return (
-<<<<<<< HEAD
-
-    <Box display="flex" justifyContent="space-between" p={2} borderBottom="2px solid #DCDDDD !important" alignItems="center">
-      {/* Left Section */}
-      <Box display="flex" p={0.2}>
-        <Typography variant="h5" color={colors.blueAccents[500]} fontWeight="bold">
-          {welcomeText}
-        </Typography>
-      </Box>
-      
-      {/* Right Section */}
-      <Box display="flex">
-=======
     <Box
       display="flex"
       justifyContent="space-between"
@@ -146,7 +119,6 @@ const welcomeText = routeTextMap[currentRoute];
         </Typography>
       </Box>
       <Box display="flex" alignItems="center">
->>>>>>> 2eafb8dfee2919df82c8615139bef8a85d113850
         <Box borderRight="1px solid #DCDDDD !important" p="0px 8px 0px 8px">
           <IconButton onClick={handleAlertClick}>
             <NotificationsOutlinedIcon />
@@ -166,7 +138,12 @@ const welcomeText = routeTextMap[currentRoute];
               },
             }}
           >
-            <Grid container alignItems="center" justifyContent="space-between" p={2}>
+            <Grid
+              container
+              alignItems="center"
+              justifyContent="space-between"
+              p={2}
+            >
               <Grid item>
                 <Typography variant="subtitle1" fontWeight="bold" color="black">
                   Notifications
@@ -177,7 +154,7 @@ const welcomeText = routeTextMap[currentRoute];
                   variant="outlined"
                   color="primary"
                   size="small"
-                //  onClick={handleMarkAllAsRead}
+                  //  onClick={handleMarkAllAsRead}
                 >
                   Mark All as Read
                 </Button>
@@ -227,9 +204,17 @@ const welcomeText = routeTextMap[currentRoute];
             </MenuItem>
           </Menu>
         </Box>
-        <Box borderLeft="1px solid #DCDDDD !important" p="0px 8px 0px 8px" display="flex" alignItems="center">
+        <Box
+          borderLeft="1px solid #DCDDDD !important"
+          p="0px 8px 0px 8px"
+          display="flex"
+          alignItems="center"
+        >
           <IconButton
-            sx={{ border: "2px solid #DCDDDD !important", backgroundColor: colors.orangeAccents[300] }}
+            sx={{
+              border: "2px solid #DCDDDD !important",
+              backgroundColor: colors.orangeAccents[300],
+            }}
             onClick={handleClick}
           >
             <PersonIcon />
@@ -265,7 +250,6 @@ const welcomeText = routeTextMap[currentRoute];
         </Box>
       </Box>
     </Box>
-    
   );
 };
 
