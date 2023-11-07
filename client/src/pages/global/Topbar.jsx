@@ -60,7 +60,7 @@ const Topbar = ({ welcomeText }) => {
   const handleFilterChange = (event) => {
     setSelectedFilter(event.target.value);
   };
-
+/*
   const handleMarkAllAsRead = () => {
     const updatedNotifications = notifications.map((notification) => ({
       ...notification,
@@ -69,7 +69,7 @@ const Topbar = ({ welcomeText }) => {
     // Update the state with the new notifications array
     // You can use a state management library like Redux, MobX, or React Context for this.
   };
-
+*/
   const filteredNotifications = notifications.filter((notification) => {
     if (selectedFilter === "all") return true;
     return notification.type === selectedFilter;
@@ -123,7 +123,7 @@ const Topbar = ({ welcomeText }) => {
                   variant="outlined"
                   color="primary"
                   size="small"
-                  onClick={handleMarkAllAsRead}
+                //  onClick={handleMarkAllAsRead}
                 >
                   Mark All as Read
                 </Button>
