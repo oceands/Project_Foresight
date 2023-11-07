@@ -231,10 +231,8 @@ function CustomToolbar({ setFilterButtonEl }) {
   );
 }
 
-const DispatchSettings = ({ changeWelcomeText }) => {
-  useEffect(() => {
-    changeWelcomeText("Settings / Dispatch Settings");
-  }, []);
+const DispatchSettings = () => {
+
   const [rows, setRows] = React.useState(mockDataDispatch);
 
   const handleDelete = (id) => {

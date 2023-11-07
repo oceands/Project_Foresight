@@ -113,6 +113,10 @@ export const themeSettings = (mode) => {
         fontFamily: ["Raleway", "sans-serif"].join(","),
         fontSize: 14,
       },
+      h7: {
+        fontFamily: ["Raleway", "sans-serif"].join(","),
+        fontSize: 12,
+      },
     },
   };
 };

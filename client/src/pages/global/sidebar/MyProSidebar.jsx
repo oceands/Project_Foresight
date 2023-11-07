@@ -6,25 +6,23 @@ import { Link } from "react-router-dom";
 import { tokens } from "../../../theme";
 import { useTheme, Box, Typography } from "@mui/material";
 
-
 //MAIN MENUE ICONS
-import {FaChartPie} from 'react-icons/fa';
-import {MdOutlineNotificationAdd} from 'react-icons/md';
-import {FaRegEye} from 'react-icons/fa'
-import {LuUsers} from 'react-icons/lu'
-import {TbReport} from 'react-icons/tb'
-import {BiChip} from 'react-icons/bi'
-import {LuSettings} from 'react-icons/lu'
-import {AiOutlineQuestionCircle} from 'react-icons/ai'
-import {FiHeadphones} from 'react-icons/fi'
-
+import { FaChartPie } from "react-icons/fa";
+import { MdOutlineNotificationAdd } from "react-icons/md";
+import { FaRegEye } from "react-icons/fa";
+import { LuUsers } from "react-icons/lu";
+import { TbReport } from "react-icons/tb";
+import { BiChip } from "react-icons/bi";
+import { LuSettings } from "react-icons/lu";
+import { AiOutlineQuestionCircle } from "react-icons/ai";
+import { FiHeadphones } from "react-icons/fi";
 
 // SUB SETTINGS ICONS
-import {AiOutlineCamera} from 'react-icons/ai';
-import {BiUserVoice} from 'react-icons/bi';
-import {FiMap} from 'react-icons/fi';
-import {FiInfo} from 'react-icons/fi';
-import {BsShieldLock} from 'react-icons/bs'
+import { AiOutlineCamera } from "react-icons/ai";
+import { BiUserVoice } from "react-icons/bi";
+import { FiMap } from "react-icons/fi";
+import { FiInfo } from "react-icons/fi";
+import { BsShieldLock } from "react-icons/bs";
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
   const theme = useTheme();
@@ -53,16 +51,17 @@ const MyProSidebar = () => {
   return (
     <Box
       sx={{
-       // Styling for the outer sidebar container
-        borderRight: '2px solid #DCDDDD !important',
+        // Styling for the outer sidebar container
+        borderRight: "2px solid #DCDDDD !important",
         position: "sticky",
         display: "flex",
         height: "100vh",
         top: 0,
         bottom: 0,
-        
+
         zIndex: 10000,
-        "& .sidebar": { // Sidebar configuration
+        "& .sidebar": {
+          // Sidebar configuration
           border: "none",
         },
 
@@ -70,49 +69,45 @@ const MyProSidebar = () => {
           backgroundColor: "transparent !important",
         },
         "& .menu-item": {
-          backgroundColor: "transparent !important", padding: '5px 0',
+          backgroundColor: "transparent !important",
+          padding: "5px 0",
         },
         "& .menu-anchor": {
           color: "inherit !important",
           backgroundColor: "transparent !important",
         },
-/* Exclude the "admin-box" from the background color rule */
-"& .menu-item:not(.admin-box):hover, & .menu-item:not(.sub-menu).active:not(.admin-box)": {
-  backgroundColor: "rgba(255, 87, 34, 0.3) !important",
-  //boxShadow: "0 8px 8px -4px !important"
-  boxShadow: "rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;!important"
-},
-
-
+        /* Exclude the "admin-box" from the background color rule */
+        "& .menu-item:not(.admin-box):hover, & .menu-item:not(.sub-menu).active:not(.admin-box)":
+          {
+            backgroundColor: "rgba(255, 87, 34, 0.3) !important",
+            //boxShadow: "0 8px 8px -4px !important"
+            boxShadow:
+              "rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;!important",
+          },
 
         "& .sub-menu-content": {
           backgroundColor: `${colors.primary[400]} !important`,
-          
         },
-       
+
         "& .menu-item.active::after": {
           content: '""',
-          position: 'absolute',
+          position: "absolute",
           right: 0,
-          top: '50%',
-          transform: 'translateY(-50%)',
-          width: '5px',
-          height: '50px',
-          backgroundColor: '#FF5722'
-        }
-
+          top: "50%",
+          transform: "translateY(-50%)",
+          width: "5px",
+          height: "50px",
+          backgroundColor: "#FF5722",
+        },
       }}
     >
       <Sidebar
         breakPoint="md"
         rtl={sidebarRTL}
         backgroundColor={colors.secondary[500]}
-      
         image={sidebarImage}
       >
         <Menu iconshape="square">
-          
-       
           {!collapsed && (
             <Box mb="25px">
               <Box
@@ -128,24 +123,24 @@ const MyProSidebar = () => {
                 }}
               >
                 <img
-                  className="avater-image"
-                  alt="profile user"
+                  className="logo-image"
+                  alt="Logo sidebar"
                   width="124px"
                   height="102px"
-                  
-                  src={"../../assets/logo5.png"}
+                  src={"../../assets/logoNew.png"}
                   style={{ cursor: "pointer", padding: "10px" }}
                 />
               </Box>
-              <Box textAlign="center">
-              
-              </Box>
+              <Box textAlign="center"></Box>
             </Box>
           )}
           <Box paddingLeft={collapsed ? undefined : "0"}>
             <Item
               title={
-                <Typography variant="h6" style={{ fontWeight: 600, fontSize: 14 }}>
+                <Typography
+                  variant="h6"
+                  style={{ fontWeight: 600, fontSize: 14 }}
+                >
                   Dashboard
                 </Typography>
               }
@@ -157,7 +152,10 @@ const MyProSidebar = () => {
 
             <Item
               title={
-                <Typography variant="h6" style={{ fontWeight: 600, fontSize: 14 }}>
+                <Typography
+                  variant="h6"
+                  style={{ fontWeight: 600, fontSize: 14 }}
+                >
                   Notifications
                 </Typography>
               }
@@ -169,7 +167,10 @@ const MyProSidebar = () => {
 
             <Item
               title={
-                <Typography variant="h6" style={{ fontWeight: 600, fontSize: 14 }}>
+                <Typography
+                  variant="h6"
+                  style={{ fontWeight: 600, fontSize: 14 }}
+                >
                   Incidents
                 </Typography>
               }
@@ -181,7 +182,10 @@ const MyProSidebar = () => {
 
             <Item
               title={
-                <Typography variant="h6" style={{ fontWeight: 600, fontSize: 14 }}>
+                <Typography
+                  variant="h6"
+                  style={{ fontWeight: 600, fontSize: 14 }}
+                >
                   User Management
                 </Typography>
               }
@@ -193,7 +197,10 @@ const MyProSidebar = () => {
 
             <Item
               title={
-                <Typography variant="h6" style={{ fontWeight: 600, fontSize: 14 }}>
+                <Typography
+                  variant="h6"
+                  style={{ fontWeight: 600, fontSize: 14 }}
+                >
                   Reports
                 </Typography>
               }
@@ -205,7 +212,10 @@ const MyProSidebar = () => {
 
             <Item
               title={
-                <Typography variant="h6" style={{ fontWeight: 600, fontSize: 14 }}>
+                <Typography
+                  variant="h6"
+                  style={{ fontWeight: 600, fontSize: 14 }}
+                >
                   AI Models
                 </Typography>
               }
@@ -214,79 +224,137 @@ const MyProSidebar = () => {
               selected={selected}
               setSelected={setSelected}
             />
-  </Box>
-            {/*SUB - MENU */}
-            <Box paddingLeft={collapsed ? undefined : "0"} className="sub-menu">
+          </Box>
+          {/*SUB - MENU */}
+          <Box paddingLeft={collapsed ? undefined : "0"} className="sub-menu">
             <SubMenu // Add SubMenu component for the "Settings" menu item
               label={
-                <Typography variant="h6" style={{ fontWeight: 600, fontSize: 14 }}>
+                <Typography
+                  variant="h6"
+                  style={{ fontWeight: 600, fontSize: 14 }}
+                >
                   Settings
                 </Typography>
               }
-              icon={<LuSettings style={{ fontSize: 20 }}  />}
+              icon={<LuSettings style={{ fontSize: 20 }} />}
               selected={selected}
               setSelected={setSelected}
               className="sub-menu-header"
             >
               {/*SUB MENU ITEMS */}
-              
-               <Item
-              title={<Typography variant="h6" style={{ fontWeight: 600, fontSize: 14, marginLeft: "20px" }}>
-              Camera
-            </Typography>}
-              to="/settings/camera"
-              icon={<AiOutlineCamera style={{fontSize: 20, marginLeft: "18px"}}/>}
-              selected={selected}
-              setSelected={setSelected}
+
+              <Item
+                title={
+                  <Typography
+                    variant="h6"
+                    style={{
+                      fontWeight: 600,
+                      fontSize: 14,
+                      marginLeft: "20px",
+                    }}
+                  >
+                    Camera
+                  </Typography>
+                }
+                to="/settings/camsetting"
+                icon={
+                  <AiOutlineCamera
+                    style={{ fontSize: 20, marginLeft: "18px" }}
+                  />
+                }
+                selected={selected}
+                setSelected={setSelected}
               />
 
               <Item
-              title={<Typography variant="h6" style={{ fontWeight: 600, fontSize: 14, marginLeft: "20px" }}>
-              Dispatch
-            </Typography>}
-              to="/settings/dispatch"
-              icon={<BiUserVoice style={{fontSize: 20, marginLeft: "18px"}}/>}
-              selected={selected}
-              setSelected={setSelected}
+                title={
+                  <Typography
+                    variant="h6"
+                    style={{
+                      fontWeight: 600,
+                      fontSize: 14,
+                      marginLeft: "20px",
+                    }}
+                  >
+                    Dispatch
+                  </Typography>
+                }
+                to="/settings/dispatchsettings"
+                icon={
+                  <BiUserVoice style={{ fontSize: 20, marginLeft: "18px" }} />
+                }
+                selected={selected}
+                setSelected={setSelected}
               />
 
               <Item
-              title={<Typography variant="h6" style={{ fontWeight: 600, fontSize: 14, marginLeft: "20px" }}>
-              Floor Plan
-            </Typography>}
-              to="/settings/floorplan"
-              icon={<FiMap style={{fontSize: 20, marginLeft: "18px"}}/>}
-              selected={selected}
-              setSelected={setSelected}
+                title={
+                  <Typography
+                    variant="h6"
+                    style={{
+                      fontWeight: 600,
+                      fontSize: 14,
+                      marginLeft: "20px",
+                    }}
+                  >
+                    Floor Plan
+                  </Typography>
+                }
+                to="/settings/floorplan"
+                icon={<FiMap style={{ fontSize: 20, marginLeft: "18px" }} />}
+                selected={selected}
+                setSelected={setSelected}
               />
 
               <Item
-              title={<Typography variant="h6" style={{ fontWeight: 600, fontSize: 14, marginLeft: "20px" }}>
-              System Info
-            </Typography>}
-              to="/settings/versioninfo"
-              icon={<FiInfo style={{fontSize: 20, marginLeft: "18px"}}/>}
-              selected={selected}
-              setSelected={setSelected}
+                title={
+                  <Typography
+                    variant="h6"
+                    style={{
+                      fontWeight: 600,
+                      fontSize: 14,
+                      marginLeft: "20px",
+                    }}
+                  >
+                    System Info
+                  </Typography>
+                }
+                to="/settings/versioninfo"
+                icon={<FiInfo style={{ fontSize: 20, marginLeft: "18px" }} />}
+                selected={selected}
+                setSelected={setSelected}
               />
 
               <Item
-              title={<Typography variant="h6" style={{ fontWeight: 600, fontSize: 14, marginLeft: "20px" }}>
-              Security
-            </Typography>}
-              to="/settings/security"
-              icon={<BsShieldLock style={{fontSize: 20, marginLeft: "18px"}}/>}
-              selected={selected}
-              setSelected={setSelected}
+                title={
+                  <Typography
+                    variant="h6"
+                    style={{
+                      fontWeight: 600,
+                      fontSize: 14,
+                      marginLeft: "20px",
+                    }}
+                  >
+                    Security
+                  </Typography>
+                }
+                to="/settings/security"
+                icon={
+                  <BsShieldLock style={{ fontSize: 20, marginLeft: "18px" }} />
+                }
+                selected={selected}
+                setSelected={setSelected}
               />
+            </SubMenu>
+          </Box>
 
-            </SubMenu> 
-            </Box>
-
-            <Box paddingLeft={collapsed ? undefined : "0"}>
+          <Box paddingLeft={collapsed ? undefined : "0"}>
             <Item
               title={
-                <Typography variant="h6" style={{ fontWeight: 600, fontSize: 14 }}>
+                <Typography
+                  variant="h6"
+                  style={{ fontWeight: 600, fontSize: 14 }}
+                >
                   FAQ Page
                 </Typography>
               }
@@ -298,7 +366,10 @@ const MyProSidebar = () => {
 
             <Item
               title={
-                <Typography variant="h6" style={{ fontWeight: 600, fontSize: 14 }}>
+                <Typography
+                  variant="h6"
+                  style={{ fontWeight: 600, fontSize: 14 }}
+                >
                   Contact Us
                 </Typography>
               }
@@ -307,23 +378,21 @@ const MyProSidebar = () => {
               selected={selected}
               setSelected={setSelected}
             />
-              </Box>
-
+          </Box>
         </Menu>
         <Box paddingTop={20}>
-        <Typography 
-
-               textAlign="center"
-               padding="10px" // Add some padding for spacing
-               backgroundColor={colors.secondary[500]} // Match the sidebar background
-               color= "#FF5722 !important" // Text color
-               position="sticky"
-               bottom="0"
-               width="100%"
-               fontWeight="bold"
-               
-        >Version 1.1
-        </Typography>
+          <Typography
+            textAlign="center"
+            padding="10px" // Add some padding for spacing
+            backgroundColor={colors.secondary[500]} // Match the sidebar background
+            color="#FF5722 !important" // Text color
+            position="sticky"
+            bottom="0"
+            width="100%"
+            fontWeight="bold"
+          >
+            Version 2.0
+          </Typography>
         </Box>
       </Sidebar>
     </Box>

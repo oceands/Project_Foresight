@@ -1,5 +1,5 @@
 import React from "react";
-import { useEffect } from "react";
+
 import { Box, useTheme, Grid, Button ,Toolbar} from "@mui/material";
 import { DataGrid,GridToolbarQuickFilter , GridToolbarContainer, GridToolbarFilterButton} from "@mui/x-data-grid";
 import { tokens } from "../../theme";
@@ -47,10 +47,8 @@ function CustomToolbar({ setFilterButtonEl }) {
 
 
 
-const Notifications = ({ changeWelcomeText }) => {
-  useEffect(() => {
-    changeWelcomeText("Notifications");
-  }, []);
+const Notifications = () => {
+
     const theme = useTheme();// Extract theme and colors from the MUI theme
     const colors = tokens;
 

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useEffect } from 'react';
+
 import {
   Box,
   Button,
@@ -15,10 +15,8 @@ import * as yup from 'yup';
 import { tokens } from '../../theme';
 import {Typography} from '@mui/material';
 
-const Security = ({ changeWelcomeText }) => {
-  useEffect(() => {
-    changeWelcomeText("Settings / Security Settings");
-  }, []);
+const Security = () => {
+
   const theme = useTheme();
   const colors = tokens;
 

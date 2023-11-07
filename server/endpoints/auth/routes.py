@@ -51,7 +51,7 @@ class Register(Resource):
     @rest_api.expect(signup_model, validate=True)
     def post(self):
 
-        print("touched!")
+
         request_data=request.get_json()
         _Fname =request_data.get("Fname")
         _Lname =request_data.get("Lname")
@@ -94,7 +94,7 @@ class LoginUser(Resource):
     
     @rest_api.expect(login_model, validate= True)
     def post(self):
-        print("touched1")
+
         if not request.is_json:
             return {"msg": "Missing JSON in request"}, 400
 
@@ -122,7 +122,6 @@ class LoginUser(Resource):
         #Add the tokens to the database
         add_token_to_database(access_token)
         add_token_to_database(refresh_token)
-
         return {"success": True, "Access_token": access_token, "Refresh_token": refresh_token, "user": user_exist.toJSON()}, 200
 
 

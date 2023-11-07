@@ -58,10 +58,8 @@ function CustomToolbar({ setFilterButtonEl }) {
   );
 }
 
-const Usermgnt = ({ changeWelcomeText }) => {
-  useEffect(() => {
-    changeWelcomeText("User Management");
-  }, []);
+const Usermgnt = () => {
+
   const theme = useTheme();
   const colors = tokens;
 

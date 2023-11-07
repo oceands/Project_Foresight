@@ -7,11 +7,8 @@ import { useEffect } from "react";
 
 import Header from "../../components/Header";
 
-const VersionInfo = ({ changeWelcomeText }) => {
+const VersionInfo = () => {
 
-    useEffect(() => {
-      changeWelcomeText("Settings / System Information");
-    }, []);
 };
 
 export default VersionInfo;

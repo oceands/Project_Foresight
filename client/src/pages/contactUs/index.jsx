@@ -3,7 +3,6 @@ import { Box, Button, TextField, Typography, useTheme  } from '@mui/material';
 import { Formik } from 'formik';
 import * as yup from 'yup';
 import { tokens } from "../../theme";
-import { useEffect } from 'react';
 import { mockDataContacts } from '../../data/mockData';
 
 
@@ -13,10 +12,8 @@ import {IoMailSharp} from 'react-icons/io5'
 import {BsTelephoneFill} from 'react-icons/bs'
 
 
-const Contact = ({ changeWelcomeText }) => {
-  useEffect(() => {
-    changeWelcomeText("Contact Us");
-  }, []);
+const Contact = () => {
+
 
     const colors = tokens;
     // Define a regular expression for validating phone numbers

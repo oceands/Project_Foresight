@@ -5,13 +5,11 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import Typography from "@mui/material/Typography";
 import {MdExpandMore} from "react-icons/md";
 import { tokens } from "../../theme";
-import { useEffect } from "react";
 
-const FAQ = ({ changeWelcomeText }) => {
 
-  useEffect(() => {
-    changeWelcomeText("FAQ");
-  }, []);
+const FAQ = () => {
+
+
   const colors = tokens;
   return (
     <Box backgroundColor={colors.primary[500]} p={3} minHeight={"100vh"}>

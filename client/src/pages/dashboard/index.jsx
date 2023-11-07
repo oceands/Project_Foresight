@@ -19,10 +19,8 @@ import LineChart from "../../components/LineChart";
 import StatBox from "../../components/StatBox";
 import PieChart from "../../components/PieChart";
 
-const Dashboard = ({ changeWelcomeText }) => {
-  useEffect(() => {
-    changeWelcomeText("Welcome Back, Admin");
-  }, []);
+const Dashboard = () => {
+
   const theme = useTheme();
   const colors = tokens;
   const totalValue = mockPieData.reduce((total, item) => total + item.value, 0);// Calculate total value for pie chart data

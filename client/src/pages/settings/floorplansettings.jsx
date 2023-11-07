@@ -5,13 +5,11 @@ import { tokens } from "../../theme";
 import { mockDataContacts } from "../../data/mockData";
 
 import Header from "../../components/Header";
-import { useEffect } from "react";
 
-const FloorplanSettings = ({ changeWelcomeText }) => {
 
-    useEffect(() => {
-      changeWelcomeText("Settings / Floor Plan");
-    }, []);
+const FloorplanSettings = () => {
+
+
 };
 
 export default FloorplanSettings;

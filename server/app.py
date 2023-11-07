@@ -27,14 +27,21 @@ jwt.init_app(app)
 # Enabling Cross-Origin Resource Sharing (CORS)
 CORS(app)
 
+#Initialize boolean
+initialized = False
+
 # Setup the database prior to the first request
 @app.before_request
 def initialize_database():
-    try:
-        db.create_all()
-        print('> Success: All relevant tables have been created')
-    except Exception as e:
-        print('> Error: DBMS Table creation exception: ' + str(e))
+    global initialized
+
+    if not initialized:
+        try:
+            db.create_all()
+            print('> Success: All relevant tables have been created')
+            initialized = True
+        except Exception as e:
+            print('> Error: DBMS Table creation exception: ' + str(e))
 
 # Custom response for debugging
 @app.after_request

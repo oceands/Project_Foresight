@@ -275,10 +275,8 @@ function CustomToolbar({ setFilterButtonEl }) {
 }
 
 
-const CameraSettings = ({ changeWelcomeText }) => {
-  useEffect(() => {
-    changeWelcomeText("Settings / Camera Settings");
-  }, []);
+const CameraSettings = () => {
+
   const [rows, setRows] = React.useState(mockDataCamera);
 
   const handleDelete = (id) => {

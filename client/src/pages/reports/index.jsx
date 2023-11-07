@@ -1,5 +1,5 @@
 import React from "react";
-import { useEffect } from "react";
+
 import { Box, useTheme ,Toolbar, IconButton, Button} from "@mui/material";
 import { DataGrid, GridToolbarQuickFilter , GridToolbarContainer, GridToolbarFilterButton} from "@mui/x-data-grid";
 import { tokens } from "../../theme";
@@ -57,10 +57,8 @@ function CustomToolbar({ setFilterButtonEl }) {
   );
 }
 
-const Reports = ({ changeWelcomeText }) => {
-  useEffect(() => {
-    changeWelcomeText("Reports");
-  }, []);
+const Reports = () => {
+
   const theme = useTheme();
   const colors = tokens;
 
