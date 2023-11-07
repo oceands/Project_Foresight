@@ -22,6 +22,7 @@ import FireIcon from "@mui/icons-material/LocalFireDepartmentOutlined";
 import SmokeIcon from "@mui/icons-material/SmokeFreeOutlined";
 import GunAlertOutlinedIcon from "@mui/icons-material/ReportOutlined";
 import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
 const Topbar = () => {
   const theme = useTheme();
@@ -230,7 +231,7 @@ const Topbar = () => {
               },
             }}
           >
-            <MenuItem onClick={handleClose}>
+            <MenuItem onClick={handleClose} component={Link} to="/myprofile">
               <Avatar>
                 <PersonIcon />
               </Avatar>

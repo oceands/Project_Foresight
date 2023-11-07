@@ -1,7 +1,5 @@
-
-
 const AI = () => {
-//fill code here
+  //fill code here
 };
 
 export default AI;

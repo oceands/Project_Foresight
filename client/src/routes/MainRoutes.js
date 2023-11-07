@@ -11,6 +11,7 @@ import Topbar from "../pages/global/Topbar";
 const Dashboard = Loadable(lazy(() => import("../pages/dashboard")));
 
 // utilities routing - main
+const UserProfile = Loadable(lazy(() => import("../pages/userprofile")));
 const Notifications = Loadable(lazy(() => import("../pages/notifications")));
 const Incidents = Loadable(lazy(() => import("../pages/Incidents")));
 const Usermgnt = Loadable(lazy(() => import("../pages/usermgnt")));
@@ -49,6 +50,7 @@ const MainRoutes = () => {
         "/ai",
         "/contact",
         "/faq",
+        "/myprofile",
         "/settings/camsetting",
         "/settings/dispatchsettings",
         "/settings/floorplan",
@@ -70,6 +72,7 @@ const MainRoutes = () => {
                 <Route path="/ai" component={AI} />
                 <Route path="/contact" component={Contact} />
                 <Route path="/faq" component={FAQ} />
+                <Route path="/myprofile" component={UserProfile} />
 
                 <Route path="/settings/camsetting" component={CamSetting} />
                 <Route
