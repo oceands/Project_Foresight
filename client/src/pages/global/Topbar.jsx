@@ -23,8 +23,13 @@ import SmokeIcon from "@mui/icons-material/SmokeFreeOutlined";
 import GunAlertOutlinedIcon from "@mui/icons-material/ReportOutlined";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { LOGOUT } from "./../../store/actions";
+import axios from "axios";
+import { useDispatch } from "react-redux";
+import configData from "../../config";
 
 const Topbar = () => {
+  const dispatcher = useDispatch();
   const theme = useTheme();
   const colors = tokens;
   const currentRoute = window.location.pathname;
@@ -32,6 +37,8 @@ const Topbar = () => {
   const username = JSON.stringify(user.username);
   let firstName = username.replace(/['"]+/g, "").split(".")[0];
   firstName = firstName.charAt(0).toUpperCase() + firstName.slice(1);
+
+  const account = useSelector((state) => state.account);
 
   const routeTextMap = {
     "/dashboard": "Welcome Back, " + firstName,
@@ -78,10 +85,10 @@ const Topbar = () => {
     setAlertAnchorEl(null);
   };
 
-  const handleLogout = () => {
-    handleClose();
-    // Add your logout logic here
-  };
+  // const handleLogout = () => {
+  //   handleClose();
+  //   // Add your logout logic here
+  // };
 
   const handleFilterChange = (event) => {
     setSelectedFilter(event.target.value);
@@ -100,6 +107,27 @@ const Topbar = () => {
     if (selectedFilter === "all") return true;
     return notification.type === selectedFilter;
   });
+
+  const handleLogout = () => {
+    console.log(account.token);
+    axios
+      .post(
+        configData.API_SERVER + "users/logout",
+        { token: `${account.token}` },
+        { headers: { Authorization: `${account.token}` } }
+      )
+      .then(function (response) {
+        // Force the LOGOUT
+        //if (response.data.success) {
+        dispatcher({ type: LOGOUT });
+        //} else {
+        //    console.log('response - ', response.data.msg);
+        //}
+      })
+      .catch(function (error) {
+        console.log("error - ", error);
+      });
+  };
 
   return (
     <Box
