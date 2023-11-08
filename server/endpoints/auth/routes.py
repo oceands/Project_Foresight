@@ -2,6 +2,8 @@ from datetime import datetime, timezone, timedelta
 from flask import request
 from flask_restx import Namespace, Resource, fields
 
+from models import Notifications
+from models import Incidents
 #JWT imports
 from flask_jwt_extended import create_refresh_token, get_jwt, get_jwt_identity, create_access_token, jwt_required
 #Email validation
@@ -38,6 +40,146 @@ user_edit_model = rest_api.model('UserEditModel', {
     "username": fields.String(required=True, min_length=2, max_length=32),
     "email": fields.String(required=True, min_length=4, max_length=64)
 })
+
+
+
+@rest_api.route('/api/users/notifications', defaults={'notification_id': None})
+@rest_api.route('/api/users/notifications/<int:notification_id>')
+class GetNotifications(Resource):
+    
+    def get(self, notification_id=None):
+        try:
+            
+            notifications = Notifications.query.filter(Notifications.type != 'Ignored').order_by(Notifications.id).all()
+
+
+            return {
+                "success": True,
+                "notifications": [
+                    {
+                        'id': n.id, 
+                        'date': n.date.isoformat() if n.date else None,
+                        'type': n.type, 
+                        'module': n.module, 
+                        'camera': n.camera, 
+                        'status': n.status
+                    } for n in notifications
+                ]
+            }, 200
+        except Exception as e:
+            return {
+                "success": False,
+                "msg": f"Error fetching notifications: {str(e)}"
+            }, 500
+    
+    def post(self, notification_id=None):
+        try:
+            data = request.get_json()
+            new_notification = Notifications(
+                date=data.get("date", datetime.utcnow()),
+                type=data["type"],
+                module=data["module"],
+                camera=data["camera"],
+                status=data["status"]
+            )
+            db.session.add(new_notification)
+            db.session.commit()
+            return {"success": True, "msg": "Notification created successfully."}, 201
+        except Exception as e:
+            return {"success": False, "msg": f"Error creating notification: {str(e)}"}, 500
+    
+    def put(self, notification_id=None):
+        if notification_id is None:
+         return {"success": False, "msg": "Notification ID not provided"}, 400
+
+        try:
+            notification = Notifications.query.get(notification_id)
+            if not notification:
+                return {"success": False, "msg": "Notification not found"}, 404
+        
+            data = request.get_json()
+            status = data.get('status')
+            type_ = data.get('type')
+
+            updated = False
+            if status:
+                notification.status = status
+                updated = True
+
+            if type_:
+                notification.type = type_
+                updated = True
+
+            if updated:
+
+                db.session.commit()
+                return {"success": True, "msg": "Notification updated successfully."}, 200
+            else:
+                return {"success": False, "msg": "Status not provided"}, 400
+        except Exception as e:
+            return {"success": False, "msg": f"Error updating notification: {str(e)}"}, 500
+
+    
+@rest_api.route('/api/users/incidents', defaults={'incident_id': None})
+@rest_api.route('/api/users/incidents/<int:incident_id>')
+class GetIncidents(Resource):
+    
+    def get(self, incident_id=None):
+        try:
+            if incident_id:
+                # If an incident_id is provided, fetch a single incident
+                incident = Incidents.query.get_or_404(incident_id)
+                return {"success": True, "incident": incident.to_dict()}, 200
+            else:
+                # Fetch all incidents
+                incidents = Incidents.query.all()
+                return {
+                    "success": True,
+                    "incidents": [incident.to_dict() for incident in incidents]
+                }, 200
+        except Exception as e:
+            return {
+                "success": False,
+                "msg": f"Error fetching incidents: {str(e)}"
+            }, 500
+
+    # Implement POST, PUT, DELETE methods for Incidents similar to Notifications if needed
+
+    def post(self, incident_id = None):
+        try:
+            data = request.get_json()
+            
+            # Check if 'notification_id' is provided and if it's a valid integer
+            notification_id = data.get('notification_id')
+            if notification_id is None:
+                return {"success": False, "msg": "notification_id is required"}, 400
+
+            # Fetch the associated notification
+            notification = Notifications.query.get(notification_id)
+            if notification is None:
+                return {"success": False, "msg": f"No Notification found with id {notification_id}"}, 404
+
+            # Use data from the notification to create the incident
+            new_incident = Incidents(
+                notification_id=notification.id,
+                date=notification.date, # Assuming you want to use the same date as the notification
+                type=notification.type, # You may also use data from the 'notification' object
+                module=notification.module,
+                camera=notification.camera,
+                status=notification.status
+            )
+
+            db.session.add(new_incident)
+            db.session.commit()
+            
+            return {"success": True, "msg": "Incident created successfully.", "incident": new_incident.to_dict()}, 201
+
+        except Exception as e:
+            db.session.rollback()
+            return {"success": False, "msg": f"Error creating incident: {e}"}, 500
+
+
+
 
 
 
