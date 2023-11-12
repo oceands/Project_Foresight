@@ -1,7 +1,9 @@
 from datetime import datetime
 
-from flask import current_app as app
+from flask import current_app as app, jsonify
 from flask_jwt_extended import decode_token
+from flask_jwt_extended import get_jwt, get_jwt_identity,decode_token
+
 from sqlalchemy.exc import NoResultFound
 
 
@@ -33,11 +35,22 @@ def revoke_token(token_jti, user_id):
         raise Exception(f"Could not find token {token_jti}")
 
 # Check if the token is revoked successfully 
+# def is_token_revoked(jwt_payload):
+#     jti = jwt_payload["jti"]
+#     user_id = jwt_payload[app.config.get("JWT_IDENTITY_CLAIM")]
+#     try:
+#         token = TokenBlocklist.Get_token_by_id(jti, user_id)
+#         return token.revoked_at is not None
+#     except NoResultFound:
+#         raise Exception(f"Could not find token {jti}")
 def is_token_revoked(jwt_payload):
+    print (jwt_payload)
     jti = jwt_payload["jti"]
     user_id = jwt_payload[app.config.get("JWT_IDENTITY_CLAIM")]
     try:
         token = TokenBlocklist.Get_token_by_id(jti, user_id)
         return token.revoked_at is not None
     except NoResultFound:
-        raise Exception(f"Could not find token {jti}")
+        # Log the exception or return False
+        app.logger.warning(f"Token {jti} not found in the blocklist.")
+        return False

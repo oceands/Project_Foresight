@@ -3,8 +3,6 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 
-import configData from "../../config";
-
 //MUI
 import {
   Box,
@@ -14,7 +12,6 @@ import {
   Checkbox,
   FormControlLabel,
   FormControl,
-  useMediaQuery,
   InputAdornment,
   IconButton,
 } from "@mui/material";
@@ -22,12 +19,12 @@ import {
 //Third party
 import { Formik } from "formik";
 import * as yup from "yup";
-import axios from "axios";
 import { ACCOUNT_INITIALIZE } from "../../store/actions";
 
 //Project Imports
 import useScriptRef from "../../hooks/useScriptRef";
 import { tokens } from "../../theme";
+import axioInstance from "../../api/axios";
 
 //assets
 import { MdVisibility } from "react-icons/md";
@@ -56,8 +53,8 @@ const Login = (props, { ...others }) => {
     { setErrors, setStatus, setSubmitting }
   ) => {
     try {
-      axios
-        .post(configData.API_SERVER + "auth/api/users/login", {
+      axioInstance
+        .post("auth/api/users/login", {
           email: values.email,
           password: values.password,
         })

@@ -11,13 +11,15 @@ class BaseConfig():
     #This variable checks if JWT secret key is available in the .env
     JWT_SECRET_KEY = os.getenv('JWT_SECRET', None)
     JWT_IDENTITY_CLAIM = "user_id"  # default == sub
+    PROPAGATE_EXCEPTIONS=True
 
     #if it is not available we will generate one
     if not JWT_SECRET_KEY:
         JWT_SECRET_KEY = ''.join(random.choice( string.ascii_lowercase  ) for i in range( 32 ))
 
     #Tells when the tokens will expire    
-    JWT_ACCESS_TOKEN_EXPIRES= timedelta(minutes=15)
+    JWT_ACCESS_TOKEN_EXPIRES= timedelta(seconds=15)
+    JWT_REFRESH_TOKEN_EXPIRES=timedelta(minutes=30)
 
     # Pull all Database constants from thE .ENV File
     db_username = os.getenv('DB_USERNAME', None)

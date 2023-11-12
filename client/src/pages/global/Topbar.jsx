@@ -24,9 +24,9 @@ import GunAlertOutlinedIcon from "@mui/icons-material/ReportOutlined";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { LOGOUT } from "./../../store/actions";
-import axios from "axios";
 import { useDispatch } from "react-redux";
-import configData from "../../config";
+
+import axiosInstance from "../../api/axios";
 
 const Topbar = () => {
   const dispatcher = useDispatch();
@@ -34,11 +34,10 @@ const Topbar = () => {
   const colors = tokens;
   const currentRoute = window.location.pathname;
   const user = useSelector((state) => state.account.user);
+  const refresh_token = useSelector((state) => state.account.Refresh_token);
   const username = JSON.stringify(user.username);
   let firstName = username.replace(/['"]+/g, "").split(".")[0];
   firstName = firstName.charAt(0).toUpperCase() + firstName.slice(1);
-
-  const account = useSelector((state) => state.account);
 
   const routeTextMap = {
     "/dashboard": "Welcome Back, " + firstName,
@@ -108,21 +107,48 @@ const Topbar = () => {
     return notification.type === selectedFilter;
   });
 
+  // const handleLogout = () => {
+  //   // Assuming Refresh_token is accessible in this scope
+
+  //   axiosInstance
+  //     .post("auth/api/users/logout")
+  //     .then(function (logoutResponse) {
+  //       if (logoutResponse.data.success) {
+  //         // Logout was successful, proceed to revoke_refresh
+
+  //         // Send a request to revoke_refresh
+  //         return axios.post(
+  //           config.API_SERVER + "auth/api/users/revoke_refresh",
+  //           {},
+  //           {
+  //             headers: { Authorization: `Bearer ${refresh_token}` },
+  //           }
+  //         );
+  //       } else {
+  //         // Logout was unsuccessful
+  //         console.log("Logout unsuccessful: ", logoutResponse.data.msg);
+  //         return;
+  //       }
+  //     })
+  //     .then(function (revokeResponse) {
+  //       // Handle the response after revoking the refresh token
+  //       console.log("Refresh token revoked: ", revokeResponse.data);
+  //       dispatcher({ type: LOGOUT });
+  //     })
+  //     .catch(function (error) {
+  //       // Handle errors for both the logout and revoke_refresh requests
+  //       console.log("Error: ", error);
+  //     });
+  // };
   const handleLogout = () => {
-    console.log(account.token);
-    axios
-      .post(
-        configData.API_SERVER + "users/logout",
-        { token: `${account.token}` },
-        { headers: { Authorization: `${account.token}` } }
-      )
+    axiosInstance
+      .post("auth/api/users/logout", refresh_token)
       .then(function (response) {
-        // Force the LOGOUT
-        //if (response.data.success) {
-        dispatcher({ type: LOGOUT });
-        //} else {
-        //    console.log('response - ', response.data.msg);
-        //}
+        if (response.data.success) {
+          dispatcher({ type: LOGOUT });
+        } else {
+          console.log("response - ", response.data.msg);
+        }
       })
       .catch(function (error) {
         console.log("error - ", error);

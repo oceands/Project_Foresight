@@ -1,5 +1,10 @@
 // action - state management
-import { ACCOUNT_INITIALIZE, LOGIN, LOGOUT } from "./actions";
+import {
+  ACCOUNT_INITIALIZE,
+  LOGIN,
+  LOGOUT,
+  UPDATE_ACCESS_TOKEN,
+} from "./actions";
 
 export const initialState = {
   isLoggedIn: false,
@@ -24,6 +29,15 @@ const accountReducer = (state = initialState, action) => {
         user,
       };
     }
+
+    case UPDATE_ACCESS_TOKEN: {
+      const { Access_token } = action.payload;
+      return {
+        ...state,
+        Access_token,
+      };
+    }
+
     case LOGIN: {
       const { user } = action.payload;
       return {
@@ -37,6 +51,7 @@ const accountReducer = (state = initialState, action) => {
         ...state,
         isLoggedIn: false,
         Access_token: "",
+        Refresh_token: "",
         user: null,
       };
     }

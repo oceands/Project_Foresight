@@ -5,7 +5,7 @@ from flask_restx import Namespace, Resource, fields
 from models import Notifications
 from models import Incidents
 #JWT imports
-from flask_jwt_extended import create_refresh_token, get_jwt, get_jwt_identity, create_access_token, jwt_required
+from flask_jwt_extended import create_refresh_token, get_jwt, get_jwt_identity, create_access_token, jwt_required, decode_token
 #Email validation
 from email_validator import EmailNotValidError, validate_email
 #Databse Models
@@ -320,9 +320,10 @@ class EditUser(Resource):
         @jwt_required(refresh=True)
         def post(self):
             user_id = get_jwt_identity()
-            access_token = create_access_token(identity=user_id)
-            add_token_to_database(access_token)
-            return {"success": True,"access_token": access_token}, 200
+            Access_token = create_access_token(identity=user_id)
+            add_token_to_database(Access_token)
+            return {"success": True,"Access_token": Access_token}, 200
+
 
     #Logout User 
     #protected route 4           
@@ -330,51 +331,46 @@ class EditUser(Resource):
     class LogoutUser(Resource):
         @jwt_required()
         def post(self):
+            req=request.get_data().decode('UTF-8').replace('"','')  
+            decode_token(req)
+            reftoken=decode_token(req)
+            jtiref=reftoken["jti"]
+
             jti=get_jwt()["jti"]
             user_id = get_jwt_identity()
             revoke_token(jti, user_id)
+            revoke_token(jtiref,user_id)
+
 
             user=Users.get_by_id(user_id)
-            print(user_id,user)
+            print("> User LoggedOut:"+user.username)
             user.set_jwt_auth_active(False)
             user.save()
             return {"success": True, "msg": "User logged-out successfully !"}, 200
     
     
-    #Revoke User token 
-    #protected route 5        
-    @rest_api.route("/revoke_access")
-    class RevokeAccessTokenResource(Resource):
-        @jwt_required()
-        def delete(self):
-            jti = get_jwt()["jti"]
-            user_id = get_jwt_identity()
-            revoke_token(jti, user_id)
-            return {"success": True,"msg": "Token revoked"}, 200
+    # # #Revoke User token 
+    # # #protected route 5        
+    # @rest_api.route('/api/users/revokeAccess')
+    # class RevokeAccessTokenResource(Resource):
+    #     @jwt_required(optional=True)
+    #     def post(self):
+    #         print("ran")
+    #         jti = get_jwt()["jti"]
+    #         user_id = get_jwt_identity()
+    #         revoke_token(jti, user_id)
+    #         return {"success": True,"msg": "Token revoked"}, 200
         
 
-    #Revoke User Refresh token
-    #protected route 6    
-    @rest_api.route("/revoke_refresh")
-    class RevokeRefreshTokenResource(Resource):
-        @jwt_required(refresh=True)
-        def delete(self):
-            jti = get_jwt()["jti"]
-            user_id = get_jwt_identity()
-            revoke_token(jti, user_id)
-            return {"success": True,"msg": "Refresh token revoked"}, 200
+    # #Revoke User Refresh token
+    # #protected route 6    
+    # @rest_api.route("/api/users/revoke_refresh")
+    # class RevokeRefreshTokenResource(Resource):
+    #     @jwt_required(refresh=True)
+    #     def post(self):
+    #         jti = get_jwt()["jti"]
+    #         user_id = get_jwt_identity()
+    #         revoke_token(jti, user_id)
+    #         print("last step")
+    #         return {"success": True,"msg": "Refresh token revoked"}, 200
         
-
-    #Check if toklen has been sent to blocklist
-    @jwt.token_in_blocklist_loader
-    def check_if_token_revoked(jwt_headers, jwt_payload):
-        try:
-            return is_token_revoked(jwt_payload)
-        except Exception:
-            return True
-
-    #@JWT_Manager.user_lookup_loader
-    #def load_user(jwt_headers, jwt_payload):
-     #   user_id = jwt_payload[.get("JWT_IDENTITY_CLAIM")]
-      #  return User.query.get(user_id)
-
