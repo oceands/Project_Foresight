@@ -1,25 +1,46 @@
-import React from "react";
+import React, { useRef } from "react";
+import emailjs from "@emailjs/browser";
+import styled from "styled-components";
 import { Box, Button, TextField, Typography } from "@mui/material";
-import { Formik } from "formik";
 import * as yup from "yup";
 import { tokens } from "../../theme";
 import { mockDataContacts } from "../../data/mockData";
-
-// Import icons for contact information
 import { IoLocationSharp } from "react-icons/io5";
 import { IoMailSharp } from "react-icons/io5";
 import { BsTelephoneFill } from "react-icons/bs";
 
+const StyledForm = styled.form`
+  /* Add any additional styling you need */
+`;
+
 const Contact = () => {
+  const form = useRef();
+
+  const sendEmail = (e) => {
+    e.preventDefault();
+
+    emailjs
+      .sendForm(
+        "projectforesight",
+        "form1",
+        form.current,
+        "E06Hiw_CcD4K58j-k"
+      )
+      .then(
+        (result) => {
+          console.log(result.text);
+          console.log("message sent");
+        },
+        (error) => {
+          console.log(error.text);
+        }
+      );
+  };
+
   const colors = tokens;
-  // Define a regular expression for validating phone numbers
   const phoneRegExp =
     /^((\+[1-9]{1,4}[ -]?)|(\([0-9]{2,3}\)[ -]?)|([0-9]{2,4})[ -]?)*?[0-9]{3,4}[ -]?[0-9]{3,4}$/;
-  // Function to handle form submission
-  const handleFormSubmit = (values) => {
-    console.log(values);
-  };
-  //Initial form field values
+
   const initialValues = {
     firstName: "",
     lastName: "",
@@ -28,7 +49,7 @@ const Contact = () => {
     address1: "",
     address2: "",
   };
-  //Define the validation schema for form fields
+
   const checkoutSchema = yup.object().shape({
     firstName: yup.string().required("Required"),
     lastName: yup.string().required("Required"),
@@ -41,7 +62,6 @@ const Contact = () => {
     address2: yup.string().required("Required"),
   });
 
-  //Render the component
   return (
     <Box
       display="flex"
@@ -54,13 +74,13 @@ const Contact = () => {
         p={2}
         style={{
           backgroundImage: "url('../../assets/ContactUsBackground.png')",
-          backgroundSize: "cover", // Cover the entire Box
-          backgroundPosition: "center", // Center the image
-          display: "flex", // Set display to flex
-          flexDirection: "column", // Stack items vertically
-          alignItems: "center", // Center items horizontally
-          justifyContent: "center", // Center items vertically
-          textAlign: "left", // Left align text inside the Box
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          textAlign: "left",
         }}
       >
         <Box>
@@ -122,122 +142,79 @@ const Contact = () => {
             Get in touch!
           </Typography>
           <Typography variant="h7" paddingBottom={3}>
-            Fill in the form with your details and our team will get reach out
-            to you!
+            Fill in the form with your details, and our team will reach out to
+            you!
           </Typography>
 
-          <Formik
-            onSubmit={handleFormSubmit}
-            initialValues={initialValues}
-            validationSchema={checkoutSchema}
-          >
-            {({
-              values,
-              errors,
-              touched,
-              handleBlur,
-              handleChange,
-              handleSubmit,
-            }) => (
-              <form onSubmit={handleSubmit}>
-                <Box
+          <StyledForm ref={form} onSubmit={sendEmail}>
+          <Box
                   display="grid"
                   gap="30px"
                   gridTemplateColumns="repeat(4, minmax(0, 1fr))"
                 >
-                  <TextField //Labling the textboxes
-                    fullWidth
-                    variant="filled"
-                    type="text"
-                    label="First Name"
-                    onBlur={handleBlur}
-                    onChange={handleChange}
-                    value={values.firstName}
-                    name="firstName"
-                    error={!!touched.firstName && !!errors.firstName}
-                    helperText={touched.firstName && errors.firstName}
-                    sx={{ gridColumn: "span 2" }}
-                  />
-                  <TextField
-                    fullWidth
-                    variant="filled"
-                    type="text"
-                    label="Last Name"
-                    onBlur={handleBlur}
-                    onChange={handleChange}
-                    value={values.lastName}
-                    name="lastName"
-                    error={!!touched.lastName && !!errors.lastName}
-                    helperText={touched.lastName && errors.lastName}
-                    sx={{ gridColumn: "span 2" }}
-                  />
-                  <TextField
-                    fullWidth
-                    variant="filled"
-                    type="text"
-                    label="Email"
-                    onBlur={handleBlur}
-                    onChange={handleChange}
-                    value={values.email}
-                    name="email"
-                    error={!!touched.email && !!errors.email}
-                    helperText={touched.email && errors.email}
-                    sx={{ gridColumn: "span 4" }}
-                  />
-                  <TextField
-                    fullWidth
-                    variant="filled"
-                    type="text"
-                    label="Contact Number"
-                    onBlur={handleBlur}
-                    onChange={handleChange}
-                    value={values.contact}
-                    name="contact"
-                    error={!!touched.contact && !!errors.contact}
-                    helperText={touched.contact && errors.contact}
-                    sx={{ gridColumn: "span 4" }}
-                  />
-                  <TextField
-                    fullWidth
-                    variant="filled"
-                    type="text"
-                    label="Address 1"
-                    onBlur={handleBlur}
-                    onChange={handleChange}
-                    value={values.address1}
-                    name="address1"
-                    error={!!touched.address1 && !!errors.address1}
-                    helperText={touched.address1 && errors.address1}
-                    sx={{ gridColumn: "span 4" }}
-                  />
-                  <TextField
-                    fullWidth
-                    variant="filled"
-                    type="text"
-                    label="Address 2"
-                    onBlur={handleBlur}
-                    onChange={handleChange}
-                    value={values.address2}
-                    name="address2"
-                    error={!!touched.address2 && !!errors.address2}
-                    helperText={touched.address2 && errors.address2}
-                    sx={{ gridColumn: "span 4" }}
-                  />
 
-                  <Button
-                    type="submit"
-                    variant="contained"
-                    style={{
-                      gridColumn: "span 4",
-                      backgroundColor: colors.orangeAccents[500],
-                    }}
-                  >
-                    Send 🡲
-                  </Button>
-                </Box>
-              </form>
-            )}
-          </Formik>
+            <TextField
+              fullWidth
+              variant="filled"
+              type="text"
+              label="First Name"
+              name="user_firstname"
+              sx={{ gridColumn: "span 2" }}
+            />
+            <TextField
+              fullWidth
+              variant="filled"
+              type="text"
+              label="Last Name"
+              name="user_lastname"
+              sx={{ gridColumn: "span 2" }}
+            />
+            <TextField
+              fullWidth
+              variant="filled"
+              type="email"
+              label="Email"
+              name="user_email"
+              sx={{ gridColumn: "span 4" }}
+            />
+            <TextField
+              fullWidth
+              variant="filled"
+              type="text"
+              label="Contact Number"
+              name="user_number"
+              sx={{ gridColumn: "span 4" }}
+            />
+            <TextField
+              fullWidth
+              variant="filled"
+              type="text"
+              label="Address1"
+              name="user_address"
+              sx={{ gridColumn: "span 4" }}
+            />
+            <TextField
+              fullWidth
+              variant="filled"
+              type="text"
+              label="Address2"
+              name="user_addresss"
+              sx={{ gridColumn: "span 4" }}
+            />
+
+            <Button
+              type="submit"
+              variant="contained"
+              style={{
+                gridColumn: "span 4",
+                backgroundColor: colors.orangeAccents[500],
+              }}
+            >
+              Send 🡲
+            </Button>
+            </Box>
+
+          </StyledForm>
         </Box>
       </Box>
     </Box>
