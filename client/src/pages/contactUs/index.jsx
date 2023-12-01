@@ -207,6 +207,7 @@ const Contact = () => {
               variant="contained"
               style={{
                 gridColumn: "span 4",
+                height:"150%",
                 backgroundColor: colors.orangeAccents[500],
               }}
             >
