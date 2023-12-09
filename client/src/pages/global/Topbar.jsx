@@ -47,7 +47,7 @@ const Topbar = () => {
     "/usermgnt": "User Management",
     "/reports": "Reports",
     "/ai": "Artificial Intelligence",
-    "/contact": "Contact",
+    "/contact": "Contact Us",
     "/faq": "FAQ",
     "/settings/camsetting": "Camera Settings",
     "/settings/dispatchsettings": "Dispatch Settings",
