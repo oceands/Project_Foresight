@@ -38,6 +38,7 @@
     "react-scripts": "^5.0.1",
     "redux": "^4.2.1",
     "redux-persist": "^6.0.0",
+    "uifx": "^2.0.7",
     "web-vitals": "^2.1.4",
     "yup": "0.32.11"
   },

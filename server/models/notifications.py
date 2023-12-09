@@ -8,6 +8,7 @@ class Notifications(db.Model):
     module = db.Column(db.String(50), nullable=False)
     camera = db.Column(db.String(100), nullable=False)
     status = db.Column(db.String(50), nullable=False)
+    conf_score = db.Column(db.Float)
     
 
     def __repr__(self):
@@ -17,9 +18,9 @@ class Notifications(db.Model):
     def save(self):
         db.session.add(self)
         db.session.commit()
+        db.session.close()
 
     def to_dict(self):
-        """Serialize the Notifications object to a Python dictionary."""
         return {
             'id': self.id,
             'date': self.date.isoformat() if self.date else None,

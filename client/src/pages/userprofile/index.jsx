@@ -50,13 +50,29 @@ const UserProfile = () => {
 
   const colors = tokens;
 
+  // const handleOverlayClick = (e) => {
+  //   e.stopPropagation();
+  //   setShowForm(false);
+  // };
+
+  const buttonSx = {
+    backgroundColor: colors.orangeAccents[500],
+    color: colors.primary[500],
+    fontSize: "14px",
+    fontWeight: "bold",
+    padding: "10px", // Remove horizontal padding
+    minWidth: "130px", // Set a fixed width for all buttons
+    "&:hover": {
+      backgroundColor: colors.primary[500], // New color on hover
+      color: colors.orangeAccents[500],
+      boxShadow: " rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;",
+    },
+  };
+
   return (
     <Box
       sx={{
         display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
         minHeight: "100vh",
         padding: 5,
         width: "100%",
@@ -184,12 +200,7 @@ const UserProfile = () => {
               color="secondary"
               variant="contained"
               size="small"
-              sx={{
-                color: colors.primary[500],
-                padding: "10px",
-                backgroundColor: colors.orangeAccents[500],
-                width: "120px",
-              }}
+              sx={buttonSx}
             >
               Save Changes
             </Button>

@@ -1,25 +1,31 @@
 import React from "react";
 import { ResponsivePie } from "@nivo/pie";
 import { tokens } from "../theme";
-import { mockPieData as data } from "../data/mockData";
 
-const CenterText = ({ dataWithArc, centerX, centerY }) => (
-  <text x={centerX} y={centerY} textAnchor="middle" dominantBaseline="central" fill="black">
-    <tspan fontSize={22}  fontWeight="bold" x={centerX} dy="-0.5em">{dataWithArc.reduce((sum, data) => sum + data.value, 0)}</tspan>
-    <tspan fontSize={14}  fontWeight="bold" x={centerX} dy="1.5em">Dispatches</tspan>
+const CenterText = ({ dataWithArc, centerX, centerY, data }) => (
+  <text
+    x={centerX}
+    y={centerY}
+    textAnchor="middle"
+    dominantBaseline="central"
+    fill="black"
+  >
+    <tspan fontSize={22} fontWeight="bold" x={centerX} dy="-0.5em">
+      {dataWithArc.reduce((sum, data) => sum + data.value, 0)}
+    </tspan>
+    <tspan fontSize={14} fontWeight="bold" x={centerX} dy="1.5em">
+      Dispatches
+    </tspan>
   </text>
 );
 
-  
-const PieChart = (isDashboard = false) => {
-
+const PieChart = ({ data, isDashboard = false }) => {
   const colors = tokens;
   return (
     <ResponsivePie
-        
       data={data}
-      layers={['arcs', 'legends', CenterText]}
-      colors={{ datum: 'data.color' }}
+      layers={["arcs", "legends", CenterText]}
+      colors={{ datum: "data.color" }}
       theme={{
         axis: {
           domain: {
@@ -69,7 +75,6 @@ const PieChart = (isDashboard = false) => {
         from: "color",
         modifiers: [["darker", 2]],
       }}
-    
     />
   );
 };

@@ -9,6 +9,7 @@ import Topbar from "../pages/global/Topbar";
 
 // dashboard routing
 const Dashboard = Loadable(lazy(() => import("../pages/dashboard")));
+const Feed = Loadable(lazy(() => import("../pages/viewFeed")));
 
 // utilities routing - main
 const UserProfile = Loadable(lazy(() => import("../pages/userprofile")));
@@ -20,14 +21,9 @@ const AI = Loadable(lazy(() => import("../pages/ai")));
 const Contact = Loadable(lazy(() => import("../pages/contactUs")));
 const FAQ = Loadable(lazy(() => import("../pages/faq")));
 // utilities routing - settings
-const CamSetting = Loadable(
-  lazy(() => import("../pages/settings/dispatchsettings"))
-);
+const CamSetting = Loadable(lazy(() => import("../pages/settings/camsetting")));
 const DispatchSettings = Loadable(
   lazy(() => import("../pages/settings/dispatchsettings"))
-);
-const FloorplanSettings = Loadable(
-  lazy(() => import("../pages/settings/floorplansettings"))
 );
 const VersionInfo = Loadable(
   lazy(() => import("../pages/settings/versioninfo"))
@@ -43,6 +39,7 @@ const MainRoutes = () => {
     <Route
       path={[
         "/dashboard",
+        "/view_feed",
         "/notifications",
         "/incidents",
         "/usermgnt",
@@ -53,7 +50,6 @@ const MainRoutes = () => {
         "/myprofile",
         "/settings/camsetting",
         "/settings/dispatchsettings",
-        "/settings/floorplan",
         "/settings/versioninfo",
         "/settings/security",
       ]}
@@ -65,6 +61,7 @@ const MainRoutes = () => {
               <Topbar />
               <Switch location={location} key={location.pathname}>
                 <Route path="/dashboard" component={Dashboard} />
+                <Route path="/view_feed" component={Feed} />
                 <Route path="/notifications" component={Notifications} />
                 <Route path="/incidents" component={Incidents} />
                 <Route path="/usermgnt" component={Usermgnt} />
@@ -78,10 +75,6 @@ const MainRoutes = () => {
                 <Route
                   path="/settings/dispatchsettings"
                   component={DispatchSettings}
-                />
-                <Route
-                  path="/settings/floorplan"
-                  component={FloorplanSettings}
                 />
                 <Route path="/settings/versioninfo" component={VersionInfo} />
                 <Route path="/settings/security" component={Security} />

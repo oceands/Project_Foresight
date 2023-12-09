@@ -41,6 +41,7 @@ const Topbar = () => {
 
   const routeTextMap = {
     "/dashboard": "Welcome Back, " + firstName,
+    "/view_feed": "View Live Feed",
     "/notifications": "Notifications",
     "/incidents": "Incidents",
     "/usermgnt": "User Management",

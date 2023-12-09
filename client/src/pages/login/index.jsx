@@ -66,6 +66,7 @@ const Login = (props, { ...others }) => {
                 isLoggedIn: true,
                 Access_token: response.data.Access_token,
                 Refresh_token: response.data.Refresh_token,
+                Role: response.data.Role,
                 user: response.data.user,
               },
             });

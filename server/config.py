@@ -7,6 +7,7 @@ from datetime import timedelta
 class BaseConfig():
 
     load_dotenv()
+    
 
     #This variable checks if JWT secret key is available in the .env
     JWT_SECRET_KEY = os.getenv('JWT_SECRET', None)
@@ -20,6 +21,11 @@ class BaseConfig():
     #Tells when the tokens will expire    
     JWT_ACCESS_TOKEN_EXPIRES= timedelta(seconds=15)
     JWT_REFRESH_TOKEN_EXPIRES=timedelta(minutes=30)
+
+    SQLALCHEMY_POOL_SIZE = 10  # Example size, adjust based on your needs
+    SQLALCHEMY_MAX_OVERFLOW = 5
+
+    
 
     # Pull all Database constants from thE .ENV File
     db_username = os.getenv('DB_USERNAME', None)
@@ -41,6 +47,10 @@ class BaseConfig():
                 db_port,
                 db_name
             )
+
+            SQLALCHEMY_POOL_SIZE = 400  # Example size, adjust based on your needs
+            SQLALCHEMY_MAX_OVERFLOW = 200
+            
         #if an exception is caught then we can print the errors    
         except Exception as e:
-            print('> Error: DBMS Exception: ' + str(e) )  
+            print('> Error: DBMS Exception: ' + str(e) )

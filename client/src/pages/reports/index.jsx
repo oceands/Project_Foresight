@@ -1,6 +1,18 @@
-import React from "react";
-
-import { Box, Toolbar, IconButton, Button } from "@mui/material";
+import React, { useState, useEffect } from "react";
+import {
+  Box,
+  Toolbar,
+  IconButton,
+  Button,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  LinearProgress,
+  TextField,
+  MenuItem,
+} from "@mui/material";
+import { TbReport } from "react-icons/tb";
 import {
   DataGrid,
   GridToolbarQuickFilter,
@@ -8,25 +20,16 @@ import {
   GridToolbarFilterButton,
 } from "@mui/x-data-grid";
 import { tokens } from "../../theme";
-import { mockDataReports } from "../../data/mockData";
 import { MdEdit } from "react-icons/md";
 import { BsTrash3Fill } from "react-icons/bs";
 import { HiDownload } from "react-icons/hi";
-import { useState } from "react";
-import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  LinearProgress,
-} from "@mui/material";
+import { Formik } from "formik";
 
 function DownloadPopup({ open, onClose }) {
   return (
     <Dialog open={open} onClose={onClose}>
       <DialogTitle>Download Report</DialogTitle>
       <DialogContent>
-        {/* Add content for the download pop-up here */}
         <p>Click the button to start the download...</p>
         <Button onClick={onClose}>Close</Button>
       </DialogContent>
@@ -34,19 +37,18 @@ function DownloadPopup({ open, onClose }) {
   );
 }
 
-function CustomToolbar({ setFilterButtonEl }) {
+function CustomToolbar({ setFilterButtonEl, onAddReportClick }) {
   const colors = tokens;
 
   const buttonSx = {
-    // Styling for the "Create Reports" button in the toolbar
     backgroundColor: colors.orangeAccents[500],
     color: colors.primary[500],
     fontSize: "14px",
     fontWeight: "bold",
-    padding: "10px", // Remove horizontal padding
-    minWidth: "130px", // Set a fixed width for all buttons
+    padding: "10px",
+    minWidth: "130px",
     "&:hover": {
-      backgroundColor: colors.primary[500], // New color on hover
+      backgroundColor: colors.primary[500],
       color: colors.orangeAccents[500],
       boxShadow: " rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;",
     },
@@ -59,7 +61,9 @@ function CustomToolbar({ setFilterButtonEl }) {
     >
       <Toolbar variant="dense" disableGutters>
         <Box p={2} display={"flex"} alignItems={"center"}>
-          <Button sx={buttonSx}>Create Reports</Button>
+          <Button sx={buttonSx} onClick={onAddReportClick}>
+            Create Reports
+          </Button>
         </Box>
 
         <Box sx={{ flexGrow: 1 }} />
@@ -94,28 +98,281 @@ function CustomToolbar({ setFilterButtonEl }) {
 
 const Reports = () => {
   const colors = tokens;
-
   const [filterButtonEl, setFilterButtonEl] = useState(null);
-  //const [downloadPopupOpen, setDownloadPopupOpen] = useState(false);
   const [downloadProgressOpen, setDownloadProgressOpen] = useState(false);
   const [downloadProgress, setDownloadProgress] = useState(0);
-
   const [deleteConfirmationOpen, setDeleteConfirmationOpen] = useState(false);
+  const [showForm, setShowForm] = useState(false);
 
-  // Function to open the delete confirmation dialog
+  const [incidentOptions, setIncidentOptions] = useState([]);
+
+  const [reports, setReports] = useState([]); // State to store reports data
+
+  const userAccount = JSON.parse(sessionStorage.getItem("user-account"));
+  const user = JSON.parse(userAccount.user);
+  const username = user.username;
+
+  useEffect(() => {
+    // Fetch reports data when the component mounts
+    const fetchReports = async () => {
+      try {
+        const response = await fetch(
+          "http://127.0.0.1:5000/auth/api/users/reports",
+          {
+            headers: {
+              username: username, // Pass username in the header
+            },
+          }
+        );
+        if (!response.ok) throw new Error("Network response was not ok");
+        const data = await response.json();
+        if (data.success) {
+          setReports(
+            data.reports.map((report) => ({
+              id: report.id,
+              title: report.title,
+              IncidentID: report.incident_id, // Ensure field names match your column definitions
+              createdBy: report.created_by,
+              DateCreated: report.date_created,
+              // other fields if needed
+            }))
+          );
+        }
+      } catch (error) {
+        console.error(
+          "There has been a problem with your fetch operation:",
+          error
+        );
+      }
+    };
+
+    fetchReports();
+  }, []);
+
+  useEffect(() => {
+    // Fetch incident IDs when the component mounts
+    const fetchIncidents = async () => {
+      try {
+        const response = await fetch(
+          "http://127.0.0.1:5000/auth/api/users/incidents"
+        );
+        if (!response.ok) throw new Error("Network response was not ok");
+        const data = await response.json();
+        if (data.success) {
+          setIncidentOptions(data.incidents);
+        }
+      } catch (error) {
+        console.error(
+          "There has been a problem with your fetch operation:",
+          error
+        );
+      }
+    };
+
+    fetchIncidents();
+  }, []);
+
+  const handleAddReportClick = () => {
+    setShowForm(true);
+  };
+  const handleFormSubmit = (values, actions) => {
+    // Construct form data for the file upload
+    const formData = new FormData();
+    formData.append("title", values.title);
+    formData.append("incident_id", values.incident_id);
+    formData.append("comments", values.comments);
+    if (values.file) {
+      formData.append("report_file", values.file);
+    }
+
+    // Retrieve the user account information from Session storage
+
+    // Check if userAccount and user field exist
+    if (!userAccount || !userAccount.user) {
+      console.error("User information is not found in session storage.");
+      return;
+    }
+
+    // Parse the user field to access the username
+
+    // Define your API endpoint
+    const API_ENDPOINT = "http://127.0.0.1:5000/auth/api/users/reports";
+
+    // Perform the POST request
+    fetch(API_ENDPOINT, {
+      method: "POST",
+      headers: {
+        username: username, // Pass username in the header
+      },
+      body: formData,
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log(data);
+        // Perform actions based on response
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      })
+      .finally(() => {
+        actions.setSubmitting(false);
+      });
+  };
+
+  const AddReportForm = () => (
+    <Dialog
+      open={showForm}
+      onClose={() => setShowForm(false)}
+      fullWidth
+      maxWidth="sm"
+    >
+      <DialogTitle
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          gap: 1,
+          mt: 2, // Material-UI's shortcut for marginTop
+          pt: 2, // Material-UI's shortcut for paddingTop
+        }}
+      >
+        <TbReport style={{ fontSize: "2rem" }} />
+        Add Report
+      </DialogTitle>
+
+      <Formik
+        initialValues={{
+          title: "",
+          incident_id: "",
+          comments: "",
+          file: null,
+        }}
+        onSubmit={handleFormSubmit}
+      >
+        {({
+          values,
+          setFieldValue,
+          handleChange,
+          handleBlur,
+          handleSubmit,
+        }) => (
+          <form onSubmit={handleSubmit}>
+            <DialogContent>
+              <TextField
+                name="title"
+                label="Title"
+                onChange={handleChange}
+                onBlur={handleBlur}
+                value={values.title}
+                fullWidth
+                margin="dense"
+                sx={{ marginY: 2 }} // Adjust spacing
+              />
+              <TextField
+                name="incident_id"
+                label="Incident ID"
+                select
+                fullWidth
+                margin="dense"
+                onChange={handleChange}
+                onBlur={handleBlur}
+                value={values.incident_id}
+                sx={{ marginY: 2 }}
+              >
+                {incidentOptions.map((incident) => (
+                  <MenuItem
+                    key={incident.incidents_id}
+                    value={incident.incidents_id.toString()}
+                  >
+                    {incident.incidents_id}
+                  </MenuItem>
+                ))}
+              </TextField>
+              <TextField
+                name="comments"
+                label="Comments"
+                onChange={handleChange}
+                onBlur={handleBlur}
+                value={values.comments}
+                fullWidth
+                multiline
+                rows={4}
+                margin="dense"
+                sx={{ marginY: 2 }}
+              />
+              <input
+                accept=".doc,.docx,application/msword,application/pdf"
+                style={{ display: "none" }}
+                id="raised-button-file"
+                multiple={false}
+                type="file"
+                onChange={(event) => {
+                  setFieldValue("file", event.currentTarget.files[0]);
+                }}
+              />
+              <label htmlFor="raised-button-file">
+                <Button
+                  variant="outlined"
+                  component="span"
+                  fullWidth
+                  sx={{ marginY: 2, textTransform: "none" }}
+                >
+                  Upload Document
+                </Button>
+              </label>
+              {values.file ? (
+                <Box sx={{ my: 2 }}>{values.file.name}</Box>
+              ) : null}
+            </DialogContent>
+            <DialogActions sx={{ justifyContent: "flex-end", padding: 3 }}>
+              <Button
+                onClick={() => setShowForm(false)}
+                sx={{
+                  backgroundColor: "white",
+                  color: colors.orangeAccents[500],
+                  border: "1px solid ${colors.orangeAccents[500]}",
+                  "&:hover": {
+                    backgroundColor: "#eeeeee",
+                  },
+                  marginRight: 2,
+                }}
+              >
+                Cancel
+              </Button>
+              <Button
+                type="submit"
+                sx={{
+                  backgroundColor: colors.orangeAccents[500],
+                  color: "white",
+                  "&:hover": {
+                    backgroundColor:
+                      colors.orangeAccents[700] || colors.orangeAccents[500],
+                  },
+                }}
+              >
+                Add Report
+              </Button>
+            </DialogActions>
+          </form>
+        )}
+      </Formik>
+    </Dialog>
+  );
+
   const openDeleteConfirmation = () => {
     setDeleteConfirmationOpen(true);
   };
 
-  // Function to close the delete confirmation dialog
   const closeDeleteConfirmation = () => {
     setDeleteConfirmationOpen(false);
   };
-  const handleDownloadClick = () => {
-    // Open the download progress pop-up
-    setDownloadProgressOpen(true);
 
-    // Simulate a download process for demonstration purposes
+  const handleDownloadClick = () => {
+    setDownloadProgressOpen(true);
     const downloadInterval = setInterval(() => {
       setDownloadProgress((prevProgress) => {
         if (prevProgress < 100) {
@@ -128,21 +385,15 @@ const Reports = () => {
       });
     }, 1000);
   };
-  // const openDownloadPopup = () => {
-  // setDownloadPopupOpen(true);
-  // };
-  // const closeDownloadPopup = () => {
-  // setDownloadPopupOpen(false);
-  // };
 
   const handleDeleteConfirmed = () => {
-    // Perform the deletion logic here
-    // You can remove the item from your data source
-    // Example: Delete the item with an API call or update the state
     closeDeleteConfirmation();
+    // Additional logic for deletion
   };
 
   const columns = [
+    // Column definitions
+
     {
       field: "id",
       headerName: "Report ID",
@@ -178,13 +429,7 @@ const Reports = () => {
       cellClassName: "name-column--cell",
       disableColumnMenu: true,
     },
-    {
-      field: "Status",
-      headerName: "Status",
-      flex: 1, // Space columns equally
-      cellClassName: "name-column--cell",
-      disableColumnMenu: true,
-    },
+
     {
       field: "action",
       headerName: "Action",
@@ -289,7 +534,7 @@ const Reports = () => {
             border: "none",
             fontSize: "14px",
             "& .MuiDataGrid-cell:focus": {
-              outline: "none", // Remove the focus outline
+              outline: "none",
             },
           },
 
@@ -316,10 +561,10 @@ const Reports = () => {
             borderRadius: "0 0 8px 8px",
           },
           "& .MuiCheckbox-root": {
-            color: `${colors.primary[500]} !important`,
+            color: "${colors.primary[500]} !important",
           },
           "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
-            color: `${colors.blackAccents[100]} !important`,
+            color: "${colors.blackAccents[100]} !important",
             fontSize: "14px",
           },
         }}
@@ -327,7 +572,7 @@ const Reports = () => {
         <DataGrid
           disableColumnSelector
           disableDensitySelector
-          rows={mockDataReports}
+          rows={reports}
           columns={columns}
           components={{ Toolbar: CustomToolbar }}
           componentsProps={{
@@ -337,10 +582,12 @@ const Reports = () => {
             },
             toolbar: {
               setFilterButtonEl,
+              onAddReportClick: handleAddReportClick,
             },
           }}
         />
       </Box>
+      {showForm && <AddReportForm />}
     </Box>
   );
 };

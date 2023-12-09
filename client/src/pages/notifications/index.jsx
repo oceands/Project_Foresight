@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Box,
   useTheme,
@@ -20,7 +20,13 @@ import { VscBellDot } from "react-icons/vsc";
 import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
 import NotificationsOffIcon from "@mui/icons-material/NotificationsOff";
+import UIfx from "uifx";
+//import alarmSound from "../../../public/assets/alarm.mp3"; // Adjust the path according to your project structure
 
+const alarm = new UIfx("../../../public/assets/alarm.mp3", {
+  volume: 0.4, // set the volume to 40%
+  throttleMs: 100,
+});
 // Custom toolbar for the DataGrid
 function CustomToolbar({ setFilterButtonEl }) {
   return (
@@ -66,10 +72,94 @@ function CustomToolbar({ setFilterButtonEl }) {
 
 const Notifications = ({ changeWelcomeText }) => {
   const [notifications, setNotifications] = useState([]);
+  const [selectedImage, setSelectedImage] = useState("");
+  const [selectedVideo, setSelectedVideo] = useState("");
+
+  const [selectedNotification, setSelectedNotification] = useState(null);
+
   const theme = useTheme();
   const colors = tokens;
   const [filterButtonEl, setFilterButtonEl] = useState(null);
   const [selectedRows, setSelectedRows] = useState([]);
+  const videoRef = useRef(null);
+  const [playbackSpeed] = useState(0.45); // Example: 0.75 times the normal speed
+  const formatDate = (isoString) => {
+    const date = new Date(isoString);
+    return date.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+  };
+  const formatDateFull = (isoString) => {
+    const date = new Date(isoString);
+    // Convert to Dubai time (UTC+4)
+    const dubaiTime = new Date(date.getTime() + 4 * 60 * 60 * 1000);
+    return dubaiTime.toLocaleString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      timeZoneName: "short",
+    });
+  };
+
+  const playSound = () => {
+    alarm.play();
+  };
+
+  const fetchImage = async (notificationId) => {
+    if (!notificationId) {
+      setSelectedImage(""); // Reset the image if no ID is provided
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `http://127.0.0.1:5000/auth/api/users/get_image/${notificationId}`
+      );
+      if (response.ok) {
+        const imageUrl = URL.createObjectURL(await response.blob());
+        setSelectedImage(imageUrl);
+      } else {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+    } catch (error) {
+      console.error("There was an error fetching the image:", error);
+      setSelectedImage(""); // Reset the image URL on error
+    }
+  };
+  const fetchVideo = async (notificationId) => {
+    if (!notificationId) {
+      if (selectedVideo) URL.revokeObjectURL(selectedVideo);
+      setSelectedVideo("");
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `http://127.0.0.1:5000/auth/api/users/videos/${notificationId}`
+      );
+      if (response.ok) {
+        const videoUrl = URL.createObjectURL(await response.blob());
+        setSelectedVideo(videoUrl);
+      } else {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+    } catch (error) {
+      console.error("There was an error fetching the video:", error);
+      setSelectedVideo(""); // Reset the video URL on error
+    }
+  };
+  useEffect(() => {
+    if (videoRef.current && selectedVideo) {
+      videoRef.current.load();
+      videoRef.current.play();
+      videoRef.current.playbackRate = playbackSpeed; // Set the playback speed
+    }
+  }, [selectedVideo, playbackSpeed]);
 
   const handleApprove = async () => {
     // Map over selectedRows to create an array of PUT requests
@@ -217,64 +307,61 @@ const Notifications = ({ changeWelcomeText }) => {
   };
 
   const handleSelectionChange = (newSelectionModel) => {
-    const selectedData = notifications.filter((row) =>
-      newSelectionModel.includes(row.id)
-    );
-    setSelectedRows(selectedData);
+    if (newSelectionModel.length > 0) {
+      const latestSelectionId = newSelectionModel[newSelectionModel.length - 1];
+      const latestSelection = notifications.find(
+        (notification) => notification.id === latestSelectionId
+      );
+
+      setSelectedRows([latestSelection]);
+      setSelectedNotification(latestSelection); // Update the selected notification
+
+      fetchImage(latestSelection.id);
+      fetchVideo(latestSelection.id);
+    } else {
+      setSelectedRows([]);
+      setSelectedNotification(null);
+      setSelectedImage("");
+      setSelectedVideo("");
+    }
   };
-
-  useEffect(() => {
-    const fetchNotifications = async () => {
-      try {
-        const response = await fetch(
-          "http://127.0.0.1:5000/auth/api/users/notifications"
-        );
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const result = await response.json();
-        if (result.success && Array.isArray(result.notifications)) {
-          setNotifications(result.notifications);
-        } else {
-          throw new Error("Invalid data structure");
-        }
-      } catch (error) {
-        console.error("There was an error fetching notifications:", error);
+  const fetchNotifications = async () => {
+    try {
+      const response = await fetch(
+        "http://127.0.0.1:5000/auth/api/users/notifications"
+      );
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
-    };
-
+      const result = await response.json();
+      if (result.success && Array.isArray(result.notifications)) {
+        const storedCount = parseInt(
+          localStorage.getItem("notificationCount") || "0",
+          10
+        );
+        if (result.notifications.length > storedCount) {
+          playSound();
+          localStorage.setItem(
+            "notificationCount",
+            result.notifications.length.toString()
+          );
+        }
+        setNotifications(result.notifications);
+      } else {
+        throw new Error("Invalid data structure");
+      }
+    } catch (error) {
+      console.error("There was an error fetching notifications:", error);
+    }
+  };
+  useEffect(() => {
     fetchNotifications();
-    // Define the handler inside useEffect to capture the current state scope
-    // Set up polling
-    const pollingInterval = setInterval(fetchNotifications, 5000); // Poll every 5 seconds
+    const pollingInterval = setInterval(fetchNotifications, 10000); // Adjust the interval as needed
 
-    // Clean up interval on component unmount
     return () => {
       clearInterval(pollingInterval);
     };
-    const handleNewNotification = (notification) => {
-      setNotifications((prevNotifications) => {
-        const existingIndex = prevNotifications.findIndex(
-          (n) => n.id === notification.id
-        );
-        if (existingIndex > -1) {
-          return prevNotifications.map((item, index) =>
-            index === existingIndex ? { ...item, ...notification } : item
-          );
-        } else {
-          return [...prevNotifications, notification];
-        }
-      });
-    };
-
-    // // Define the event listener
-    // socket.on("database_update", handleNewNotification);
-
-    // // Cleanup the listener when the effect re-runs or the component unmounts
-    // return () => {
-    //   socket.off("database_update", handleNewNotification);
-    // };
-  }); // Dependencies array
+  }, []);
 
   const columns = [
     // Define the columns for the DataGrid
@@ -290,6 +377,9 @@ const Notifications = ({ changeWelcomeText }) => {
       flex: 1,
       disableColumnMenu: true,
       cellClassName: "name-column--cell",
+      renderCell: (params) => (
+        <Typography>{formatDateFull(params.value)}</Typography>
+      ),
     },
     {
       field: "type",
@@ -369,13 +459,23 @@ const Notifications = ({ changeWelcomeText }) => {
                 alignItems="center"
                 justifyContent="center"
                 border={"1px solid "}
+                height={"100%"}
               >
-                {/*Insert the video / RTSP FEED HERE */}
-                <img
-                  src={"../../assets/vid-evidence.jpg"}
-                  alt="sample"
-                  style={{ maxWidth: "100%", height: "auto" }} // Controlling image dimensions
-                />
+                {selectedImage ? (
+                  <img
+                    src={selectedImage}
+                    alt="Detected"
+                    style={{
+                      width: "100%",
+                      height: "100%", // Ensure image does not exceed the Box's height
+                      objectFit: "fill", // Add objectFit to prevent image distortion
+                    }}
+                  />
+                ) : (
+                  <Typography variant="h6">
+                    Select a notification to view image
+                  </Typography>
+                )}
               </Box>
             </Grid>
 
@@ -388,18 +488,28 @@ const Notifications = ({ changeWelcomeText }) => {
               >
                 <Box width="100%" display="flex" alignItems="left">
                   <Box p={5} color={colors.blackAccents[200]}>
-                    <Typography variant="h6">Incident Type:</Typography>
-                    <Typography variant="h6">Date:</Typography>
-                    <Typography variant="h6">Room:</Typography>
-                    <Typography variant="h6">Room:</Typography>
                     <Typography variant="h6">ID:</Typography>
+                    <Typography variant="h6">Date:</Typography>
+                    <Typography variant="h6">Module:</Typography>
+                    <Typography variant="h6">Camera Location:</Typography>
+                    <Typography variant="h6">Status:</Typography>
                   </Box>
                   <Box p={5}>
-                    <Typography variant="h6">Filler</Typography>
-                    <Typography variant="h6">Filler</Typography>
-                    <Typography variant="h6">Filler</Typography>
-                    <Typography variant="h6">Filler</Typography>
-                    <Typography variant="h6">Filler</Typography>
+                    <Typography variant="h6">
+                      {selectedNotification?.id || "N/A"}
+                    </Typography>
+                    <Typography variant="h6">
+                      {formatDate(selectedNotification?.date) || "N/A"}
+                    </Typography>
+                    <Typography variant="h6">
+                      {selectedNotification?.module || "N/A"}
+                    </Typography>
+                    <Typography variant="h6">
+                      {selectedNotification?.camera || "N/A"}
+                    </Typography>
+                    <Typography variant="h6">
+                      {selectedNotification?.status || "N/A"}
+                    </Typography>
                   </Box>
                 </Box>
 
@@ -408,7 +518,7 @@ const Notifications = ({ changeWelcomeText }) => {
                   display="flex"
                   alignItems="center"
                   justifyContent="space-around" // To evenly space the buttons
-                  paddingTop={5} // Adding padding for spacing
+                  // Adding padding for spacing
                   margin="auto" // Center horizontally and vertically
                 >
                   <Button
@@ -476,13 +586,29 @@ const Notifications = ({ changeWelcomeText }) => {
                 alignItems="center"
                 justifyContent="center"
                 border={"1px solid "}
+                height="100%"
               >
-                {/*Insert the video / RTSP FEED HERE */}
-                <img
-                  src={"../../assets/vid-evidence.jpg"}
-                  alt="sample"
-                  style={{ maxWidth: "100%", height: "auto" }} // Controlling image dimensions
-                />
+                {selectedVideo ? (
+                  <video
+                    ref={videoRef}
+                    key={selectedRows.length > 0 ? selectedRows[0].id : "video"} // Re-render the video component
+                    controls
+                    autoPlay // This will play the video as soon as it's loaded
+                    loop // This will loop the video continuously
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "cover",
+                    }}
+                  >
+                    <source src={selectedVideo} type="video/mp4" />
+                    Your browser does not support the video tag.
+                  </video>
+                ) : (
+                  <Typography variant="h6">
+                    Select a notification to view video
+                  </Typography>
+                )}
               </Box>
             </Grid>
           </Grid>
@@ -545,7 +671,7 @@ const Notifications = ({ changeWelcomeText }) => {
           disableDensitySelector
           checkboxSelection
           onSelectionModelChange={handleSelectionChange}
-          selectionModel={selectedRows.map((row) => row.id)}
+          selectionModel={selectedRows.length > 0 ? [selectedRows[0].id] : []}
           rows={notifications}
           columns={columns}
           components={{ Toolbar: CustomToolbar }}

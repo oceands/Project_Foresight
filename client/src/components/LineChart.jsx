@@ -2,11 +2,10 @@ import React from "react";
 import { ResponsiveLine } from "@nivo/line";
 import { linearGradientDef } from "@nivo/core";
 import { tokens } from "../theme";
-import { mockLineData } from "../data/mockData";
 
-const LineChart = ({ isDashboard = false }) => {
-
+const LineChart = ({ data, isDashboard = false }) => {
   const colors = tokens;
+
   return (
     <ResponsiveLine
       theme={{
@@ -44,7 +43,7 @@ const LineChart = ({ isDashboard = false }) => {
         },
       }}
       curve="catmullRom"
-      data={mockLineData}
+      data={data}
       colors={isDashboard ? { datum: "color" } : { scheme: "nivo" }}
       margin={{ top: 50, right: 110, bottom: 50, left: 60 }}
       xScale={{ type: "point" }}
@@ -63,7 +62,7 @@ const LineChart = ({ isDashboard = false }) => {
         tickSize: 5,
         tickPadding: 5,
         tickRotation: 0,
-        legend:"Months",
+        legend: "Months",
         legendOffset: 36,
         legendPosition: "middle",
       }}
@@ -117,11 +116,10 @@ const LineChart = ({ isDashboard = false }) => {
       defs={[
         linearGradientDef("gradientA", [
           { offset: 50, color: "inherit" },
-          { offset: 70, color: "inherit", opacity: 0 }
-        ])]}
-
-        fill={[
-          { match: { id: "Incidents" }, id: "gradientA" }]}
+          { offset: 70, color: "inherit", opacity: 0 },
+        ]),
+      ]}
+      fill={[{ match: { id: "Incidents" }, id: "gradientA" }]}
     />
   );
 };

@@ -1,7 +1,6 @@
 import { Box, IconButton, Typography } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2";
 import { tokens } from "../../theme";
-import { mockPieData } from "../../data/mockData";
 import { AiOutlineArrowRight } from "react-icons/ai";
 import { AiFillFire } from "react-icons/ai";
 import { FaGun } from "react-icons/fa6";
@@ -12,14 +11,117 @@ import { Stack } from "@mui/material";
 import LineChart from "../../components/LineChart";
 import StatBox from "../../components/StatBox";
 import PieChart from "../../components/PieChart";
+import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 const Dashboard = () => {
   const colors = tokens;
-  const totalValue = mockPieData.reduce((total, item) => total + item.value, 0); // Calculate total value for pie chart data
-  const progressPercent = mockPieData.map(
+
+  // apiService.js
+  const API_URL = "http://127.0.0.1:5000/user"; // Replace with your actual API URL
+
+  const fetchFireIncidentsCount = async () => {
+    try {
+      const response = await fetch(`${API_URL}/incidents/count/fire`);
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      const data = await response.json();
+      return data.fire_incident_count;
+    } catch (error) {
+      console.error("Error fetching fire incident count:", error);
+      return 0; // Return a default value in case of error
+    }
+  };
+
+  const fetchWeaponIncidentsCount = async () => {
+    try {
+      const response = await fetch(`${API_URL}/incidents/count/weapon`);
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      const data = await response.json();
+      return data.weapon_incident_count;
+    } catch (error) {
+      console.error("Error fetching weapon incident count:", error);
+      return 0; // Return a default value in case of error
+    }
+  };
+
+  const fetchVerifiedIncidentsCount = async () => {
+    try {
+      const response = await fetch(`${API_URL}/incidents/count/verified`);
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      const data = await response.json();
+      return data.verified_incident_count;
+    } catch (error) {
+      console.error("Error fetching verified incident count:", error);
+      return 0; // Return a default value in case of error
+    }
+  };
+
+  const fetchDispatchData = async () => {
+    try {
+      const response = await fetch(`${API_URL}/dispatch/count`);
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      const jsonData = await response.json();
+      return jsonData;
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  const fetchIncidentData = async () => {
+    try {
+      const response = await fetch(`${API_URL}/incidents/monthly-count`);
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  const [fireIncidentCount, setFireIncidentCount] = useState(0);
+  const [weaponIncidentCount, setWeaponIncidentCount] = useState(0);
+  const [verifiedIncidentCount, setVerifiedIncidentCount] = useState(0);
+  const [DispatchData, setDispatchData] = useState([]);
+  const [incidentData, setIncidentData] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const fireCount = await fetchFireIncidentsCount();
+      const weaponCount = await fetchWeaponIncidentsCount();
+      const verifiedCount = await fetchVerifiedIncidentsCount();
+      const dispatchCount = await fetchDispatchData();
+      const incidentDataCount = await fetchIncidentData();
+
+      setFireIncidentCount(fireCount);
+      setWeaponIncidentCount(weaponCount);
+      setVerifiedIncidentCount(verifiedCount);
+      setDispatchData(dispatchCount);
+      setIncidentData(incidentDataCount);
+      console.log(incidentDataCount);
+    };
+
+    fetchData();
+  }, []);
+
+  const totalValue = DispatchData.reduce(
+    (total, item) => total + item.value,
+    0
+  ); // Calculate total value for pie chart data
+  const progressPercent = DispatchData.map(
     (item) => (item.value / totalValue) * 100
   ); // Calculate progress percentage and progress values for pie chart
-  const progressValues = mockPieData.map((item) => item.value);
+  const progressValues = DispatchData.map((item) => item.value);
+
   return (
     // STATS, GRAPHS AND FEED
 
@@ -47,7 +149,7 @@ const Dashboard = () => {
                 borderRadius="8px"
               >
                 <StatBox
-                  title="12,361"
+                  title={fireIncidentCount.toString()}
                   subtitle="Total Fire Incidents"
                   icon={
                     <AiFillFire
@@ -71,7 +173,7 @@ const Dashboard = () => {
                 borderRadius="8px"
               >
                 <StatBox
-                  title="431,225"
+                  title={weaponIncidentCount.toString()}
                   subtitle="Total Weapon Incidents"
                   icon={
                     <FaGun
@@ -95,7 +197,7 @@ const Dashboard = () => {
                 borderRadius="8px"
               >
                 <StatBox
-                  title="32,441"
+                  title={verifiedIncidentCount.toString()}
                   subtitle="Total Verified Incidents"
                   progress="0.30"
                   increase="+5%"
@@ -144,11 +246,16 @@ const Dashboard = () => {
 
                 {/*THIS IS THE CONTAINER WHICH WILL HOLD THE ARROW */}
                 <Box>
-                  <IconButton>
-                    <AiOutlineArrowRight
-                      sx={{ fontSize: "26px", color: colors.blackAccents[500] }}
-                    />
-                  </IconButton>
+                  <Link to="/view_feed">
+                    <IconButton>
+                      <AiOutlineArrowRight
+                        sx={{
+                          fontSize: "26px",
+                          color: colors.blackAccents[500],
+                        }}
+                      />
+                    </IconButton>
+                  </Link>
                 </Box>
               </Box>
 
@@ -239,25 +346,17 @@ const Dashboard = () => {
                   variant="h7"
                   fontWeight="bold"
                   paddingLeft={1}
+                  paddingTop={2}
                   sx={{ color: colors.blackAccents[500] }}
                 >
                   Weekly Analytics
                 </Typography>
               </Box>
-
-              {/*THIS IS THE CONTAINER WHICH WILL HOLD THE ARROW */}
-              <Box>
-                <IconButton>
-                  <AiOutlineArrowRight
-                    sx={{ fontSize: "26px", color: colors.blackAccents[500] }}
-                  />
-                </IconButton>
-              </Box>
             </Box>
             {/*This is the Box which will contain the pie chart */}
             <Box m="20px">
               <Box height="25vh">
-                <PieChart isDashboard={true} />
+                <PieChart isDashboard={true} data={DispatchData} />
               </Box>
 
               <Box
@@ -266,7 +365,7 @@ const Dashboard = () => {
                 alignItems="center"
                 justifyContent="center"
               >
-                {mockPieData.map((item, index) => (
+                {DispatchData.map((item, index) => (
                   <Box
                     key={item.id}
                     display="flex"
@@ -329,16 +428,9 @@ const Dashboard = () => {
                   Dashboard Analytics
                 </Typography>
               </Box>
-              <Box>
-                <IconButton>
-                  <AiOutlineArrowRight
-                    sx={{ fontSize: "26px", color: colors.blackAccents[500] }}
-                  />
-                </IconButton>
-              </Box>
             </Box>
             <Box height="250px" m="-20px 0 0 0">
-              <LineChart isDashboard={true} />
+              <LineChart isDashboard={true} data={incidentData} />
             </Box>
           </Box>
         </Grid>

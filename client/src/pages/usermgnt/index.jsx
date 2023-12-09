@@ -1,5 +1,14 @@
 import React from "react";
-import { Box, Toolbar, IconButton, Button } from "@mui/material";
+import { useEffect } from "react";
+import {
+  Box,
+  Toolbar,
+  IconButton,
+  Button,
+  TextField,
+  Select,
+  MenuItem,
+} from "@mui/material";
 import {
   DataGrid,
   GridToolbarQuickFilter,
@@ -7,13 +16,20 @@ import {
   GridToolbarFilterButton,
 } from "@mui/x-data-grid";
 import { tokens } from "../../theme";
+import { Typography } from "@mui/material";
 import { mockUserManagement } from "../../data/mockData";
 import { MdEdit } from "react-icons/md";
 import { BsTrash3Fill } from "react-icons/bs";
 import { useState } from "react";
-//import userprofile from './userprofile';
+import * as yup from "yup";
+import { Formik } from "formik";
+import { FiUsers } from "react-icons/fi";
+import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import dayjs from "dayjs";
+import axiosInstance from "../../api/axios";
 
-function CustomToolbar({ setFilterButtonEl }) {
+function CustomToolbar({ setFilterButtonEl, fetchUsers }) {
   const colors = tokens;
 
   const buttonSx = {
@@ -30,6 +46,288 @@ function CustomToolbar({ setFilterButtonEl }) {
     },
   };
 
+  function getRandomChar(characters) {
+    const randomIndex = Math.floor(Math.random() * characters.length);
+    return characters[randomIndex];
+  }
+
+  function generateStrongPassword(length) {
+    const lowercaseChars = "abcdefghijklmnopqrstuvwxyz";
+    const uppercaseChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    const numbers = "0123456789";
+    const specialChars = "!@#$%^&*";
+    const allChars = lowercaseChars + uppercaseChars + numbers + specialChars;
+
+    let password = "";
+
+    // Ensure at least one character from each category
+    password += getRandomChar(lowercaseChars);
+    password += getRandomChar(uppercaseChars);
+    password += getRandomChar(numbers);
+    password += getRandomChar(specialChars);
+
+    // Generate the remaining characters
+    for (let i = password.length; i < length; i++) {
+      const randomIndex = Math.floor(Math.random() * allChars.length);
+      password += allChars[randomIndex];
+    }
+
+    return password;
+  }
+
+  const handleFormSubmit = (
+    values,
+    { setErrors, setStatus, setSubmitting }
+  ) => {
+    const [fname, lname] = values.name.split(" ");
+    const pass = generateStrongPassword(8);
+
+    try {
+      axiosInstance
+        .post("auth/api/users/register", {
+          Fname: fname,
+          Lname: lname,
+          email: values.email,
+          role: values.role.toLowerCase(),
+          password: pass,
+        })
+        .then(function (response) {
+          if (response.data.success) {
+            // Handle success
+            console.log("User added successfully:", response.data.message);
+            alert("User added successfully temp* password is " + pass);
+            setStatus({ success: true });
+            setSubmitting(false);
+            fetchUsers();
+            setShowForm(false);
+          } else {
+            // Handle failure
+            console.error("Failed to add user:", response.data.msg);
+            alert(`Failed to add user: ${response.data.msg}`);
+            setStatus({ success: false });
+            setErrors({ submit: response.data.msg });
+            setSubmitting(false);
+          }
+        })
+        .catch(function (error) {
+          // Handle error
+          console.error("Error adding user:", error);
+          alert("Error adding user. Please try again.");
+          setStatus({ success: false });
+          setErrors({ submit: error.message });
+          setSubmitting(false);
+        });
+    } catch (err) {
+      // Handle unexpected error
+      console.error(err);
+      alert("Error adding user. Please try again.");
+      setStatus({ success: false });
+      setErrors({ submit: err.message });
+      setSubmitting(false);
+    }
+  };
+
+  const handleOverlayClick = (e) => {
+    e.stopPropagation();
+    setShowForm(false);
+  };
+
+  const [showForm, setShowForm] = React.useState(false);
+
+  const [selectedRole, setselectedRole] = useState(""); // State to hold the selected question
+
+  const handleRoleChange = (event) => {
+    console.log("launched");
+    setselectedRole(event.target.value);
+  };
+
+  const checkoutSchema = yup.object().shape({
+    name: yup.string().required("Required"),
+    email: yup.string().email("Invalid email format").required("Required"),
+    joiningdate: yup.date().required("Required"),
+    role: yup.string().required("Required"),
+  });
+  const initialValues = {
+    name: "",
+    email: "",
+    joiningdate: dayjs(), // You can set a default Joining Date if needed
+    role: selectedRole,
+  };
+
+  //Adding the Users Form
+  const AddUserForm = ({
+    onClose,
+    onSubmit,
+    initialValues,
+    validationSchema,
+    setShowForm,
+  }) => {
+    return (
+      <Box
+        position="fixed"
+        top={0}
+        left={0}
+        width="100%"
+        height="100%"
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        onClick={handleOverlayClick}
+        backgroundColor="rgba(0, 0, 0, 0.65)"
+        zIndex={9999}
+      >
+        <Box
+          onClick={(e) => e.stopPropagation()}
+          backgroundColor={colors.primary[500]}
+          borderRadius="8px"
+          padding="20px"
+          maxWidth="600px"
+          height={"500px"}
+          boxShadow="0px 4px 10px rgba(0, 0, 0, 0.2)"
+        >
+          <Formik
+            onSubmit={handleFormSubmit}
+            initialValues={initialValues}
+            validationSchema={checkoutSchema}
+          >
+            {({
+              values,
+              errors,
+              touched,
+              handleBlur,
+              handleChange,
+              handleSubmit,
+              setFieldValue,
+            }) => (
+              <form onSubmit={handleSubmit}>
+                <Box p={1} display={"flex"} alignItems={"center"}>
+                  <FiUsers style={{ fontSize: "2rem" }} />
+                  <Typography variant="h6" p={2} fontWeight={"bold"}>
+                    User Details
+                  </Typography>
+                </Box>
+
+                <Box
+                  display="grid"
+                  gap="25px"
+                  gridTemplateColumns="repeat(4, minmax(0, 1fr))"
+                  p={4}
+                >
+                  <TextField
+                    fullWidth
+                    variant="filled"
+                    type="text"
+                    label="Name"
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    value={values.name} // Adjusted from 'values.Name'
+                    name="name" // Adjusted from 'values.Name'
+                    error={!!touched.name && !!errors.name}
+                    helperText={touched.name && errors.name}
+                    sx={{ gridColumn: "span 4" }}
+                    size="small"
+                  />
+                  <TextField
+                    fullWidth
+                    variant="filled"
+                    type="text"
+                    label="Email"
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    value={values.email} // Adjusted from 'values.email'
+                    name="email" // Adjusted from 'values.email'
+                    error={!!touched.email && !!errors.email}
+                    helperText={touched.email && errors.email}
+                    sx={{ gridColumn: "span 4" }}
+                    size="small"
+                  />
+
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DatePicker
+                      sx={{
+                        gridColumn: "span 2",
+                        "& .MuiInputBase-root": {
+                          height: "48px",
+                        },
+                      }}
+                      onChange={(value) =>
+                        setFieldValue("joiningdate", dayjs(value), true)
+                      }
+                      label="Date"
+                      value={values.joiningdate}
+                      slotProps={{
+                        popper: { sx: { zIndex: 9999 } },
+                      }}
+                    />
+                  </LocalizationProvider>
+
+                  <TextField
+                    fullWidth
+                    select
+                    variant="filled"
+                    label="Role"
+                    onChange={handleRoleChange}
+                    value={values.role}
+                    name="role"
+                    error={!!touched.role && !!errors.role}
+                    helperText={touched.role && errors.role}
+                    sx={{
+                      gridColumn: "span 2",
+                    }}
+                    SelectProps={{
+                      MenuProps: {
+                        style: { zIndex: 9999 },
+                      },
+                    }}
+                    size="small"
+                  >
+                    <MenuItem value="Admin">Admin</MenuItem>
+                    <MenuItem value="User">User</MenuItem>
+                  </TextField>
+
+                  <Box
+                    gridColumn="span 4"
+                    maxWidth={"100%"}
+                    display="flex"
+                    justifyContent="right"
+                    gap={"10px"}
+                  >
+                    <Button
+                      type="submit"
+                      variant="contained"
+                      size="small"
+                      sx={{
+                        color: colors.orangeAccents[500],
+                        padding: "10px",
+                        backgroundColor: colors.primary[500],
+                        border: "1px solid" + colors.orangeAccents[500],
+                        width: "120px",
+                      }}
+                    >
+                      Help
+                    </Button>
+                    <Button
+                      type="submit"
+                      variant="contained"
+                      size="small"
+                      sx={{
+                        color: colors.primary[500],
+                        padding: "10px",
+                        backgroundColor: colors.orangeAccents[500],
+                        width: "120px",
+                      }}
+                    >
+                      Add User
+                    </Button>
+                  </Box>
+                </Box>
+              </form>
+            )}
+          </Formik>
+        </Box>
+      </Box>
+    );
+  };
   return (
     <Box
       sx={{ flexGrow: 1, borderRadius: "8px 8px 0 0" }}
@@ -37,7 +335,9 @@ function CustomToolbar({ setFilterButtonEl }) {
     >
       <Toolbar variant="dense" disableGutters>
         <Box p={2} display={"flex"} alignItems={"center"}>
-          <Button sx={buttonSx}>Add User</Button>
+          <Button onClick={() => setShowForm(!showForm)} sx={buttonSx}>
+            Add User
+          </Button>
         </Box>
 
         <Box sx={{ flexGrow: 1 }} />
@@ -65,6 +365,14 @@ function CustomToolbar({ setFilterButtonEl }) {
             />
           </Box>
         </GridToolbarContainer>
+        {showForm && (
+          <AddUserForm
+            onClose={() => setShowForm(false)}
+            onSubmit={handleFormSubmit}
+            initialValues={initialValues}
+            validationSchema={checkoutSchema}
+          />
+        )}
       </Toolbar>
     </Box>
   );
@@ -75,6 +383,55 @@ const Usermgnt = () => {
 
   const [filterButtonEl, setFilterButtonEl] = useState(null);
 
+  const [Users, setUsers] = useState([]);
+
+  const handleDelete = async (id) => {
+    try {
+      // Make a request to your backend to delete the camera
+      const response = await axiosInstance.delete(
+        `auth/api/users/delete/${id}`
+      );
+      console.log(response);
+      if (response.status === 200) {
+        console.log("User deleted successfully:", response.data.message);
+        alert("Camera deleted successfully");
+        fetchUsers();
+      } else {
+        // Handle error scenario
+        console.error("Failed to delete user:", response.data.message);
+      }
+    } catch (error) {
+      // Handle unexpected error
+      console.error("Error deleting user:", error.message);
+    }
+  };
+
+  const fetchUsers = async () => {
+    try {
+      const response = await fetch(
+        "http://127.0.0.1:5000/user/usermgnt/get_users"
+      );
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const result = await response.json();
+      console.log(result);
+      if (result.success && Array.isArray(result.users)) {
+        // Handle the fetched users data
+        setUsers(result.users);
+      } else {
+        throw new Error("Invalid data structure");
+      }
+    } catch (error) {
+      console.error("There was an error fetching users:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchUsers();
+  }, []); // Dependencies array
+
   const columns = [
     {
       field: "id",
@@ -84,7 +441,7 @@ const Usermgnt = () => {
       flex: 1, // Space columns equally
     },
     {
-      field: "name",
+      field: "username",
       headerName: "Name",
       flex: 1, // Space columns equally
       cellClassName: "name-column--cell",
@@ -98,22 +455,22 @@ const Usermgnt = () => {
       disableColumnMenu: true,
     },
     {
-      field: "joiningDate",
+      field: "date_joined",
       headerName: "Joining Date",
       flex: 1, // Space columns equally
       cellClassName: "name-column--cell",
       disableColumnMenu: true,
     },
     {
-      field: "roleAccess",
+      field: "roles",
       headerName: "Role",
       flex: 1, // Space columns equally
       cellClassName: "name-column--cell",
       disableColumnMenu: true,
     },
     {
-      field: "access",
-      headerName: "Access",
+      field: "actions",
+      headerName: "Actions",
       flex: 1, // Space columns equally
       cellClassName: "name-column--cell",
       disableColumnMenu: true,
@@ -130,6 +487,7 @@ const Usermgnt = () => {
           </IconButton>
           <IconButton>
             <BsTrash3Fill
+              onClick={() => handleDelete(params.row.id)}
               style={{
                 color: colors.blueAccents[500],
                 width: "15px",
@@ -192,7 +550,7 @@ const Usermgnt = () => {
         <DataGrid
           disableColumnSelector
           disableDensitySelector
-          rows={mockUserManagement}
+          rows={Users}
           columns={columns}
           components={{ Toolbar: CustomToolbar }}
           componentsProps={{
@@ -202,6 +560,7 @@ const Usermgnt = () => {
             },
             toolbar: {
               setFilterButtonEl,
+              fetchUsers,
             },
           }}
         />

@@ -20,7 +20,6 @@ import { FiHeadphones } from "react-icons/fi";
 // SUB SETTINGS ICONS
 import { AiOutlineCamera } from "react-icons/ai";
 import { BiUserVoice } from "react-icons/bi";
-import { FiMap } from "react-icons/fi";
 import { FiInfo } from "react-icons/fi";
 import { BsShieldLock } from "react-icons/bs";
 
@@ -281,25 +280,6 @@ const MyProSidebar = () => {
                 icon={
                   <BiUserVoice style={{ fontSize: 20, marginLeft: "18px" }} />
                 }
-                selected={selected}
-                setSelected={setSelected}
-              />
-
-              <Item
-                title={
-                  <Typography
-                    variant="h6"
-                    style={{
-                      fontWeight: 600,
-                      fontSize: 14,
-                      marginLeft: "20px",
-                    }}
-                  >
-                    Floor Plan
-                  </Typography>
-                }
-                to="/settings/floorplan"
-                icon={<FiMap style={{ fontSize: 20, marginLeft: "18px" }} />}
                 selected={selected}
                 setSelected={setSelected}
               />

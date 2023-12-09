@@ -5,7 +5,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from extensions import db
 
 
-#USER & ROLES DB MODEL
+#USER DB MODEL
 
 # Define the Users class that inherits from db.Model
 class Users(db.Model):
@@ -33,6 +33,7 @@ class Users(db.Model):
     def save(self):
         db.session.add(self)
         db.session.commit()
+        db.session.close()
 
     # Define a method to set the user's password securely (using hashing)
     def set_password(self, password):
@@ -58,6 +59,9 @@ class Users(db.Model):
     def set_jwt_auth_active(self, set_status):
         self.jwt_auth_active = set_status
 
+    def get_role(self):
+        return [role.name for role in self.roles]
+
     # Class method to retrieve an object from the database by its primary key 'id'
     # It takes the class itself (cls) and the 'id' as arguments
     @classmethod
@@ -76,47 +80,16 @@ class Users(db.Model):
     
 
     #creating JSON objects of our class
-    def toDICT(self):
+    def to_dict(self):
+        user_dict = {
+            'id': self.id,
+            'username': self.username,
+            'email': self.email,
+            'date_joined': self.date_joined.strftime('%d-%m-%Y'),  # Convert datetime to ISO format
+            'roles': [role.name for role in self.roles],
+        }
 
-        cls_dict = {}
-        cls_dict['_id'] = self.id
-        cls_dict['username'] = self.username
-        cls_dict['email'] = self.email
-        cls_dict['roles'] = self.roles
+        return user_dict
 
-        return cls_dict
 
-    def toJSON(self):
-
-        return self.toDICT()
     
-
-
-#Roles Class
-class Roles(db.Model):
-    __tablename__ = "roles"
-
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    name = db.Column(db.String(36), nullable=False)
-    slug = db.Column(db.String(36), nullable=False, unique=True)
-
-    users = db.relationship("Users", secondary="user_roles", back_populates="roles")
-# Method to save the object to the database
-    def save(self):
-        db.session.add(self)  # Add the object to the database session
-        db.session.commit()  # Commit the changes to the database (save the object)
-
-
-
-# Define the UserRole model, which represents the many-to-many relationship between User and Role
-class UserRole(db.Model):
-    __tablename__ = "user_roles"  # Table name for the UserRole model
-
-    # Primary keys as foreign keys to the User and Role tables
-    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), primary_key=True)
-    role_id = db.Column(db.Integer, db.ForeignKey("roles.id"), primary_key=True)
-# Method to save the object to the database
-    def save(self):
-        db.session.add(self)  # Add the object to the database session
-        db.session.commit()  # Commit the changes to the database (save the object)
-

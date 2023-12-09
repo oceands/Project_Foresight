@@ -1,6 +1,6 @@
 import React from "react";
 import { useEffect } from "react";
-import { Box, Button, TextField, Toolbar } from "@mui/material";
+import { Box, Button, MenuItem, TextField, Toolbar } from "@mui/material";
 import {
   DataGrid,
   GridToolbarQuickFilter,
@@ -12,68 +12,119 @@ import { Formik } from "formik";
 import * as yup from "yup";
 import { Typography } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
-import { mockDataCamera } from "../../data/mockData";
 import { useState } from "react";
 import { AiOutlineCamera } from "react-icons/ai";
 import { MdEdit } from "react-icons/md";
 import { BsTrash3Fill } from "react-icons/bs";
+import axiosInstance from "../../api/axios";
 
-function CustomToolbar({ setFilterButtonEl }) {
+function CustomToolbar({ setFilterButtonEl, fetchCameras }) {
   const colors = tokens;
 
-  //This function helps to close the form when the overlay is clicked
   const handleOverlayClick = (e) => {
     e.stopPropagation();
     setShowForm(false);
   };
 
-  //State for showing/ hiding the form
   const [showForm, setShowForm] = React.useState(false);
 
-  // Regular expression for IP validation
-  const phoneRegExp =
-    /^((\+[1-9]{1,4}[ -]?)|(\([0-9]{2,3}\)[ -]?)|([0-9]{2,4})[ -]?)*?[0-9]{3,4}[ -]?[0-9]{3,4}$/;
+  const ipAddressRegex = /^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$/;
+  const portRegex = /^([1-9]\d{0,4}|[1-5]\d{4}|[1-6][0-5][0-5][0-3][0-5])$/;
 
-  //Event in case the form is submitted
-  const handleFormSubmit = (values) => {
-    console.log(values);
+  const handleFormSubmit = (
+    values,
+    { setErrors, setStatus, setSubmitting }
+  ) => {
+    try {
+      axiosInstance
+        .post("user/settings/camsettings/add", {
+          CameraName: values.name,
+          CameraType: values.type,
+          IPAddress: values.IP,
+          Port: values.Port,
+          OwnerName: values.Owner,
+          Option: values.Option,
+          Description: values.Description,
+        })
+        .then(function (response) {
+          if (response.data.success) {
+            // Handle success
+            console.log("Camera added successfully:", response.data.message);
+            alert("Camera added successfully");
+            setStatus({ success: true });
+            setSubmitting(false);
+            fetchCameras();
+            setShowForm(false);
+          } else {
+            // Handle failure
+            console.error("Failed to add camera:", response.data.msg);
+            alert(`Failed to add camera: ${response.data.msg}`);
+            setStatus({ success: false });
+            setErrors({ submit: response.data.msg });
+            setSubmitting(false);
+          }
+        })
+        .catch(function (error) {
+          // Handle error
+          console.error("Error adding camera:", error);
+          alert("Error adding camera. Please try again.");
+          setStatus({ success: false });
+          setErrors({ submit: error.message });
+          setSubmitting(false);
+        });
+    } catch (err) {
+      // Handle unexpected error
+      console.error(err);
+      alert("Error adding camera. Please try again.");
+      setStatus({ success: false });
+      setErrors({ submit: err.message });
+      setSubmitting(false);
+    }
+  };
+
+  const [selectedType, setselectedType] = useState(""); // State to hold the selected question
+
+  const handleTypeChange = (event) => {
+    setselectedType(event.target.value);
   };
 
   const initialValues = {
     name: "",
-    type: "",
+    type: selectedType,
     IP: "",
-    MAC: "",
+    Port: "",
     Owner: "",
+    Option: "",
     Description: "",
   };
 
   const checkoutSchema = yup.object().shape({
     name: yup.string().required("Required"),
     type: yup.string().required("Required"),
-    IP: yup.string().email("Invalid IP!").required("Required"),
-    MAC: yup
+    IP: yup
       .string()
-      .matches(phoneRegExp, "MAC is not valid!")
+      .matches(ipAddressRegex, "Invalid IP!")
       .required("Required"),
+    Port: yup.string().matches(portRegex, "Port is not valid!"),
     Owner: yup.string().required("Required"),
+    Option: yup.string(),
     Description: yup.string().required("Required"),
   });
-  // Button Preloaded settings
+
   const buttonSx = {
     backgroundColor: colors.orangeAccents[500],
     color: colors.primary[500],
     fontSize: "14px",
     fontWeight: "bold",
-    padding: "10px", // Remove horizontal padding
-    minWidth: "130px", // Set a fixed width for all buttons
+    padding: "10px",
+    minWidth: "130px",
     "&:hover": {
-      backgroundColor: colors.primary[500], // New color on hover
+      backgroundColor: colors.primary[500],
       color: colors.orangeAccents[500],
       boxShadow: " rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;",
     },
   };
-  //Adding the Camera Form
+  //Adding the Camers Form
   const AddCameraForm = ({
     onClose,
     onSubmit,
@@ -92,7 +143,7 @@ function CustomToolbar({ setFilterButtonEl }) {
         justifyContent="center"
         alignItems="center"
         onClick={handleOverlayClick}
-        backgroundColor="rgba(0, 0, 0, 0.65)" // Semi-transparent black background
+        backgroundColor="rgba(0, 0, 0, 0.65)"
         zIndex={9999}
       >
         <Box
@@ -109,8 +160,15 @@ function CustomToolbar({ setFilterButtonEl }) {
             initialValues={initialValues}
             validationSchema={checkoutSchema}
           >
-            {({ values, errors, touched, handleBlur, handleChange }) => (
-              <form onSubmit={handleFormSubmit}>
+            {({
+              values,
+              errors,
+              touched,
+              handleBlur,
+              handleChange,
+              handleSubmit,
+            }) => (
+              <form onSubmit={handleSubmit}>
                 <Box p={1} display={"flex"} alignItems={"center"}>
                   <AiOutlineCamera style={{ fontSize: "2rem" }} />
                   <Typography variant="h6" p={2} fontWeight={"bold"}>
@@ -123,7 +181,6 @@ function CustomToolbar({ setFilterButtonEl }) {
                   gridTemplateColumns="repeat(4, minmax(0, 1fr))"
                   p={4}
                 >
-                  {/*Text feild 1*/}
                   <TextField
                     fullWidth
                     variant="filled"
@@ -131,34 +188,43 @@ function CustomToolbar({ setFilterButtonEl }) {
                     label="Camera's Name"
                     onBlur={handleBlur}
                     onChange={handleChange}
-                    value={values.Name}
-                    name="Name"
-                    error={!!touched.Name && !!errors.Name}
-                    helperText={touched.Name && errors.Name}
+                    value={values.name} // Adjusted from 'values.Name'
+                    name="name" // Adjusted from 'values.Name'
+                    error={!!touched.name && !!errors.name}
+                    helperText={touched.name && errors.name}
                     sx={{ gridColumn: "span 4" }}
                     size="small"
                   />
-                  {/*Text feild 2*/}
                   <TextField
                     fullWidth
+                    select
                     variant="filled"
                     type="text"
                     label="Camera's Type"
                     onBlur={handleBlur}
-                    onChange={handleChange}
-                    value={values.Type}
-                    name="Type"
-                    error={!!touched.Type && !!errors.Type}
-                    helperText={touched.Type && errors.Type}
-                    sx={{ gridColumn: "span 4" }}
+                    onChange={handleTypeChange}
+                    value={values.type} // Adjusted from 'values.Type'
+                    name="type" // Adjusted from 'values.Type'
+                    error={!!touched.type && !!errors.type}
+                    helperText={touched.type && errors.type}
+                    sx={{
+                      gridColumn: "span 2",
+                    }}
+                    SelectProps={{
+                      MenuProps: {
+                        style: { zIndex: 9999 },
+                      },
+                    }}
                     size="small"
-                  />
+                  >
+                    <MenuItem value="Indoors">Indoors</MenuItem>
+                    <MenuItem value="Outdoors">Outdoors</MenuItem>
+                  </TextField>
 
-                  {/*Text feild 3*/}
                   <TextField
                     fullWidth
                     variant="filled"
-                    type="IP"
+                    type="text" // Adjusted from 'IP'
                     label="Camera's IP Address"
                     onBlur={handleBlur}
                     onChange={handleChange}
@@ -169,23 +235,21 @@ function CustomToolbar({ setFilterButtonEl }) {
                     sx={{ gridColumn: "span 2" }}
                     size="small"
                   />
-                  {/*Text feild 4*/}
                   <TextField
                     fullWidth
                     variant="filled"
                     type="text"
-                    label="Camera's MAC Address"
+                    label="Camera's Port"
                     onBlur={handleBlur}
                     onChange={handleChange}
-                    value={values.MAC}
-                    name="MAC"
-                    error={!!touched.MAC && !!errors.MAC}
-                    helperText={touched.MAC && errors.MAC}
+                    value={values.Port}
+                    name="Port"
+                    error={!!touched.Port && !!errors.Port}
+                    helperText={touched.Port && errors.Port}
                     sx={{ gridColumn: "span 2" }}
                     size="small"
                   />
 
-                  {/*Text feild 5*/}
                   <TextField
                     fullWidth
                     variant="filled"
@@ -197,10 +261,25 @@ function CustomToolbar({ setFilterButtonEl }) {
                     name="Owner"
                     error={!!touched.Owner && !!errors.Owner}
                     helperText={touched.Owner && errors.Owner}
+                    sx={{ gridColumn: "span 2" }}
+                    size="small"
+                  />
+
+                  <TextField
+                    fullWidth
+                    variant="filled"
+                    type="text"
+                    label="Optional"
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    value={values.Option}
+                    name="Option"
+                    error={!!touched.Option && !!errors.Option}
+                    helperText={touched.Option && errors.Option}
                     sx={{ gridColumn: "span 4" }}
                     size="small"
                   />
-                  {/*Text feild 6*/}
+
                   <TextField
                     fullWidth
                     variant="filled"
@@ -215,7 +294,7 @@ function CustomToolbar({ setFilterButtonEl }) {
                     sx={{
                       gridColumn: "span 4",
                       ".MuiInputBase-input": {
-                        height: "8rem", // You can adjust the height as needed
+                        height: "8rem",
                       },
                     }}
                   />
@@ -303,7 +382,7 @@ function CustomToolbar({ setFilterButtonEl }) {
         </GridToolbarContainer>
         {showForm && (
           <AddCameraForm
-            onClose={() => setShowForm(false)} // Close the form
+            onClose={() => setShowForm(false)}
             onSubmit={handleFormSubmit}
             initialValues={initialValues}
             validationSchema={checkoutSchema}
@@ -315,30 +394,71 @@ function CustomToolbar({ setFilterButtonEl }) {
 }
 
 const CameraSettings = () => {
-  const [rows, setRows] = React.useState(mockDataCamera);
+  const [Camera, setCamera] = useState([]);
 
-  const handleDelete = (id) => {
-    // Filter out the row with the specified id
-    const updatedRows = rows.filter((row) => row.id !== id);
-    // Update the rows state
-    setRows(updatedRows);
+  const handleDelete = async (id) => {
+    try {
+      // Make a request to your backend to delete the camera
+      const response = await axiosInstance.delete(
+        `/user/settings/camsettings/delete/${id}`
+      );
+      console.log(response);
+      if (response.status === 200) {
+        console.log("Camera deleted successfully:", response.data.message);
+        alert("Camera deleted successfully");
+        fetchCameras();
+      } else {
+        // Handle error scenario
+        console.error("Failed to delete camera:", response.data.message);
+      }
+    } catch (error) {
+      // Handle unexpected error
+      console.error("Error deleting camera:", error.message);
+    }
   };
-  const handleEdit = (id) => {
-    // Your edit logic here
-    console.log(`Editing row with id ${id}`);
+
+  const fetchCameras = async () => {
+    try {
+      const response = await fetch(
+        "http://127.0.0.1:5000/user/settings/camsettings"
+      );
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const result = await response.json();
+      console.log(result);
+      if (result.success && Array.isArray(result.camera)) {
+        setCamera(result.camera);
+      } else {
+        throw new Error("Invalid data structure");
+      }
+    } catch (error) {
+      console.error("There was an error fetching camera:", error);
+    }
   };
+
+  useEffect(() => {
+    fetchCameras();
+  }, []); // Dependencies array
 
   const colors = tokens;
   const [filterButtonEl, setFilterButtonEl] = useState(null);
   const columns = [
     {
-      field: "name",
+      field: "id",
+      headerName: "ID",
+      flex: 1, // Space columns equally
+      cellClassName: "name-column--cell",
+    },
+    {
+      field: "CameraName",
       headerName: "Name",
       flex: 1, // Space columns equally
       cellClassName: "name-column--cell",
     },
     {
-      field: "type",
+      field: "CameraType",
       headerName: "Type",
       type: "number",
       headerAlign: "left",
@@ -347,32 +467,32 @@ const CameraSettings = () => {
       cellClassName: "name-column--cell",
     },
     {
-      field: "IP",
+      field: "IPAddress",
       headerName: "IP",
       flex: 1, // Space columns equally
       cellClassName: "name-column--cell",
     },
     {
-      field: "MAC",
-      headerName: "MAC",
+      field: "Port",
+      headerName: "Port",
       flex: 1, // Space columns equally
       cellClassName: "name-column--cell",
     },
     {
-      field: "Owner",
+      field: "OwnerName",
       headerName: "Owner",
       flex: 1, // Space columns equally
       cellClassName: "name-column--cell",
     },
     {
-      field: "description",
-      headerName: "Description",
+      field: "Option",
+      headerName: "Option",
       flex: 1, // Space columns equally
       cellClassName: "name-column--cell",
     },
     {
-      field: "Status",
-      headerName: "Status",
+      field: "Description",
+      headerName: "Description",
       flex: 1, // Space columns equally
       cellClassName: "name-column--cell",
     },
@@ -395,6 +515,7 @@ const CameraSettings = () => {
           </IconButton>
           <IconButton>
             <BsTrash3Fill
+              onClick={() => handleDelete(params.row.id)}
               style={{
                 color: colors.blueAccents[500],
                 width: "15px",
@@ -457,7 +578,7 @@ const CameraSettings = () => {
         <DataGrid
           disableColumnSelector
           disableDensitySelector
-          rows={mockDataCamera}
+          rows={Camera}
           columns={columns}
           components={{ Toolbar: CustomToolbar }}
           componentsProps={{
@@ -467,6 +588,7 @@ const CameraSettings = () => {
             },
             toolbar: {
               setFilterButtonEl,
+              fetchCameras,
             },
           }}
         />

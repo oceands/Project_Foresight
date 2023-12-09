@@ -11,12 +11,13 @@ import { Formik } from "formik";
 import * as yup from "yup";
 import IconButton from "@mui/material/IconButton";
 import { useState } from "react";
-import { mockDataDispatch } from "../../data/mockData";
 import { MdEdit } from "react-icons/md";
 import { BsTrash3Fill } from "react-icons/bs";
 import { BiUserVoice } from "react-icons/bi";
+import axiosInstance from "../../api/axios";
+import { useEffect } from "react";
 
-function CustomToolbar({ setFilterButtonEl }) {
+function CustomToolbar({ setFilterButtonEl, fetchDispatch }) {
   const colors = tokens;
 
   //This function helps to close the form when the overlay is clicked
@@ -28,32 +29,74 @@ function CustomToolbar({ setFilterButtonEl }) {
   //State for showing/ hiding the form
   const [showForm, setShowForm] = React.useState(false);
 
-  const phoneRegExp =
-    /^((\+[1-9]{1,4}[ -]?)|(\([0-9]{2,3}\)[ -]?)|([0-9]{2,4})[ -]?)*?[0-9]{3,4}[ -]?[0-9]{3,4}$/;
+  const phoneRegExp = /^\d{3,5}$/;
 
   //Event in case the form is submitted
-  const handleFormSubmit = (values) => {
-    console.log(values);
+  const handleFormSubmit = (
+    values,
+    { setErrors, setStatus, setSubmitting }
+  ) => {
+    try {
+      axiosInstance
+        .post("user/settings/dispatchsettings/add", {
+          Name: values.name,
+          Type: values.type,
+          Number: values.number,
+          Location: values.location,
+          Description: values.description,
+        })
+        .then(function (response) {
+          if (response.data.success) {
+            // Handle success
+            console.log("Dispatch added successfully:", response.data.message);
+            alert("Dispatch added successfully");
+            setStatus({ success: true });
+            setSubmitting(false);
+            fetchDispatch();
+            setShowForm(false);
+          } else {
+            // Handle failure
+            console.error("Failed to add dispatch:", response.data.msg);
+            alert(`Failed to add dispatch: ${response.data.msg}`);
+            setStatus({ success: false });
+            setErrors({ submit: response.data.msg });
+            setSubmitting(false);
+          }
+        })
+        .catch(function (error) {
+          // Handle error
+          console.error("Error adding Dispatch:", error);
+          alert("Error adding dispatch. Please try again.");
+          setStatus({ success: false });
+          setErrors({ submit: error.message });
+          setSubmitting(false);
+        });
+    } catch (err) {
+      // Handle unexpected error
+      console.error(err);
+      alert("Error adding dispatch. Please try again.");
+      setStatus({ success: false });
+      setErrors({ submit: err.message });
+      setSubmitting(false);
+    }
   };
 
   const initialValues = {
-    firstName: "",
-    lastName: "",
-    email: "",
-    contact: "",
-    address1: "",
-    address2: "",
+    name: "",
+    type: "",
+    number: "",
+    location: "",
+    description: "",
   };
   const checkoutSchema = yup.object().shape({
-    firstName: yup.string().required("Required"),
-    lastName: yup.string().required("Required"),
-    email: yup.string().email("Invalid email!").required("Required"),
-    contact: yup
+    name: yup.string().required("Required"),
+    type: yup.string().required("Required"),
+    number: yup
       .string()
       .matches(phoneRegExp, "Phone number is not valid!")
       .required("Required"),
-    address1: yup.string().required("Required"),
-    address2: yup.string().required("Required"),
+    location: yup.string().required("Required"),
+    description: yup.string().required("Required"),
   });
 
   const buttonSx = {
@@ -89,7 +132,7 @@ function CustomToolbar({ setFilterButtonEl }) {
         justifyContent="center"
         alignItems="center"
         onClick={handleOverlayClick}
-        backgroundColor="rgba(0, 0, 0, 0.65)" // Semi-transparent black background
+        backgroundColor="rgba(0, 0, 0, 0.65)"
         zIndex={9999}
       >
         <Box
@@ -106,8 +149,15 @@ function CustomToolbar({ setFilterButtonEl }) {
             initialValues={initialValues}
             validationSchema={checkoutSchema}
           >
-            {({ values, errors, touched, handleBlur, handleChange }) => (
-              <form onSubmit={handleFormSubmit}>
+            {({
+              values,
+              errors,
+              touched,
+              handleBlur,
+              handleChange,
+              handleSubmit,
+            }) => (
+              <form onSubmit={handleSubmit}>
                 <Box p={1} display={"flex"} alignItems={"center"}>
                   <BiUserVoice style={{ fontSize: "2rem" }} />
                   <Typography variant="h6" p={2} fontWeight={"bold"}>
@@ -123,13 +173,13 @@ function CustomToolbar({ setFilterButtonEl }) {
                     fullWidth
                     variant="filled"
                     type="text"
-                    label="Name"
+                    label="Dispatch Name"
                     onBlur={handleBlur}
                     onChange={handleChange}
-                    value={values.firstName}
-                    name="firstName"
-                    error={!!touched.firstName && !!errors.firstName}
-                    helperText={touched.firstName && errors.firstName}
+                    value={values.name}
+                    name="name"
+                    error={!!touched.name && !!errors.name}
+                    helperText={touched.name && errors.name}
                     sx={{ gridColumn: "span 4" }}
                   />
 
@@ -140,10 +190,10 @@ function CustomToolbar({ setFilterButtonEl }) {
                     label="Type"
                     onBlur={handleBlur}
                     onChange={handleChange}
-                    value={values.email}
-                    name="email"
-                    error={!!touched.email && !!errors.email}
-                    helperText={touched.email && errors.email}
+                    value={values.type}
+                    name="type"
+                    error={!!touched.type && !!errors.type}
+                    helperText={touched.type && errors.type}
                     sx={{ gridColumn: "span 4" }}
                   />
                   <TextField
@@ -153,10 +203,10 @@ function CustomToolbar({ setFilterButtonEl }) {
                     label="Number"
                     onBlur={handleBlur}
                     onChange={handleChange}
-                    value={values.contact}
-                    name="contact"
-                    error={!!touched.contact && !!errors.contact}
-                    helperText={touched.contact && errors.contact}
+                    value={values.number}
+                    name="number"
+                    error={!!touched.number && !!errors.number}
+                    helperText={touched.number && errors.number}
                     sx={{ gridColumn: "span 4" }}
                   />
                   <TextField
@@ -166,10 +216,10 @@ function CustomToolbar({ setFilterButtonEl }) {
                     label="Location"
                     onBlur={handleBlur}
                     onChange={handleChange}
-                    value={values.address1}
-                    name="address1"
-                    error={!!touched.address1 && !!errors.address1}
-                    helperText={touched.address1 && errors.address1}
+                    value={values.location}
+                    name="location"
+                    error={!!touched.location && !!errors.location}
+                    helperText={touched.location && errors.location}
                     sx={{ gridColumn: "span 4" }}
                   />
                   <TextField
@@ -179,10 +229,10 @@ function CustomToolbar({ setFilterButtonEl }) {
                     label="Description"
                     onBlur={handleBlur}
                     onChange={handleChange}
-                    value={values.address1}
-                    name="address1"
-                    error={!!touched.address1 && !!errors.address1}
-                    helperText={touched.address1 && errors.address1}
+                    value={values.description}
+                    name="description"
+                    error={!!touched.description && !!errors.description}
+                    helperText={touched.description && errors.description}
                     sx={{ gridColumn: "span 4" }}
                   />
 
@@ -209,7 +259,6 @@ function CustomToolbar({ setFilterButtonEl }) {
                     </Button>
                     <Button
                       type="submit"
-                      color="secondary"
                       variant="contained"
                       size="small"
                       sx={{
@@ -282,31 +331,72 @@ function CustomToolbar({ setFilterButtonEl }) {
 }
 
 const DispatchSettings = () => {
-  const [rows, setRows] = React.useState(mockDataDispatch);
+  const [Dispatch, setDispatch] = useState([]);
 
-  const handleDelete = (id) => {
-    // Filter out the row with the specified id
-    const updatedRows = rows.filter((row) => row.id !== id);
-    // Update the rows state
-    setRows(updatedRows);
+  const handleDelete = async (id) => {
+    try {
+      // Make a request to your backend to delete the despatch
+      const response = await axiosInstance.delete(
+        `/user/settings/dispatchsettings/delete/${id}`
+      );
+      console.log(response);
+      if (response.status === 200) {
+        console.log("Dispatch deleted successfully:", response.data.message);
+        alert("Dispatch deleted successfully");
+        fetchDispatch();
+      } else {
+        // Handle error scenario
+        console.error("Failed to delete dispatch:", response.data.message);
+      }
+    } catch (error) {
+      // Handle unexpected error
+      console.error("Error deleting dispatch:", error.message);
+    }
   };
 
-  const handleEdit = (id) => {
-    // Your edit logic here
-    console.log(`Editing row with id ${id}`);
+  const fetchDispatch = async () => {
+    try {
+      const response = await fetch(
+        "http://127.0.0.1:5000/user/settings/dispatchsettings"
+      );
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const result = await response.json();
+      console.log(result.success);
+      console.log(result);
+      console.log(result.success && Array.isArray(result.dispatch));
+      if (result.success && Array.isArray(result.dispatch)) {
+        setDispatch(result.dispatch);
+      } else {
+        throw new Error("Invalid data structure");
+      }
+    } catch (error) {
+      console.error("There was an error fetching dispatch:", error);
+    }
   };
+
+  useEffect(() => {
+    fetchDispatch();
+  }, []); // Dependencies array
 
   const colors = tokens;
   const [filterButtonEl, setFilterButtonEl] = useState(null);
   const columns = [
     {
-      field: "name",
+      field: "id",
+      headerName: "ID",
+      flex: 1, // Space columns equally
+      cellClassName: "name-column--cell",
+    },
+    {
+      field: "Name",
       headerName: "Name",
       flex: 1, // Space columns equally
       cellClassName: "name-column--cell",
     },
     {
-      field: "type",
+      field: "Type",
       headerName: "Type",
       type: "number",
       headerAlign: "left",
@@ -315,19 +405,19 @@ const DispatchSettings = () => {
       cellClassName: "name-column--cell",
     },
     {
-      field: "number",
+      field: "Number",
       headerName: "Number",
       flex: 1, // Space columns equally
       cellClassName: "name-column--cell",
     },
     {
-      field: "location",
+      field: "Location",
       headerName: "Location",
       flex: 1, // Space columns equally
       cellClassName: "name-column--cell",
     },
     {
-      field: "description",
+      field: "Description",
       headerName: "Description",
       flex: 1, // Space columns equally
       cellClassName: "name-column--cell",
@@ -337,6 +427,7 @@ const DispatchSettings = () => {
       headerName: "Auto Dispatch",
       flex: 1, // Space columns equally
       cellClassName: "name-column--cell",
+      renderCell: () => true, // Always render as true
     },
 
     {
@@ -358,6 +449,7 @@ const DispatchSettings = () => {
           </IconButton>
           <IconButton>
             <BsTrash3Fill
+              onClick={() => handleDelete(params.row.id)}
               style={{
                 color: colors.blueAccents[500],
                 width: "15px",
@@ -420,7 +512,7 @@ const DispatchSettings = () => {
         <DataGrid
           disableColumnSelector
           disableDensitySelector
-          rows={mockDataDispatch}
+          rows={Dispatch}
           columns={columns}
           components={{ Toolbar: CustomToolbar }}
           componentsProps={{
@@ -430,6 +522,7 @@ const DispatchSettings = () => {
             },
             toolbar: {
               setFilterButtonEl,
+              fetchDispatch,
             },
           }}
         />
