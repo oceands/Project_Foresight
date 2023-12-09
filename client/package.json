@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@emailjs/browser": "^3.11.0",
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
     "@fullcalendar/core": "5.11.3",
@@ -27,6 +28,7 @@
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.6.0",
     "dayjs": "^1.11.9",
+    "emailjs": "^4.0.3",
     "formik": "^2.2.9",
     "react": "^18.2.0",
     "react-chartjs-2": "^5.2.0",
