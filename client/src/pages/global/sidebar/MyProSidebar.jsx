@@ -22,6 +22,7 @@ import { AiOutlineCamera } from "react-icons/ai";
 import { BiUserVoice } from "react-icons/bi";
 import { FiInfo } from "react-icons/fi";
 import { BsShieldLock } from "react-icons/bs";
+import { useSelector } from "react-redux";
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
   const colors = tokens;
@@ -45,6 +46,12 @@ const MyProSidebar = () => {
   const { sidebarRTL, setSidebarRTL, sidebarImage } = useSidebarContext();
   const { collapseSidebar, toggleSidebar, collapsed, broken } = useProSidebar();
 
+  const { Role } = useSelector((state) => state.account); // Get the user's role
+
+  // Function to check if the current role is permitted to see an item
+  const isPermitted = (permittedRoles) => {
+    return permittedRoles.includes(Role);
+  };
   return (
     <Box
       sx={{
@@ -132,95 +139,88 @@ const MyProSidebar = () => {
             </Box>
           )}
           <Box paddingLeft={collapsed ? undefined : "0"}>
-            <Item
-              title={
-                <Typography
-                  variant="h6"
-                  style={{ fontWeight: 600, fontSize: 14 }}
-                >
-                  Dashboard
-                </Typography>
-              }
-              to="/"
-              icon={<FaChartPie style={{ fontSize: 20 }} />}
-              selected={selected}
-              setSelected={setSelected}
-            />
+            {isPermitted(["Super Administrator", "Admin", "Normal User"]) && (
+              <Item
+                title={
+                  <Typography
+                    variant="h6"
+                    style={{ fontWeight: 600, fontSize: 14 }}
+                  >
+                    Dashboard
+                  </Typography>
+                }
+                to="/"
+                icon={<FaChartPie style={{ fontSize: 20 }} />}
+                selected={selected}
+                setSelected={setSelected}
+              />
+            )}
 
-            <Item
-              title={
-                <Typography
-                  variant="h6"
-                  style={{ fontWeight: 600, fontSize: 14 }}
-                >
-                  Notifications
-                </Typography>
-              }
-              to="/notifications"
-              icon={<MdOutlineNotificationAdd style={{ fontSize: 20 }} />}
-              selected={selected}
-              setSelected={setSelected}
-            />
+            {isPermitted(["Super Administrator", "Admin", "Normal User"]) && (
+              <Item
+                title={
+                  <Typography
+                    variant="h6"
+                    style={{ fontWeight: 600, fontSize: 14 }}
+                  >
+                    Notifications
+                  </Typography>
+                }
+                to="/notifications"
+                icon={<MdOutlineNotificationAdd style={{ fontSize: 20 }} />}
+                selected={selected}
+                setSelected={setSelected}
+              />
+            )}
+            {isPermitted(["Super Administrator", "Admin", "Normal User"]) && (
+              <Item
+                title={
+                  <Typography
+                    variant="h6"
+                    style={{ fontWeight: 600, fontSize: 14 }}
+                  >
+                    Incidents
+                  </Typography>
+                }
+                to="/incidents"
+                icon={<FaRegEye style={{ fontSize: 20 }} />}
+                selected={selected}
+                setSelected={setSelected}
+              />
+            )}
 
-            <Item
-              title={
-                <Typography
-                  variant="h6"
-                  style={{ fontWeight: 600, fontSize: 14 }}
-                >
-                  Incidents
-                </Typography>
-              }
-              to="/incidents"
-              icon={<FaRegEye style={{ fontSize: 20 }} />}
-              selected={selected}
-              setSelected={setSelected}
-            />
-
-            <Item
-              title={
-                <Typography
-                  variant="h6"
-                  style={{ fontWeight: 600, fontSize: 14 }}
-                >
-                  User Management
-                </Typography>
-              }
-              to="/usermgnt"
-              icon={<LuUsers style={{ fontSize: 20 }} />}
-              selected={selected}
-              setSelected={setSelected}
-            />
-
-            <Item
-              title={
-                <Typography
-                  variant="h6"
-                  style={{ fontWeight: 600, fontSize: 14 }}
-                >
-                  Reports
-                </Typography>
-              }
-              to="/reports"
-              icon={<TbReport style={{ fontSize: 20 }} />}
-              selected={selected}
-              setSelected={setSelected}
-            />
-
-            <Item
-              title={
-                <Typography
-                  variant="h6"
-                  style={{ fontWeight: 600, fontSize: 14 }}
-                >
-                  AI Models
-                </Typography>
-              }
-              to="/ai"
-              icon={<BiChip style={{ fontSize: 20 }} />}
-              selected={selected}
-              setSelected={setSelected}
-            />
+            {isPermitted(["Super Administrator"]) && (
+              <Item
+                title={
+                  <Typography
+                    variant="h6"
+                    style={{ fontWeight: 600, fontSize: 14 }}
+                  >
+                    User Management
+                  </Typography>
+                }
+                to="/usermgnt"
+                icon={<LuUsers style={{ fontSize: 20 }} />}
+                selected={selected}
+                setSelected={setSelected}
+              />
+            )}
+            {isPermitted(["Super Administrator", "Admin"]) && (
+              <Item
+                title={
+                  <Typography
+                    variant="h6"
+                    style={{ fontWeight: 600, fontSize: 14 }}
+                  >
+                    Reports
+                  </Typography>
+                }
+                to="/reports"
+                icon={<TbReport style={{ fontSize: 20 }} />}
+                selected={selected}
+                setSelected={setSelected}
+              />
+            )}
           </Box>
           {/*SUB - MENU */}
           <Box paddingLeft={collapsed ? undefined : "0"} className="sub-menu">
@@ -240,89 +240,99 @@ const MyProSidebar = () => {
             >
               {/*SUB MENU ITEMS */}
 
-              <Item
-                title={
-                  <Typography
-                    variant="h6"
-                    style={{
-                      fontWeight: 600,
-                      fontSize: 14,
-                      marginLeft: "20px",
-                    }}
-                  >
-                    Camera
-                  </Typography>
-                }
-                to="/settings/camsetting"
-                icon={
-                  <AiOutlineCamera
-                    style={{ fontSize: 20, marginLeft: "18px" }}
-                  />
-                }
-                selected={selected}
-                setSelected={setSelected}
-              />
+              {isPermitted(["Super Administrator"]) && (
+                <Item
+                  title={
+                    <Typography
+                      variant="h6"
+                      style={{
+                        fontWeight: 600,
+                        fontSize: 14,
+                        marginLeft: "20px",
+                      }}
+                    >
+                      Camera
+                    </Typography>
+                  }
+                  to="/settings/camsetting"
+                  icon={
+                    <AiOutlineCamera
+                      style={{ fontSize: 20, marginLeft: "18px" }}
+                    />
+                  }
+                  selected={selected}
+                  setSelected={setSelected}
+                />
+              )}
 
-              <Item
-                title={
-                  <Typography
-                    variant="h6"
-                    style={{
-                      fontWeight: 600,
-                      fontSize: 14,
-                      marginLeft: "20px",
-                    }}
-                  >
-                    Dispatch
-                  </Typography>
-                }
-                to="/settings/dispatchsettings"
-                icon={
-                  <BiUserVoice style={{ fontSize: 20, marginLeft: "18px" }} />
-                }
-                selected={selected}
-                setSelected={setSelected}
-              />
+              {isPermitted(["Super Administrator"]) && (
+                <Item
+                  title={
+                    <Typography
+                      variant="h6"
+                      style={{
+                        fontWeight: 600,
+                        fontSize: 14,
+                        marginLeft: "20px",
+                      }}
+                    >
+                      Dispatch
+                    </Typography>
+                  }
+                  to="/settings/dispatchsettings"
+                  icon={
+                    <BiUserVoice style={{ fontSize: 20, marginLeft: "18px" }} />
+                  }
+                  selected={selected}
+                  setSelected={setSelected}
+                />
+              )}
 
-              <Item
-                title={
-                  <Typography
-                    variant="h6"
-                    style={{
-                      fontWeight: 600,
-                      fontSize: 14,
-                      marginLeft: "20px",
-                    }}
-                  >
-                    System Info
-                  </Typography>
-                }
-                to="/settings/versioninfo"
-                icon={<FiInfo style={{ fontSize: 20, marginLeft: "18px" }} />}
-                selected={selected}
-                setSelected={setSelected}
-              />
+              {isPermitted(["Super Administrator", "Admin", "Normal User"]) && (
+                <Item
+                  title={
+                    <Typography
+                      variant="h6"
+                      style={{
+                        fontWeight: 600,
+                        fontSize: 14,
+                        marginLeft: "20px",
+                      }}
+                    >
+                      System Info
+                    </Typography>
+                  }
+                  to="/settings/versioninfo"
+                  icon={<FiInfo style={{ fontSize: 20, marginLeft: "18px" }} />}
+                  selected={selected}
+                  setSelected={setSelected}
+                />
+              )}
 
-              <Item
-                title={
-                  <Typography
-                    variant="h6"
-                    style={{
-                      fontWeight: 600,
-                      fontSize: 14,
-                      marginLeft: "20px",
-                    }}
-                  >
-                    Security
-                  </Typography>
-                }
-                to="/settings/security"
-                icon={
-                  <BsShieldLock style={{ fontSize: 20, marginLeft: "18px" }} />
-                }
-                selected={selected}
-                setSelected={setSelected}
-              />
+              {isPermitted(["Super Administrator", "Admin", "Normal User"]) && (
+                <Item
+                  title={
+                    <Typography
+                      variant="h6"
+                      style={{
+                        fontWeight: 600,
+                        fontSize: 14,
+                        marginLeft: "20px",
+                      }}
+                    >
+                      Security
+                    </Typography>
+                  }
+                  to="/settings/security"
+                  icon={
+                    <BsShieldLock
+                      style={{ fontSize: 20, marginLeft: "18px" }}
+                    />
+                  }
+                  selected={selected}
+                  setSelected={setSelected}
+                />
+              )}
             </SubMenu>
           </Box>
 

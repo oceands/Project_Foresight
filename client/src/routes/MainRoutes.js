@@ -6,6 +6,7 @@ import Loadable from "../ui-components/Loadable";
 import AuthGuard from "../utils/route-guard/AuthGuard";
 import { MyProSidebarProvider } from "../pages/global/sidebar/sidebarContext";
 import Topbar from "../pages/global/Topbar";
+import RoleGuard from "../utils/route-guard/RolesGuard";
 
 // dashboard routing
 const Dashboard = Loadable(lazy(() => import("../pages/dashboard")));
@@ -17,7 +18,6 @@ const Notifications = Loadable(lazy(() => import("../pages/notifications")));
 const Incidents = Loadable(lazy(() => import("../pages/Incidents")));
 const Usermgnt = Loadable(lazy(() => import("../pages/usermgnt")));
 const Reports = Loadable(lazy(() => import("../pages/reports")));
-const AI = Loadable(lazy(() => import("../pages/ai")));
 const Contact = Loadable(lazy(() => import("../pages/contactUs")));
 const FAQ = Loadable(lazy(() => import("../pages/faq")));
 // utilities routing - settings
@@ -30,60 +30,171 @@ const VersionInfo = Loadable(
 );
 const Security = Loadable(lazy(() => import("../pages/settings/security")));
 
+//404 message
+const Page404 = Loadable(lazy(() => import("../pages/404page")));
+const Page401 = Loadable(lazy(() => import("../pages/401page")));
+
 //-----------------------|| MAIN ROUTING ||-----------------------//
 
 const MainRoutes = () => {
   const location = useLocation();
 
   return (
-    <Route
-      path={[
-        "/dashboard",
-        "/view_feed",
-        "/notifications",
-        "/incidents",
-        "/usermgnt",
-        "/reports",
-        "/ai",
-        "/contact",
-        "/faq",
-        "/myprofile",
-        "/settings/camsetting",
-        "/settings/dispatchsettings",
-        "/settings/versioninfo",
-        "/settings/security",
-      ]}
-    >
-      <AuthGuard>
-        <MyProSidebarProvider>
-          <div style={{ height: "100%", width: "100%" }}>
-            <main>
-              <Topbar />
-              <Switch location={location} key={location.pathname}>
-                <Route path="/dashboard" component={Dashboard} />
-                <Route path="/view_feed" component={Feed} />
-                <Route path="/notifications" component={Notifications} />
-                <Route path="/incidents" component={Incidents} />
-                <Route path="/usermgnt" component={Usermgnt} />
-                <Route path="/reports" component={Reports} />
-                <Route path="/ai" component={AI} />
-                <Route path="/contact" component={Contact} />
-                <Route path="/faq" component={FAQ} />
-                <Route path="/myprofile" component={UserProfile} />
+    <Switch location={location} key={location.pathname}>
+      <Route path="/401" component={Page401} />
+      <Route
+        path={[
+          "/dashboard",
+          "/view_feed",
+          "/notifications",
+          "/incidents",
+          "/usermgnt",
+          "/reports",
+          "/contact",
+          "/faq",
+          "/myprofile",
+          "/settings/camsetting",
+          "/settings/dispatchsettings",
+          "/settings/versioninfo",
+          "/settings/security",
+        ]}
+      >
+        <AuthGuard>
+          <MyProSidebarProvider>
+            <div style={{ height: "100%", width: "100%" }}>
+              <main>
+                <Topbar />
+                <Switch location={location} key={location.pathname}>
+                  <Route path="/dashboard">
+                    <RoleGuard
+                      requiredRole={[
+                        "Super Administrator",
+                        "Administrator",
+                        "Normal User",
+                      ]}
+                    >
+                      <Dashboard />
+                    </RoleGuard>
+                  </Route>
+                  <Route path="/view_feed">
+                    <RoleGuard
+                      requiredRole={[
+                        "Super Administrator",
+                        "Administrator",
+                        "Normal User",
+                      ]}
+                    >
+                      <Feed />
+                    </RoleGuard>
+                  </Route>
+                  <Route path="/notifications">
+                    <RoleGuard
+                      requiredRole={[
+                        "Super Administrator",
+                        "Administrator",
+                        "Normal User",
+                      ]}
+                    >
+                      <Notifications />
+                    </RoleGuard>
+                  </Route>
+                  <Route path="/incidents">
+                    <RoleGuard
+                      requiredRole={[
+                        "Super Administrator",
+                        "Administrator",
+                        "Normal User",
+                      ]}
+                    >
+                      <Incidents />
+                    </RoleGuard>
+                  </Route>
+                  <Route path="/usermgnt">
+                    <RoleGuard requiredRole={["Super Administrator"]}>
+                      <Usermgnt />
+                    </RoleGuard>
+                  </Route>
+                  <Route path="/reports">
+                    <RoleGuard
+                      requiredRole={["Super Administrator", "Administrator"]}
+                    >
+                      <Reports />
+                    </RoleGuard>
+                  </Route>
 
-                <Route path="/settings/camsetting" component={CamSetting} />
-                <Route
-                  path="/settings/dispatchsettings"
-                  component={DispatchSettings}
-                />
-                <Route path="/settings/versioninfo" component={VersionInfo} />
-                <Route path="/settings/security" component={Security} />
-              </Switch>
-            </main>
-          </div>
-        </MyProSidebarProvider>
-      </AuthGuard>
-    </Route>
+                  <Route path="/contact">
+                    <RoleGuard
+                      requiredRole={[
+                        "Super Administrator",
+                        "Administrator",
+                        "Normal User",
+                      ]}
+                    >
+                      <Contact />
+                    </RoleGuard>
+                  </Route>
+                  <Route path="/faq">
+                    <RoleGuard
+                      requiredRole={[
+                        "Super Administrator",
+                        "Administrator",
+                        "Normal User",
+                      ]}
+                    >
+                      <FAQ />
+                    </RoleGuard>
+                  </Route>
+                  <Route path="/myprofile">
+                    <RoleGuard
+                      requiredRole={[
+                        "Super Administrator",
+                        "Administrator",
+                        "Normal User",
+                      ]}
+                    >
+                      <UserProfile />
+                    </RoleGuard>
+                  </Route>
+                  <Route path="/settings/camsetting">
+                    <RoleGuard requiredRole={["Super Administrator"]}>
+                      <CamSetting />
+                    </RoleGuard>
+                  </Route>
+                  <Route path="/settings/dispatchsettings">
+                    <RoleGuard requiredRole={["Super Administrator"]}>
+                      <DispatchSettings />
+                    </RoleGuard>
+                  </Route>
+                  <Route path="/settings/versioninfo">
+                    <RoleGuard
+                      requiredRole={[
+                        "Super Administrator",
+                        "Administrator",
+                        "Normal User",
+                      ]}
+                    >
+                      <VersionInfo />
+                    </RoleGuard>
+                  </Route>
+                  <Route path="/settings/security">
+                    <RoleGuard
+                      requiredRole={[
+                        "Super Administrator",
+                        "Administrator",
+                        "Normal User",
+                      ]}
+                    >
+                      <Security />
+                    </RoleGuard>
+                  </Route>
+                </Switch>
+              </main>
+            </div>
+          </MyProSidebarProvider>
+        </AuthGuard>
+      </Route>
+      <Route path="*" component={Page404} />
+    </Switch>
   );
 };
 

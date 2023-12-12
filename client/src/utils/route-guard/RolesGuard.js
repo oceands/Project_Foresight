@@ -2,17 +2,19 @@ import PropTypes from "prop-types";
 import React from "react";
 import { useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
-// project imports
-import config from "../../config";
 
 const RoleGuard = ({ children, requiredRole }) => {
-  const account = useSelector((state) => state.account);
-  const { isLoggedIn, roles } = account;
+  const { isLoggedIn, Role } = useSelector((state) => state.account);
 
-  const hasRequiredRole = roles.includes(requiredRole);
+  // Ensure requiredRoles is an array
+  const validRequiredRoles = Array.isArray(requiredRole) ? requiredRole : [];
+  console.log(validRequiredRoles);
+
+  // Check if the user's role matches any of the required roles
+  const hasRequiredRole = validRequiredRoles.includes(Role);
 
   if (!isLoggedIn || !hasRequiredRole) {
-    return <Redirect to={config.defaultPath} />;
+    return <Redirect to="/401" />;
   }
 
   return children;
@@ -20,7 +22,7 @@ const RoleGuard = ({ children, requiredRole }) => {
 
 RoleGuard.propTypes = {
   children: PropTypes.node,
-  requiredRole: PropTypes.string.isRequired,
+  requiredRoles: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
 export default RoleGuard;

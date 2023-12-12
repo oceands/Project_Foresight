@@ -4,6 +4,7 @@ import { Redirect, Switch } from "react-router-dom";
 // routes
 import MainRoutes from "./MainRoutes";
 import AuthenticationRoutes from "./AuthenticationRoutes";
+import ErrorRoutes from "./ErrorRoutes";
 
 // project imports
 import config from "../config";
@@ -21,6 +22,9 @@ const AppRoutes = () => {
 
         {/* Routes for main layouts */}
         <MainRoutes />
+
+        {/*Error Routes */}
+        <ErrorRoutes />
       </React.Fragment>
     </Switch>
   );
