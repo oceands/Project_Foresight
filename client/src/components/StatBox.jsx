@@ -1,40 +1,46 @@
-import { Box, Typography, useTheme } from "@mui/material";
-import ProgressCircle from "./ProgressCircle";
+import { Box, Typography } from "@mui/material";
 import { tokens } from "../theme";
 
-const StatBox = ({ title, subtitle, progress, increase, icon }) => {
-  const theme = useTheme();
-  const colors = tokens(theme.palette.mode);
+const StatBox = ({ title, subtitle, icon }) => {
+  const colors = tokens;
 
   return (
-    <Box width="100%" m="0 30px" p="12px 0">
-      <Box display="flex" justifyContent="space-between">
-        <Box>
+    <Box width="100%" m="0 30px" p="12px 0" mt="10px">
+      <Box display="flex">
           {icon}
-          <Typography
-            variant="h4"
-            fontWeight="bold"
-            sx={{ color: colors.grey[100] }}
-          >
-            {title}
-          </Typography>
-        </Box>
-        <Box>
-          <ProgressCircle progress={progress} />
-        </Box>
-      </Box>
-      <Box display="flex" justifyContent="space-between" mt="2px">
-        <Typography variant="h5" sx={{ color: colors.pinkAccents[500] }}>
+
+          <Typography 
+          
+          variant="h7"
+          fontWeight="bold" 
+          paddingLeft={1}
+          sx={{ color: colors.blackAccents[500] }}>
           {subtitle}
-        </Typography>
+          </Typography>
+      </Box>
+
+      <Box>
         <Typography
-          variant="h5"
-          fontStyle="italic"
-          sx={{ color: colors.pinkAccents[600] }}
+            variant="h3"
+            fontWeight="bold"
+            p={1}
+            sx={{ color: colors.blackAccents[500] }}
         >
-          {increase}
+            {title}
         </Typography>
       </Box>
+
+      <Box>
+        <Typography
+            variant="h7"
+            p={1}
+            sx={{ color: colors.blackAccents[500] }}
+        >
+            {title} + Incidents
+        </Typography>
+      </Box>
+        
+
     </Box>
   );
 };

@@ -9,3 +9,5 @@ psycopg2-binary
 flask-restx
 python-dotenv
 email_validator
+ultralytics
+numpy

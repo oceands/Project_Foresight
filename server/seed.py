@@ -13,3 +13,4 @@ with app.app_context():
             db.session.execute(text(statement))
 
     db.session.commit()
+    db.session.close()

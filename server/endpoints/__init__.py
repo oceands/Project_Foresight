@@ -1,7 +1,11 @@
 from flask_restx import Api
 
 from .api.routes import rest_api as user_api
+from .auth.routes import rest_api as notifications_api
+
+from .auth.routes import rest_api as incidents_api
 from .auth.routes import rest_api as auth_api
+
 
 Foresight_API = Api(
     title="Foresight API's",
@@ -11,3 +15,5 @@ Foresight_API = Api(
 
 Foresight_API.add_namespace(user_api)
 Foresight_API.add_namespace(auth_api)
+Foresight_API.add_namespace(notifications_api)
+Foresight_API.add_namespace(incidents_api)
