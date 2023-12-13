@@ -2,7 +2,7 @@
 
 <div align="center">
 
-_A modern CCTV management system with hazard detection for efficient incident response 🛡️._
+_A modern CCTV management system with real-time fire and weapon detection for efficient incident response 🛡️._
 
 ![GitHub last commit](https://img.shields.io/github/last-commit/oceands/Project_Foresight)
 ![GitHub Downloads](https://img.shields.io/github/downloads/oceands/Project_Foresight/total.svg)
