@@ -300,7 +300,9 @@ const Topbar = () => {
             </MenuItem>
           </Menu>
           <Box ml={1}>
-            <Typography fontWeight="normal">Username</Typography>
+            <Typography fontWeight="normal">
+              {username.replace(/['"]+/g, "")}
+            </Typography>
           </Box>
         </Box>
       </Box>
