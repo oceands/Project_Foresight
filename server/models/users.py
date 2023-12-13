@@ -33,7 +33,9 @@ class Users(db.Model):
     def save(self):
         db.session.add(self)
         db.session.commit()
-        db.session.close()
+
+    def close(self):
+        db.session.close()        
 
     # Define a method to set the user's password securely (using hashing)
     def set_password(self, password):
@@ -60,7 +62,10 @@ class Users(db.Model):
         self.jwt_auth_active = set_status
 
     def get_role(self):
-        return [role.name for role in self.roles]
+        return self.roles[0].name if self.roles else None
+    
+    def close(self):
+        db.session.close()
 
     # Class method to retrieve an object from the database by its primary key 'id'
     # It takes the class itself (cls) and the 'id' as arguments

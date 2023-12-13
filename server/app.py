@@ -22,6 +22,8 @@ app = Flask(__name__)
 # Loading configuration from BaseConfig class in the config module
 app.config.from_object('config.BaseConfig')
 
+
+
 # Initializing the database with the app instance
 db.init_app(app)
 
@@ -186,6 +188,11 @@ def initialize_database():
             initialized = True
         except Exception as e:
             print('> Error: DBMS Table creation exception: ' + str(e))
+
+@app.teardown_appcontext
+def teardown_db(exception):
+    """Close the database session at the end of each request."""
+    db.session.close()
 
 @app.before_request
 def create_roles():

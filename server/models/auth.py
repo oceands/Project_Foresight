@@ -25,7 +25,10 @@ class TokenBlocklist(db.Model):
     def save(self):
         db.session.add(self)  # Add the object to the database session
         db.session.commit()  # Commit the changes to the database (save the object)
-        db.session.close()
+   
     @classmethod
     def Get_token_by_id(cls,jti,user_id):
         return cls.query.filter_by(jti=jti, user_id=user_id).one()
+    
+    def close(self):
+        db.session.close()

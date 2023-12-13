@@ -18,6 +18,8 @@ class Notifications(db.Model):
     def save(self):
         db.session.add(self)
         db.session.commit()
+
+    def close(self):
         db.session.close()
 
     def to_dict(self):

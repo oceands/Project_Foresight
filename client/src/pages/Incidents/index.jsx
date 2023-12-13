@@ -66,9 +66,7 @@ const Incidents = () => {
   useEffect(() => {
     const fetchIncidents = async () => {
       try {
-        const response = await fetch(
-          "http://127.0.0.1:5000/auth/api/users/incidents"
-        );
+        const response = await fetch("http://127.0.0.1:5000/user/incidents");
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }

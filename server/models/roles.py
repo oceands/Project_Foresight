@@ -12,8 +12,10 @@ class Roles(db.Model):
     def save(self):
         db.session.add(self)  # Add the object to the database session
         db.session.commit()  # Commit the changes to the database (save the object)
-        db.session.close()
 
+
+    def close(self):
+        db.session.close()
 
     @classmethod
     def get_by_id(cls, role_id):

@@ -22,8 +22,11 @@ class Incidents(db.Model):
         # Saves the instance to the database
         db.session.add(self)
         db.session.commit()
-        db.session.close()
 
+
+    def close(self):
+        db.session.close()
+        
     def to_dict(self):
         # Serializes the instance for JSON responses
         return {

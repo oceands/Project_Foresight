@@ -118,7 +118,7 @@ const Notifications = ({ changeWelcomeText }) => {
 
     try {
       const response = await fetch(
-        `http://127.0.0.1:5000/auth/api/users/get_image/${notificationId}`
+        `http://127.0.0.1:5000/user/notifications/get_image/${notificationId}`
       );
       if (response.ok) {
         const imageUrl = URL.createObjectURL(await response.blob());
@@ -140,7 +140,7 @@ const Notifications = ({ changeWelcomeText }) => {
 
     try {
       const response = await fetch(
-        `http://127.0.0.1:5000/auth/api/users/videos/${notificationId}`
+        `http://127.0.0.1:5000/user/notifications/videos/${notificationId}`
       );
       if (response.ok) {
         const videoUrl = URL.createObjectURL(await response.blob());
@@ -168,7 +168,7 @@ const Notifications = ({ changeWelcomeText }) => {
       const updatedType = row.type === "Pending" ? "Verified" : row.type;
 
       const response = await fetch(
-        `http://127.0.0.1:5000/auth/api/users/notifications/${row.id}`,
+        `http://127.0.0.1:5000/user/notifications/${row.id}`,
         {
           method: "PUT",
           headers: {
@@ -203,7 +203,7 @@ const Notifications = ({ changeWelcomeText }) => {
           };
 
           const postResponse = await fetch(
-            "http://127.0.0.1:5000/auth/api/users/incidents",
+            "http://127.0.0.1:5000/user/incidents",
             {
               method: "POST",
               headers: {
@@ -241,7 +241,7 @@ const Notifications = ({ changeWelcomeText }) => {
       const updatedType = "False Flag"; // Directly set to 'False Flag' for deny action
 
       const response = await fetch(
-        `http://127.0.0.1:5000/auth/api/users/notifications/${row.id}`,
+        `http://127.0.0.1:5000/user/notifications/${row.id}`,
         {
           method: "PUT",
           headers: {
@@ -279,7 +279,7 @@ const Notifications = ({ changeWelcomeText }) => {
       const updatedType = "Ignored";
 
       const response = await fetch(
-        `http://127.0.0.1:5000/auth/api/users/notifications/${row.id}`,
+        `http://127.0.0.1:5000/user/notifications/${row.id}`,
         {
           method: "PUT",
           headers: {
@@ -327,9 +327,7 @@ const Notifications = ({ changeWelcomeText }) => {
   };
   const fetchNotifications = async () => {
     try {
-      const response = await fetch(
-        "http://127.0.0.1:5000/auth/api/users/notifications"
-      );
+      const response = await fetch("http://127.0.0.1:5000/user/notifications");
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }

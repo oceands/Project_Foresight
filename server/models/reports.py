@@ -9,14 +9,15 @@ class Reports(db.Model):
     date_created = db.Column(db.DateTime, default=datetime.utcnow)
     comments = db.Column(db.Text)
     report_file = db.Column(db.LargeBinary)  # For binary file data
+    system_data = db.Column(db.LargeBinary)  # New column for system-generated PDF data
 
-    def _repr_(self):
+
+    def __repr__(self):
         return f"<Report {self.report_id} - {self.title}>"
 
     def save(self):
         db.session.add(self)
         db.session.commit()
-        db.session.close()
 
     def to_dict(self):
         return {

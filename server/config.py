@@ -22,9 +22,10 @@ class BaseConfig():
     JWT_ACCESS_TOKEN_EXPIRES= timedelta(seconds=15)
     JWT_REFRESH_TOKEN_EXPIRES=timedelta(minutes=30)
 
-    SQLALCHEMY_POOL_SIZE = 10  # Example size, adjust based on your needs
-    SQLALCHEMY_MAX_OVERFLOW = 5
 
+
+    SQLALCHEMY_POOL_SIZE = 400  # Example size, adjust based on your needs
+    SQLALCHEMY_MAX_OVERFLOW = 200
     
 
     # Pull all Database constants from thE .ENV File
@@ -48,8 +49,7 @@ class BaseConfig():
                 db_name
             )
 
-            SQLALCHEMY_POOL_SIZE = 400  # Example size, adjust based on your needs
-            SQLALCHEMY_MAX_OVERFLOW = 200
+
             
         #if an exception is caught then we can print the errors    
         except Exception as e:
