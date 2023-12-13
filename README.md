@@ -1,73 +1,62 @@
-# Project_Foresight
+# Project_Foresight 🚀
+
 <div align="center">
 
-__Modern CCTV management system with hazard detection for incident response__
+_A modern CCTV management system with hazard detection for efficient incident response 🛡️._
 
-![GitHub last commit (by committer)](https://img.shields.io/github/last-commit/oceands/Project_Foresight)
-![GitHub All Releases](https://img.shields.io/github/downloads/oceandss/Project_Foresight/total.svg)
-![Static Badge](https://img.shields.io/badge/collaborators-5-blue)
-![Static Badge](https://img.shields.io/badge/node_version-v18.16.1-red)
-![Static Badge](https://img.shields.io/badge/python_version-v3.11.4-purple)
+![GitHub last commit](https://img.shields.io/github/last-commit/oceands/Project_Foresight)
+![GitHub Downloads](https://img.shields.io/github/downloads/oceands/Project_Foresight/total.svg)
+![Collaborators](https://img.shields.io/badge/collaborators-5-blue)
+![Node Version](https://img.shields.io/badge/node_version-v18.16.1-red)
+![Python Version](https://img.shields.io/badge/python_version-v3.11.4-purple)
+
+_Foresight: Real-time CCTV 📹 anomaly detection and incident prediction. AI-powered 🧠 security for proactive threat prevention._
 
 </div>
 
+![Project Foresight Overview](https://github.com/oceands/Project_Foresight/assets/overview.jpg)
 
+## Introduction 🌟
+_Project Foresight_ is an AI-powered security system 🛡️ designed to provide proactive threat prevention by analyzing real-time CCTV footage. Our system identifies potential hazards and anomalies, ensuring timely and efficient incident response.
 
+## Features 🚀
+- **Real-time Anomaly Detection:** Utilizes cutting-edge AI to monitor CCTV footage for unusual activity.
+- **Incident Prediction:** Predicts potential incidents before they occur, enhancing proactive measures.
+- **Automated Alerts:** Notifies relevant authorities and individuals upon detection of any threats.
+- **Easy Integration:** Seamlessly integrates with existing CCTV infrastructure.
+- **User-Friendly Interface:** Intuitive design for ease of use and efficient management.
 
-Foresight: Real-time CCTV 📹 anomaly detection and incident prediction. AI-powered 🧠  security for proactive threat prevention. Stay vigilant, stay secure. 
+![Feature Highlights](https://github.com/oceands/Project_Foresight/assets/features.jpg)
 
-![background-Github](https://github.com/oceands/Project_Foresight/assets/94485584/1043b57c-cf37-44ab-ae1f-5b203c46171d)
+## Tech-stack 💻
+Our system is built using the latest technologies for optimal performance and scalability.
 
-## Tech-stack
-![background-Github-techstack](https://github.com/oceands/Project_Foresight/assets/94485584/b13bb234-30c1-4b1e-9672-fe01e0ffc7a4)
+![Tech-stack](https://github.com/oceands/Project_Foresight/assets/tech_stack.jpg)
 
-## Cloning the Repository
+## Installation Guide 🛠️
 
-To clone the **Project_Foresight** repository, follow these steps:
+### Frontend Setup
+1. Clone the repository: `git clone https://github.com/oceands/Project_Foresight.git`
+2. Navigate to the `client` directory: `cd client`
+3. Install necessary packages: `npm install`
+4. Run the frontend interface: `npm run start`
 
-1. Open your terminal or command prompt.
-2. Navigate to the directory where you want to clone the repository.
-3. Run the following command to clone the repository:
+### Backend Setup
+1. Navigate to the server directory: `cd server`
+2. Activate the virtual environment: `server\venv\Scripts\activate`
+3. Install dependencies: `pip install -r requirements.txt`
+4. Run the backend: `flask run`
 
-   ```sh
-   git clone https://github.com/oceands/Project_Foresight.git
-   ```
-__Go into the repository__
-```sh
-   cd Project_Foresight
-   ```
-__To go into frontend__
-```sh
-   cd client
-   ```
-__Install nessecary packages__
-```sh
-   npm -install
-   ```
-__Run frontend interface__
-```sh
-   npm run start
-   ```
-__To go into backend__
-```sh
-   cd client
-   ```
-__activate virtual env__
-```sh
-   server\venv\Scripts\activate
-```
+### Additional Setup
+- **Postman API Setup:** Steps to configure and use Postman for API testing.
+- **Golang Server Setup:** Instructions for setting up the Golang server for RTSP live streaming.
+- **Testing with Live IP Cam:** Guidelines for testing with Android, iOS, or actual IPCams.
 
-__Install nessecary packages__
-```sh
-   pip install -r requirments.txt
-   ```
+![Installation Process](https://github.com/oceands/Project_Foresight/assets/installation.jpg)
 
-__Run backend__
-```sh
-   flask run
-   ```
+## Usage 📚
+Detailed guide on how to use Project Foresight, from logging in to viewing live feeds and managing incidents.
 
 ## WARNING ⚠️
-
-Please do not push to the repository withoout prior testing on a test-system
+Please ensure to test all changes on a test-system before pushing to the repository.
 
