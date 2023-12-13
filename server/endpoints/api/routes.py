@@ -1,17 +1,36 @@
-import base64
-import json
+from datetime import datetime, timedelta
+from io import BytesIO
+import time
 import cv2
-from flask import Response, jsonify, send_file
-from flask_jwt_extended import jwt_required, get_jwt_identity
-from flask_restx import Namespace, Resource, fields
 import requests
-from sqlalchemy import or_
-from models import Users, CameraDetails, DispatchDetails, Incidents, Dispatch_Active
-from flask import request
-from datetime import datetime, timezone, timedelta
 import calendar
 
+#Flask Imports
+from flask import Response, jsonify, send_file
+from flask_restx import Namespace, Resource, fields
+
+#JWT imports
+from flask_jwt_extended import jwt_required, get_jwt_identity
+
+#ML requirments
+import numpy as np
+from ultralytics import YOLO
+
+from sqlalchemy import or_
+from models import Users, CameraDetails, DispatchDetails, Dispatch_Active , Detections, Notifications, Incidents,Videos, Reports
+from flask import request
+
+#extensions
 from extensions import db, jwt
+from twilio.rest import Client
+from reportlab.lib.pagesizes import letter
+from reportlab.pdfgen import canvas
+from PIL import Image
+
+
+#Importing models
+modelWeapons = YOLO("C:/Users/Ocean/Project_Foresight/server/endpoints/auth/weaponmodel.pt")
+modelFire = YOLO("C:/Users/Ocean/Project_Foresight/server/endpoints/auth/firemodel.pt")
 
 # Import your existing modules and code here, including your models, validation functions, etc.
 
@@ -56,7 +75,7 @@ dispatch_details_model = rest_api.model('dispatchDetailsModel', {
 
 golang_server_url = "http://root:foresight@127.0.0.1:8083"
 
-#Dashboard APIS
+# Dashboard API's #
 
 #Testing
 @rest_api.route('/dashboard/getUname')
@@ -207,7 +226,189 @@ class IncidentsMonthlyCount(Resource):
                 "msg": f"Error fetching monthly counts of incidents: {str(e)}"
             }, 500
 
-#User Management API's
+
+# Notification API #
+@rest_api.route('/notifications', defaults={'notification_id': None})
+@rest_api.route('/notifications/<int:notification_id>')
+class GetNotifications(Resource):
+    
+    def get(self, notification_id=None):
+        try:
+            
+            notifications = Notifications.query.filter(Notifications.type != 'Ignored').order_by(Notifications.id).all()
+
+
+            return {
+                "success": True,
+                "notifications": [
+                    {
+                        'id': n.id, 
+                        'date': n.date.isoformat() if n.date else None,
+                        'type': n.type, 
+                        'module': n.module, 
+                        'camera': n.camera, 
+                        'status': n.status
+                    } for n in notifications
+                ]
+            }, 200
+        except Exception as e:
+            return {
+                "success": False,
+                "msg": f"Error fetching notifications: {str(e)}"
+            }, 500
+    
+    def post(self, notification_id=None):
+        try:
+            data = request.get_json()
+            new_notification = Notifications(
+                date=data.get("date", datetime.utcnow()),
+                type=data["type"],
+                module=data["module"],
+                camera=data["camera"],
+                status=data["status"]
+            )
+            db.session.add(new_notification)
+            db.session.commit()
+            db.session.close()
+            return {"success": True, "msg": "Notification created successfully."}, 201
+        except Exception as e:
+            return {"success": False, "msg": f"Error creating notification: {str(e)}"}, 500
+    
+    def put(self, notification_id=None):
+        if notification_id is None:
+         return {"success": False, "msg": "Notification ID not provided"}, 400
+
+        try:
+            notification = Notifications.query.get(notification_id)
+            if not notification:
+                return {"success": False, "msg": "Notification not found"}, 404
+        
+            data = request.get_json()
+            status = data.get('status')
+            type_ = data.get('type')
+
+            updated = False
+            if status:
+                notification.status = status
+                updated = True
+
+            if type_:
+                notification.type = type_
+                updated = True
+
+            if updated:
+
+                db.session.commit()
+                db.session.close()
+                return {"success": True, "msg": "Notification updated successfully."}, 200
+            else:
+                return {"success": False, "msg": "Status not provided"}, 400
+        except Exception as e:
+            return {"success": False, "msg": f"Error updating notification: {str(e)}"}, 500
+        
+@rest_api.route('/notifications/videos/<int:notification_id>')
+class GetVideoByNotification(Resource):
+    def get(self, notification_id):
+        try:
+            # Retrieve the video associated with the notification ID
+            video = Videos.get_by_notification_id(notification_id)
+            if video is None or len(video) == 0:
+                return {"success": False, "msg": "No video found for the provided notification ID."}, 404
+
+            video_data = video[0].video_data
+
+            # Create a response object with the binary data
+            response = Response(video_data, mimetype='video/mp4')
+            response.headers['Content-Disposition'] = f'attachment; filename=video_{notification_id}.mp4'
+
+            return response
+
+        except Exception as e:
+            return {"success": False, "msg": str(e)}, 500
+
+@rest_api.route('/notifications/get_image/<int:notification_id>')
+class GetImage(Resource):
+    
+ def get(self, notification_id):
+    detection = Detections.query.filter_by(notification_id=notification_id).first()
+    if detection and detection.image_data:
+        return send_file(
+                   BytesIO(detection.image_data),
+                   mimetype='image/jpeg',
+                   as_attachment=False)
+    else:
+        return 'Image not found', 404
+    
+
+
+# Incidents API's #
+@rest_api.route('/incidents', defaults={'incident_id': None})
+@rest_api.route('/incidents/<int:incident_id>')
+class GetIncidents(Resource):
+    
+    def get(self, incident_id=None):
+        try:
+            if incident_id:
+                # If an incident_id is provided, fetch a single incident
+                incident = Incidents.query.get_or_404(incident_id)
+                return {"success": True, "incident": incident.to_dict()}, 200
+            else:
+                # Fetch all incidents
+                incidents = Incidents.query.all()
+                return {
+                    "success": True,
+                    "incidents": [incident.to_dict() for incident in incidents]
+                }, 200
+        except Exception as e:
+            return {
+                "success": False,
+                "msg": f"Error fetching incidents: {str(e)}"
+            }, 500
+
+    # Implement POST, PUT, DELETE methods for Incidents similar to Notifications if needed
+
+    def post(self, incident_id = None):
+        try:
+            data = request.get_json()
+            
+            # Check if 'notification_id' is provided and if it's a valid integer
+            notification_id = data.get('notification_id')
+            if notification_id is None:
+                return {"success": False, "msg": "notification_id is required"}, 400
+
+            # Fetch the associated notification
+            notification = Notifications.query.get(notification_id)
+            if notification is None:
+                return {"success": False, "msg": f"No Notification found with id {notification_id}"}, 404
+
+            # Use data from the notification to create the incident
+            new_incident = Incidents(
+                notification_id=notification.id,
+                date=notification.date, # Assuming you want to use the same date as the notification
+                type=notification.type, # You may also use data from the 'notification' object
+                module=notification.module,
+                camera=notification.camera,
+                status=notification.status
+            )
+
+            incident_info= new_incident.to_dict()
+
+            db.session.add(new_incident)
+            db.session.commit()
+            db.session.close()
+            
+            
+            return {"success": True, "msg": "Incident created successfully.", "incident": incident_info}, 201
+        
+            
+        except Exception as e:
+            db.session.rollback()
+            db.session.close()
+            return {"success": False, "msg": f"Error creating incident: {e}"}, 500
+        
+
+
+# User Management API's #
 
 #Add User to the Database
 # Using the same Auth/Register API
@@ -243,6 +444,229 @@ class UsersResource(Resource):
 
 
 
+# Twillio functions #
+
+def send_sms(to_numbers, body):
+    account_sid = 'AC019dcd518115af52aba58ddc27f9f644'  # Replace with your Twilio account SID
+    auth_token = 'cb7795fa17ecc131747603c10b61083e'    # Replace with your Twilio auth token
+    from_number = '+16464034549' # Replace with your Twilio phone number
+
+    client = Client(account_sid, auth_token)
+
+    for number in to_numbers:
+        message = client.messages.create(
+            body=body,
+            from_=from_number,
+            to=number
+        )
+        print(f"Message sent to {number}: {message.sid}")
+
+# Function to send whatsapp message on dispatch #
+def send_whatsapp_message(to_numbers, body):
+    account_sid = 'AC019dcd518115af52aba58ddc27f9f644'  # Replace with your Twilio account SID
+    auth_token = 'cb7795fa17ecc131747603c10b61083e'    # Replace with your Twilio auth token
+    from_whatsapp_number = 'whatsapp:+14155238886'      # Replace with your Twilio WhatsApp number
+
+    client = Client(account_sid, auth_token)
+
+    for number in to_numbers:
+        whatsapp_destination = f'whatsapp:{number}'
+        message = client.messages.create(
+            body=body,
+            from_=from_whatsapp_number,
+            to=whatsapp_destination
+        )
+        print(f"WhatsApp message sent to {number}: {message.sid}")
+
+    
+# Function to send call on dispatch #
+def make_phone_call(to_numbers, message):
+    account_sid = 'AC019dcd518115af52aba58ddc27f9f644'  # Replace with your Twilio account SID
+    auth_token = 'cb7795fa17ecc131747603c10b61083e'    # Replace with your Twilio auth token
+    twilio_number = '+16464034549'                      # Replace with your Twilio phone number
+
+    client = Client(account_sid, auth_token)
+
+    for number in to_numbers:
+        call = client.calls.create(
+            twiml=f'<Response><Say>{message}</Say></Response>',
+            to=number,
+            from_=twilio_number
+        )
+        print(f"Call initiated to {number}: {call.sid}")
+
+
+# Function to detect motion between two frames
+def is_motion_detected(current_frame, reference_frame, threshold=50):
+    # Convert frames to grayscale
+    gray_current = cv2.cvtColor(current_frame, cv2.COLOR_BGR2GRAY)
+    gray_reference = cv2.cvtColor(reference_frame, cv2.COLOR_BGR2GRAY)
+
+    # Compute the absolute difference between the current frame and reference frame
+    frame_delta = cv2.absdiff(gray_reference, gray_current)
+
+    # Threshold to get the regions with significant changes
+    thresh = cv2.threshold(frame_delta, threshold, 255, cv2.THRESH_BINARY)[1]
+
+    # If there are white pixels in the thresholded image, motion is detected
+    return np.sum(thresh) > 0
+
+# Reports API's #
+
+@rest_api.route('/reports', methods=['GET', 'POST'])
+class ReportResource(Resource):
+    
+    def post(self):
+        # Extract username from request headers or form data
+        username = request.headers.get('username') or request.form.get('username')
+
+        # Find user by username
+        user = Users.query.filter_by(username=username).first()
+
+        # Proceed only if user is found
+        if not user:
+            return {"success": False, "message": "User not found."}, 404
+
+        # Extract form data
+        title = request.form.get('title')
+        incident_id = request.form.get('incident_id')
+        comments = request.form.get('comments')
+
+        # Extract the file from the form data
+        report_file = request.files.get('report_file')
+        file_content = None
+        if report_file:
+            file_content = BytesIO(report_file.read()).getvalue()
+
+        # Use the username directly
+        created_by = username
+
+         # Fetch Incident related to this report
+        incident = Incidents.query.get(incident_id)
+        if not incident or not incident.notification:
+            return {"success": False, "message": "Incident or related notification not found"}, 404
+        
+
+        notification = incident.notification
+        
+        # Fetch Detections related to this notification
+        detections = Detections.get_by_notification_id(notification.id)
+
+
+        pdf_buffer = BytesIO()
+        p = canvas.Canvas(pdf_buffer, pagesize=letter)
+        current_height = 350  # Start from top of the page
+
+        p.drawString(72, 770, f"Incident ID: {incident.incidents_id}")  # Add this line to include Incident ID
+        p.drawString(72, 750, f"Notification ID: {notification.id}")
+        p.drawString(72, 735, f"Type: {notification.type}")
+        p.drawString(72, 720, f"Module: {notification.module}")
+        p.drawString(72, 705, f"Camera: {notification.camera}")
+        p.drawString(72, 690, f"Status: {notification.status}")
+        p.drawString(72, 675, f"Confidence Score: {notification.conf_score}")
+        p.drawString(72, 660, f"Date: {notification.date.strftime('%Y-%m-%d %H:%M:%S')}")
+
+
+
+        # Add images
+        for detection in detections:
+            if detection.image_data:
+                # Load image from binary data
+                image = Image.open(BytesIO(detection.image_data))
+                image_path = f"temp_image_{detection.id}.png"  # Temporary file name
+                image.save(image_path)
+
+                # Draw image on PDF
+                current_height -= 100  # Adjust height for each image
+                p.drawImage(image_path, 72, current_height, width=200, height=80)  # Adjust size as needed
+
+        p.save()
+
+        # Convert PDF to binary
+        system_data = pdf_buffer.getvalue()
+
+        # Create a new Report object
+        new_report = Reports(
+            title=title,
+            incident_id=incident_id,
+            created_by=created_by,
+            comments=comments,
+            report_file=file_content,
+            system_data=system_data  # Save the generated PDF
+        )
+
+        # Add and commit the new report to the database
+        db.session.add(new_report)
+        db.session.commit()
+
+        return {
+            'success': True, 
+            'message': 'Report created successfully',
+            'report_id': new_report.report_id
+        }, 201
+
+    def get(self):
+        # Extract username from request headers
+        username = request.headers.get('username')
+
+        # Find user by username
+        user = Users.query.filter_by(username=username).first()
+
+        # Proceed only if user is found
+        if not user:
+            return {"success": False, "message": "User not found."}, 404
+
+        try:
+            reports = Reports.query.filter_by(created_by=username).all()
+            report_data = []
+
+            for report in reports:
+                data = {
+                    "id": report.report_id,
+                    "title": report.title,
+                    "incident_id": report.incident_id,
+                    "created_by": report.created_by,
+                    "date_created": report.date_created.strftime("%Y-%m-%d %H:%M:%S"),
+                    "comments": report.comments
+                }
+                report_data.append(data)
+
+            return {"success": True, "reports": report_data}
+
+        except Exception as e:
+            return {"success": False, "message": "An error occurred: " + str(e)}, 500
+        
+@rest_api.route('/reports/<int:report_id>/file')
+class ReportFileResource(Resource):
+    def get(self, report_id):
+        report = Reports.query.get(report_id)
+        if not report or not report.report_file:
+            return {"success": False, "message": "Report or file not found"}, 404
+
+        # Create a BytesIO object from your binary data
+        file_data = BytesIO(report.report_file)
+
+        # You may also want to set an appropriate filename
+        filename = f"report_{report_id}.pdf"  # Adjust the extension as per your file's format
+
+        return send_file(
+           file_data,
+           as_attachment=True,
+           download_name=filename
+        )
+
+@rest_api.route('/reports/<int:report_id>/system_data')
+class SystemDataFileResource(Resource):
+    def get(self, report_id):
+        report = Reports.query.get(report_id)
+        if not report or not report.system_data:
+            return {"success": False, "message": "System data file not found"}, 404
+
+        return send_file(
+           BytesIO(report.system_data),
+           as_attachment=True,
+           download_name=f"system_data_{report_id}.pdf"
+        )
 
 # Setting API's #
 
@@ -560,4 +984,233 @@ class GetDispatches(Resource):
             }, 500
 
 
+# Process Weapon footage API #
+@rest_api.route('/api/process_weapon')
+class ProcessRTSPFootage(Resource):
+    def post(self):
+        try:
+            data = request.get_json()
+            rtsp_url = data['rtsp_url']  # URL of the RTSP feed
 
+            # Setup for video capture
+            cap = cv2.VideoCapture(rtsp_url)
+            fps = cap.get(cv2.CAP_PROP_FPS)  # Frame rate of the video
+            frame_count = int(fps * 4)  # Number of frames for 4 seconds
+
+            # Initialize debounce mechanism
+            last_notification_time = {}
+            reference_frame = None  # Reference frame for motion detection
+
+            while cap.isOpened():
+                ret, frame = cap.read()
+                if not ret:
+                    break
+
+                # Initialize the reference frame
+                if reference_frame is None:
+                    reference_frame = frame
+                    continue
+
+                # Check for motion in the frame
+                if is_motion_detected(frame, reference_frame):
+
+                    start_time = time.time()  # Start timing
+
+                    # Run the model on the current frame
+                    results = modelWeapons.predict(source=frame, device='mps' ,show=False, iou=0.45, conf=0.7)
+
+                    end_time = time.time()  # End timing
+                    processing_time = end_time - start_time
+                    print("running weapon model")
+                    print(f"Model processing time per frame: {processing_time:.3f} seconds")
+
+
+                    # Process results
+                    for frame_results in results:
+                        if frame_results.boxes is not None:
+                            img = cv2.cvtColor(frame_results.orig_img, cv2.COLOR_RGB2BGR)
+
+                            for i, box in enumerate(frame_results.boxes):
+                                cls = int(box.cls)
+                                conf = box.conf.item()
+                                if conf > 0.7:
+                                    # Check for debounce
+                                    current_time = datetime.utcnow()
+                                    if cls not in last_notification_time or (current_time - last_notification_time[cls]) > timedelta(seconds=3):
+                                        last_notification_time[cls] = current_time
+
+                                        # Draw bounding box and label on the image
+                                        x1, y1, x2, y2 = map(int, box.xyxy[0])
+                                        cv2.rectangle(img, (x1, y1), (x2, y2), (0, 255, 0), 2)
+                                        label = f'{modelWeapons.names[cls]}: {conf:.2f}'
+                                        cv2.putText(img, label, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 255, 0), 2)
+
+                                        # Create and add notification to the database
+                                        new_notification = Notifications(
+                                            date=datetime.utcnow(),
+                                            type="Pending",
+                                            module=modelWeapons.names[cls],
+                                            camera="RTSP Camera",
+                                            status="Active",
+                                            conf_score=conf  # Set the confidence score
+                                        )
+                                        db.session.add(new_notification)
+                                        db.session.flush()
+
+                                        notify_numbers = ['+971545034934', '+971505191211']  # Replace with actual numbers
+                                        message_body = f"Alert: {modelWeapons.names[cls]} detected with high confidence. Camera: {new_notification.camera}"
+
+                                        call_numbers = ['+971545034934']  # Replace with actual numbers
+                                        call_message = f"Alert: {modelWeapons.names[cls]} detected with high confidence. Camera: {new_notification.camera}"
+
+
+                                        # Send the WhatsApp message
+                                        send_whatsapp_message(notify_numbers, message_body)
+
+
+
+                                        # Save the image with bounding boxes as binary data
+                                        is_success, buffer = cv2.imencode(".jpg", img)
+                                        if is_success:
+                                            binary_image = BytesIO(buffer).read()
+
+                                            # Save to detections table
+                                            detection = Detections(notification_id=new_notification.id, image_data=binary_image)
+                                            db.session.add(detection)
+
+                                        # Process for video capture
+                                        video_buffer = []
+                                        cap.set(cv2.CAP_PROP_POS_FRAMES, cap.get(cv2.CAP_PROP_POS_FRAMES) - 1)
+                                        for _ in range(frame_count):
+                                            ret, vid_frame = cap.read()
+                                            if not ret:
+                                                break
+                                            video_buffer.append(vid_frame)
+
+                                        # Encoding the video buffer as MP4 with H.264 codec
+                                        mp4_filename = 'temp.mp4'
+                                        video = cv2.VideoWriter(mp4_filename, cv2.VideoWriter_fourcc(*'H264'), fps, (frame.shape[1], frame.shape[0]))
+                                        for vid_frame in video_buffer:
+                                            video.write(vid_frame)
+                                        video.release()
+
+                                        # Reading the video file and converting to binary
+                                        with open(mp4_filename, 'rb') as file:
+                                            video_data = file.read()
+
+                                        # Add video to the database
+                                        new_video = Videos(notification_id=new_notification.id, video_data=video_data)
+                                        db.session.add(new_video)
+                                        db.session.commit()
+                                        db.session.close()
+
+                    # Update the reference frame
+                    reference_frame = frame
+
+            return {"success": True, "msg": "RTSP feed processed successfully."}, 201
+
+        except Exception as e:
+            return {"success": False, "msg": str(e)}, 500
+
+# Process Fire footage API's #
+@rest_api.route('/api/process_fire')
+class ProcessFireFootage(Resource):
+    def post(self):
+        try:
+            data = request.get_json()
+            rtsp_url = data['rtsp_url']  # URL of the RTSP feed or MP4 file
+
+            # Setup for video capture
+            cap = cv2.VideoCapture(rtsp_url)
+            fps = cap.get(cv2.CAP_PROP_FPS)  # Frame rate of the video
+            frame_count = int(fps * 4)  # Number of frames for 4 seconds
+
+            # Initialize debounce mechanism
+            last_notification_time = {}
+            reference_frame = None  # Reference frame for motion detection
+
+            while cap.isOpened():
+                ret, frame = cap.read()
+                if not ret:
+                    break
+
+                if reference_frame is None:
+                    reference_frame = frame
+                    continue
+
+                if is_motion_detected(frame, reference_frame):
+                    start_time = time.time()
+
+                    results = modelFire.predict(source=frame, device="mps", show=False, iou=0.45, conf=0.7)
+                    end_time = time.time()
+                    processing_time = end_time - start_time
+                    print("running fire model")
+                    print(f"Model processing time per frame: {processing_time:.3f} seconds")
+
+                    for frame_results in results:
+                        if frame_results.boxes is not None:
+                            img = cv2.cvtColor(frame_results.orig_img, cv2.COLOR_RGB2BGR)
+
+                            for i, box in enumerate(frame_results.boxes):
+                                cls = int(box.cls)
+                                conf = box.conf.item()
+                                if conf > 0.7:
+                                    current_time = datetime.utcnow()
+                                    if cls not in last_notification_time or (current_time - last_notification_time[cls]) > timedelta(seconds=3):
+                                        last_notification_time[cls] = current_time
+
+                                        x1, y1, x2, y2 = map(int, box.xyxy[0])
+                                        cv2.rectangle(img, (x1, y1), (x2, y2), (0, 255, 0), 2)
+                                        label = f'{modelFire.names[cls]}: {conf:.2f}'
+                                        cv2.putText(img, label, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 255, 0), 2)
+
+                                        new_notification = Notifications(
+                                            date=datetime.utcnow(),
+                                            type="Pending",
+                                            module=modelFire.names[cls],
+                                            camera="RTSP Camera",
+                                            status="Active",
+                                            conf_score=conf
+                                        )
+                                        db.session.add(new_notification)
+                                        db.session.flush()
+
+                                        notify_numbers = ['+971545034934', '+971505191211'] 
+                                        message_body = f"Alert: {modelFire.names[cls]} detected. Camera: {new_notification.camera}"
+                                        
+                                        send_whatsapp_message(notify_numbers, message_body)
+
+                                        is_success, buffer = cv2.imencode(".jpg", img)
+                                        if is_success:
+                                            binary_image = BytesIO(buffer).read()
+                                            detection = Detections(notification_id=new_notification.id, image_data=binary_image)
+                                            db.session.add(detection)
+
+                                        video_buffer = []
+                                        cap.set(cv2.CAP_PROP_POS_FRAMES, cap.get(cv2.CAP_PROP_POS_FRAMES) - 1)
+                                        for _ in range(frame_count):
+                                            ret, vid_frame = cap.read()
+                                            if not ret:
+                                                break
+                                            video_buffer.append(vid_frame)
+
+                                        mp4_filename = 'temp.mp4'
+                                        video = cv2.VideoWriter(mp4_filename, cv2.VideoWriter_fourcc(*'H264'), fps, (frame.shape[1], frame.shape[0]))
+                                        for vid_frame in video_buffer:
+                                            video.write(vid_frame)
+                                        video.release()
+
+                                        with open(mp4_filename, 'rb') as file:
+                                            video_data = file.read()
+
+                                        new_video = Videos(notification_id=new_notification.id, video_data=video_data)
+                                        db.session.add(new_video)
+                                        db.session.commit()
+                                        db.session.close()
+
+                    reference_frame = frame
+
+            return {"success": True, "msg": "RTSP feed processed successfully."}, 201
+
+        except Exception as e:
+            return {"success": False, "msg": str(e)}, 500

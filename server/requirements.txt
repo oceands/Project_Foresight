@@ -11,3 +11,5 @@ python-dotenv
 email_validator
 ultralytics
 numpy
+reportlab
+pillow

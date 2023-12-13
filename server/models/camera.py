@@ -80,7 +80,6 @@ class CameraDetails(db.Model):
     def save(self):
         db.session.add(self)
         db.session.commit()
-        db.session.close()
 
     # Method to retrieve an object from the database by its primary key 'id'
     @classmethod
@@ -95,4 +94,6 @@ class CameraDetails(db.Model):
     def get_by_Port(cls,Port ):
         return cls.query.filter_by(Port=Port).first()
     
+    def close(self):
+        db.session.close()
  

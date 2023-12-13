@@ -22,6 +22,8 @@ app = Flask(__name__)
 # Loading configuration from BaseConfig class in the config module
 app.config.from_object('config.BaseConfig')
 
+
+
 # Initializing the database with the app instance
 db.init_app(app)
 
@@ -79,12 +81,12 @@ def build_rtsp_url(camera):
 
 def call_process_weapon(rtsp_url):
     # The process_weapon endpoint expects a POST request with the RTSP URL
-    endpoint = 'http://localhost:5000/auth/api/users/process_weapon'  # Update with your actual endpoint
+    endpoint = 'http://localhost:5000/user/api/process_weapon'  # Update with your actual endpoint
     requests.post(endpoint, json={'rtsp_url': rtsp_url})
 
 def call_process_fire(rtsp_url):
     # The process_fire endpoint expects a POST request with the RTSP URL
-    endpoint = 'http://localhost:5000/auth/api/users/process_fire'  # Update with your actual endpoint
+    endpoint = 'http://localhost:5000/user/api/process_fire'  # Update with your actual endpoint
     requests.post(endpoint, json={'rtsp_url': rtsp_url})
 
 def initializeProcessing():
@@ -186,6 +188,11 @@ def initialize_database():
             initialized = True
         except Exception as e:
             print('> Error: DBMS Table creation exception: ' + str(e))
+
+@app.teardown_appcontext
+def teardown_db(exception):
+    """Close the database session at the end of each request."""
+    db.session.close()
 
 @app.before_request
 def create_roles():

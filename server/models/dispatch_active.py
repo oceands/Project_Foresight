@@ -34,6 +34,9 @@ class Dispatch_Active(db.Model):
             'camera': self.camera.to_dict() if self.camera else None,
             'notification': self.notification.to_dict() if self.notification else None
         }
+    
+    def close(self):
+        db.session.close()
 
     @classmethod
     def get_by_id(cls, id):

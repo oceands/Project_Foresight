@@ -60,9 +60,13 @@ class DispatchDetails(db.Model):
     def save(self):
         db.session.add(self)
         db.session.commit()
-        db.session.close()
+  
 
     # Method to retrieve an object from the database by its primary key 'id'
+    
+    def close(self):
+        db.session.close()
+    
     @classmethod
     def get_by_id(cls, id):
         return cls.query.get_or_404(id)

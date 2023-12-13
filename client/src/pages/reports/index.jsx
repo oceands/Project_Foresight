@@ -112,18 +112,48 @@ const Reports = () => {
   const user = JSON.parse(userAccount.user);
   const username = user.username;
 
+  const handleDownloadBoth = async (reportId) => {
+    // Function to download a file given a URL and filename
+    const downloadFile = async (url, filename) => {
+      try {
+        const response = await fetch(url);
+        if (!response.ok) throw new Error("Network response was not ok");
+
+        const blob = await response.blob();
+        const downloadUrl = window.URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = downloadUrl;
+        link.setAttribute("download", filename);
+        document.body.appendChild(link);
+        link.click();
+        link.parentNode.removeChild(link);
+      } catch (error) {
+        console.error("Error downloading the file:", error);
+      }
+    };
+
+    // Download report file
+    await downloadFile(
+      `http://127.0.0.1:5000/user/reports/${reportId}/file`,
+      "report.pdf"
+    );
+
+    // Download system data file
+    await downloadFile(
+      `http://127.0.0.1:5000//user/reports/${reportId}/system_data`,
+      "system_data.pdf"
+    );
+  };
+
   useEffect(() => {
     // Fetch reports data when the component mounts
     const fetchReports = async () => {
       try {
-        const response = await fetch(
-          "http://127.0.0.1:5000/auth/api/users/reports",
-          {
-            headers: {
-              username: username, // Pass username in the header
-            },
-          }
-        );
+        const response = await fetch("http://127.0.0.1:5000/user/reports", {
+          headers: {
+            username: username, // Pass username in the header
+          },
+        });
         if (!response.ok) throw new Error("Network response was not ok");
         const data = await response.json();
         if (data.success) {
@@ -153,9 +183,7 @@ const Reports = () => {
     // Fetch incident IDs when the component mounts
     const fetchIncidents = async () => {
       try {
-        const response = await fetch(
-          "http://127.0.0.1:5000/auth/api/users/incidents"
-        );
+        const response = await fetch("http://127.0.0.1:5000/user/incidents");
         if (!response.ok) throw new Error("Network response was not ok");
         const data = await response.json();
         if (data.success) {
@@ -196,7 +224,7 @@ const Reports = () => {
     // Parse the user field to access the username
 
     // Define your API endpoint
-    const API_ENDPOINT = "http://127.0.0.1:5000/auth/api/users/reports";
+    const API_ENDPOINT = "http://127.0.0.1:5000/user/reports";
 
     // Perform the POST request
     fetch(API_ENDPOINT, {
@@ -458,7 +486,7 @@ const Reports = () => {
           </IconButton>
 
           <div>
-            <IconButton onClick={handleDownloadClick}>
+            <IconButton onClick={() => handleDownloadBoth(params.row.id)}>
               <HiDownload
                 style={{
                   color: colors.blueAccents[500],

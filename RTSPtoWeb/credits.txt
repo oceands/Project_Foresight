@@ -1,0 +1,4 @@
+Credits:
+cloned from RTSPtoWeb/
+Andrey Semochkin - Initial work video - deepch
+Dmitriy Vladykin - Initial work web UI - vdalex25
