@@ -81,12 +81,12 @@ def build_rtsp_url(camera):
 
 def call_process_weapon(rtsp_url):
     # The process_weapon endpoint expects a POST request with the RTSP URL
-    endpoint = 'http://localhost:5000/auth/api/users/process_weapon'  # Update with your actual endpoint
+    endpoint = 'http://localhost:5000/user/api/process_weapon'  # Update with your actual endpoint
     requests.post(endpoint, json={'rtsp_url': rtsp_url})
 
 def call_process_fire(rtsp_url):
     # The process_fire endpoint expects a POST request with the RTSP URL
-    endpoint = 'http://localhost:5000/auth/api/users/process_fire'  # Update with your actual endpoint
+    endpoint = 'http://localhost:5000/user/api/process_fire'  # Update with your actual endpoint
     requests.post(endpoint, json={'rtsp_url': rtsp_url})
 
 def initializeProcessing():

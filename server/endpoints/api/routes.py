@@ -985,7 +985,7 @@ class GetDispatches(Resource):
 
 
 # Process Weapon footage API #
-@rest_api.route('/api/users/process_weapon')
+@rest_api.route('/api/process_weapon')
 class ProcessRTSPFootage(Resource):
     def post(self):
         try:
@@ -1113,7 +1113,7 @@ class ProcessRTSPFootage(Resource):
             return {"success": False, "msg": str(e)}, 500
 
 # Process Fire footage API's #
-@rest_api.route('/api/users/process_fire')
+@rest_api.route('/api/process_fire')
 class ProcessFireFootage(Resource):
     def post(self):
         try:
