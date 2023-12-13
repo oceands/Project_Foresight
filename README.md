@@ -2,7 +2,7 @@
 
 <div align="center">
 
-_A modern CCTV management system with real-time fire and weapon detection for efficient incident response 🛡️._
+_A modern CCTV management system with hazard detection for efficient incident response 🛡️._
 
 ![GitHub last commit](https://img.shields.io/github/last-commit/oceands/Project_Foresight)
 ![GitHub Downloads](https://img.shields.io/github/downloads/oceands/Project_Foresight/total.svg)
@@ -36,27 +36,19 @@ Our system is built using the latest technologies for optimal performance and sc
 ## Installation Guide 🛠️
 
 ### Frontend Setup
-1. Clone the repository: `git clone https://github.com/oceands/Project_Foresight.git`
-2. Navigate to the `client` directory: `cd client`
-3. Install necessary packages: `npm install`
-4. Run the frontend interface: `npm run start`
-
-### Backend Setup
-1. Navigate to the server directory: `cd server`
-2. Activate the virtual environment: `server\venv\Scripts\activate`
-3. Install dependencies: `pip install -r requirements.txt`
-4. Run the backend: `flask run`
-
-### Additional Setup
-- **Postman API Setup:** Steps to configure and use Postman for API testing.
-- **Golang Server Setup:** Instructions for setting up the Golang server for RTSP live streaming.
-- **Testing with Live IP Cam:** Guidelines for testing with Android, iOS, or actual IPCams.
-
-![Installation Process](https://github.com/oceands/Project_Foresight/assets/installation.jpg)
-
-## Usage 📚
-Detailed guide on how to use Project Foresight, from logging in to viewing live feeds and managing incidents.
-
-## WARNING ⚠️
-Please ensure to test all changes on a test-system before pushing to the repository.
-
+####Clone the Repository
+```sh
+git clone https://github.com/oceands/Project_Foresight.git
+```
+####Enter Client Dir
+```sh
+cd client
+```
+####Install packages
+```sh
+npm install --force
+```
+####Run Front End Server 
+```sh
+npm run start
+```
