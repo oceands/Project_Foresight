@@ -10,14 +10,14 @@ _A modern CCTV management system with hazard detection for efficient incident re
 ![Node Version](https://img.shields.io/badge/node_version-v18.16.1-red)
 ![Python Version](https://img.shields.io/badge/python_version-v3.11.4-purple)
 
-_Foresight: Real-time CCTV 📹 anomaly detection and incident prediction. AI-powered 🧠 security for proactive threat prevention._
+_Foresight: Real-time CCTV 📹 Fire and Weapon detection and incident prediction. YOLOV8-powered 🧠 security for proactive threat prevention._
 
 </div>
 
 ![Project Foresight Overview](https://github.com/oceands/Project_Foresight/assets/overview.jpg)
 
 ## Introduction 🌟
-_Project Foresight_ is an AI-powered security system 🛡️ designed to provide proactive threat prevention by analyzing real-time CCTV footage. Our system identifies potential hazards and anomalies, ensuring timely and efficient incident response.
+_Project Foresight_ is an YOLOV8-powered security system 🛡️ designed to provide proactive threat prevention by analyzing real-time CCTV footage. Our system identifies potential hazards and anomalies, ensuring timely and efficient incident response.
 
 ## Features 🚀
 - **Real-time Anomaly Detection:** Utilizes cutting-edge AI to monitor CCTV footage for unusual activity.
@@ -75,4 +75,16 @@ Run Flask Server
 ```sh
 flask run
 ```
+### WebRTC server Setup
+Change to Server Directory
+```sh
+cd RTSPtoWeb
+```
+Run server
+```sh
+go run .
+```
+
+
+
 
