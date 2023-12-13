@@ -27,12 +27,10 @@ _Project Foresight_ is an YOLOV8-powered security system 🛡️ designed to pro
 - **Easy Integration:** Seamlessly integrates with existing CCTV infrastructure.
 - **User-Friendly Interface:** Intuitive design for ease of use and efficient management.
 
-![Feature Highlights](https://github.com/oceands/Project_Foresight/assets/features.jpg)
-
 ## Tech-stack 💻
 Our system is built using the latest technologies for optimal performance and scalability.
 
-![Tech-stack](https://github.com/oceands/Project_Foresight/assets/tech_stack.jpg)
+![page github 2](https://github.com/oceands/Project_Foresight/assets/94485584/c04d9c56-9242-4223-8c19-674ec8026358)
 
 ## Installation Guide 🛠️
 
