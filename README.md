@@ -84,6 +84,29 @@ Run server
 go run .
 ```
 
+### Additional Setup
 
+#### Postman API Setup
+Configure and Use Postman for API Testing
+- Install Postman on your device.
+- Open Postman and either sign up or log in.
+- Enter the following URL in a new tab: `http://127.0.0.1:5000/auth/api/users/register`
+- Set the method to POST and body to raw JSON.
+- Enter user details as shown in the example:
+
+  ```json
+  {
+      "Fname": "First Name",
+      "Lname": "Last Name",
+      "email": "email@example.com",
+      "role": "user role",
+      "password": "your password"
+  }
+  ```
+
+- Send the request in Postman.
+- Log in on the frontend using the provided email and password
+
+##Usage 📚
 
 
