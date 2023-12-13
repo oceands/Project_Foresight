@@ -14,7 +14,8 @@ _Foresight: Real-time CCTV 📹 Fire and Weapon detection and incident predictio
 
 </div>
 
-![Project Foresight Overview](https://github.com/oceands/Project_Foresight/assets/overview.jpg)
+![page github](https://github.com/oceands/Project_Foresight/assets/94485584/f047fe12-1401-496e-81a9-6f0ba44e4e5f)
+
 
 ## Introduction 🌟
 _Project Foresight_ is an YOLOV8-powered security system 🛡️ designed to provide proactive threat prevention by analyzing real-time CCTV footage. Our system identifies potential hazards and anomalies, ensuring timely and efficient incident response.
