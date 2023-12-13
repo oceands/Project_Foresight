@@ -109,9 +109,40 @@ Configure and Use Postman for API Testing
 
 ## Usage 📚
 
-###View Dashboard stats
-[https://private-user-images.githubusercontent.com/94485584/290295846-86d1b082-2242-46b5-ac01-81654362f661.mp4?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTEiLCJleHAiOjE3MDI0OTcxMTcsIm5iZiI6MTcwMjQ5NjgxNywicGF0aCI6Ii85NDQ4NTU4NC8yOTAyOTU4NDYtODZkMWIwODItMjI0Mi00NmI1LWFjMDEtODE2NTQzNjJmNjYxLm1wND9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFJV05KWUFYNENTVkVINTNBJTJGMjAyMzEyMTMlMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjMxMjEzVDE5NDY1N1omWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPTg4MTRjMmI2NTExZDAzYmE1YWY2MWIxOThiM2U2NTVlNTljOGQyODBkM2I1ODUxMzViN2RmMWYzMTlkMjcxZDQmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0JmFjdG9yX2lkPTAma2V5X2lkPTAmcmVwb19pZD0wIn0.mV0tAY92tro5Cbff9CqB9Aknt5RTmDn7z9Ob8EG6VLA](https://github.com/oceands/Project_Foresight/assets/94485584/86d1b082-2242-46b5-ac01-81654362f661
-)https://github.com/oceands/Project_Foresight/assets/94485584/86d1b082-2242-46b5-ac01-81654362f661
+### View Dashboard stats 
+https://github.com/oceands/Project_Foresight/assets/94485584/59df3f36-7023-4249-8a9d-9f8b19bab62b
+
+### View Live Feed 
+https://github.com/oceands/Project_Foresight/assets/94485584/e47f28f1-dd89-405f-be04-73b3e6532cd2
+
+### Notifications
+https://github.com/oceands/Project_Foresight/assets/94485584/e5a6fd60-3bf5-402e-bf9f-3201f9f7c5af
+
+### View Incidents
+https://github.com/oceands/Project_Foresight/assets/94485584/5d9e589e-62bb-4b94-833a-783365b2811e
+
+### User Managment
+https://github.com/oceands/Project_Foresight/assets/94485584/86061439-2942-48a4-acb4-547ae95b725e
+
+### Create / View Reports
+https://github.com/oceands/Project_Foresight/assets/94485584/75a6164e-0d61-426f-b54d-a9c793a98f38
+
+### Camera Settings 
+https://github.com/oceands/Project_Foresight/assets/94485584/3dae4a42-8b39-488a-8f7d-c686339b00fe
+
+### Dispatch Settings 
+https://github.com/oceands/Project_Foresight/assets/94485584/5fd7449e-0b2c-4e53-bcb5-77d3c897f498
+
+### Security Settings
+https://github.com/oceands/Project_Foresight/assets/94485584/724aee1f-83a3-41e9-8624-f9d01cd03e82
+
+### FAQ
+https://github.com/oceands/Project_Foresight/assets/94485584/9cccc15e-8e81-4600-a594-25dd8eadc7ce
+
+### Contact Us
+https://github.com/oceands/Project_Foresight/assets/94485584/bdb43fce-07e6-4500-92fe-4d6cb99a0a1c
+
+
 
 
 
