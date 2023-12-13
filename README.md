@@ -36,19 +36,43 @@ Our system is built using the latest technologies for optimal performance and sc
 ## Installation Guide 🛠️
 
 ### Frontend Setup
-####Clone the Repository
+Clone the Repository
 ```sh
 git clone https://github.com/oceands/Project_Foresight.git
 ```
-####Enter Client Dir
+Enter Client Dir
 ```sh
 cd client
 ```
-####Install packages
+Install packages
 ```sh
 npm install --force
 ```
-####Run Front End Server 
+Run Front End Server 
 ```sh
 npm run start
 ```
+
+
+### Backend Setup
+Change to Server Directory
+```sh
+cd server
+```
+Create a Venv
+```sh
+python3 -m  venv .venv
+```
+Activate venv
+```sh
+.venv/Scripts/Activate
+```
+Install Requirments
+```sh
+pip install - r requirements.txt
+```
+Run Flask Server
+```sh
+flask run
+```
+
