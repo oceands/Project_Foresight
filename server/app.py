@@ -103,7 +103,6 @@ def initializeProcessing():
 
                 # Add the camera ID to the set
                 currently_processing.add(camera.id)
-                print(currently_processing)
 
                 #Build RTSP to stream
                 rtsp_url = build_rtsp_url(camera)
@@ -122,7 +121,7 @@ def initializeProcessing():
                 threads.append(weapon_thread)
 
 
-            time.sleep(20)
+        #time.sleep(20)
 
 
 # Run initializeProcessing in a background thread
@@ -196,7 +195,7 @@ def teardown_db(exception):
     """Close the database session at the end of each request."""
     db.session.close()
 
-@app.before_request
+
 def create_roles():
     roles_data = [
         {'name': 'Administrator', 'slug': 'admin'},
@@ -236,6 +235,7 @@ def after_request(response):
 with app.app_context():
     # Initialization code that requires app context
    initialize_database()
+   create_roles()
    start_initialize_processing()
 
 # This part runs the Flask app if this script is being executed directly
