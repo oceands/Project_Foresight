@@ -29,8 +29,13 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 import axiosInstance from "../../api/axios";
 
-function CustomToolbar({ setFilterButtonEl, fetchUsers }) {
+function CustomToolbar({ setFilterButtonEl, fetchUsers, setShowEditForm, setEditFormData, showEditForm, editFormData  }) {
   const colors = tokens;
+
+
+  
+  const [showForm, setShowForm] = React.useState(false);
+
 
   const buttonSx = {
     backgroundColor: colors.orangeAccents[500],
@@ -132,8 +137,6 @@ function CustomToolbar({ setFilterButtonEl, fetchUsers }) {
     setShowForm(false);
   };
 
-  const [showForm, setShowForm] = React.useState(false);
-
   const [selectedRole, setselectedRole] = useState(""); // State to hold the selected question
 
   const handleRoleChange = (event) => {
@@ -161,6 +164,9 @@ function CustomToolbar({ setFilterButtonEl, fetchUsers }) {
     initialValues,
     validationSchema,
     setShowForm,
+    showDatePicker = true,
+
+  isEditMode = false, // Add this line
   }) => {
     return (
       <Box
@@ -241,7 +247,7 @@ function CustomToolbar({ setFilterButtonEl, fetchUsers }) {
                     sx={{ gridColumn: "span 4" }}
                     size="small"
                   />
-
+                  {showDatePicker && ( // Conditionally render date picker
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker
                       sx={{
@@ -260,6 +266,7 @@ function CustomToolbar({ setFilterButtonEl, fetchUsers }) {
                       }}
                     />
                   </LocalizationProvider>
+                  )}
 
                   <TextField
                     fullWidth
@@ -314,10 +321,10 @@ function CustomToolbar({ setFilterButtonEl, fetchUsers }) {
                         color: colors.primary[500],
                         padding: "10px",
                         backgroundColor: colors.orangeAccents[500],
-                        width: "120px",
+                        width: "150px",
                       }}
                     >
-                      Add User
+                      {isEditMode ? "Edit User" : "Add User"} {/* Change this line */}
                     </Button>
                   </Box>
                 </Box>
@@ -371,8 +378,22 @@ function CustomToolbar({ setFilterButtonEl, fetchUsers }) {
             onSubmit={handleFormSubmit}
             initialValues={initialValues}
             validationSchema={checkoutSchema}
+            isEditMode={false}
           />
         )}
+
+{showEditForm && (
+      <AddUserForm
+        // ... [existing AddUserForm props]
+
+        onClose={() => setShowForm(false)}
+        onSubmit={handleFormSubmit}
+        validationSchema={checkoutSchema}
+        showDatePicker={false} // Pass false to hide date picker
+        initialValues={editFormData || initialValues} // Pass edit form data or default initialValues
+        isEditMode={true}
+      />
+    )}
       </Toolbar>
     </Box>
   );
@@ -383,28 +404,40 @@ const Usermgnt = () => {
 
   const [filterButtonEl, setFilterButtonEl] = useState(null);
 
+  const [showEditForm, setShowEditForm] = useState(false);
+  const [editFormData, setEditFormData] = useState(null);
+
+
   const [Users, setUsers] = useState([]);
 
-  const handleDelete = async (id) => {
+
+
+  const handleEditClick = (userData) => {
+    setShowEditForm(true);
+    setEditFormData(userData);
+  };
+
+  const handleDelete = async (userId) => {
     try {
-      // Make a request to your backend to delete the camera
-      const response = await axiosInstance.delete(
-        `auth/api/users/delete/${id}`
-      );
-      console.log(response);
+      // Call the delete endpoint with the user ID
+      const response = await axiosInstance.delete(`auth/api/users/delete/${userId}`);
+  
       if (response.status === 200) {
         console.log("User deleted successfully:", response.data.message);
-        alert("Camera deleted successfully");
-        fetchUsers();
+        alert("User deleted successfully");
+        fetchUsers(); // Refresh the list of users
       } else {
         // Handle error scenario
         console.error("Failed to delete user:", response.data.message);
+        alert(`Failed to delete user: ${response.data.message}`);
       }
     } catch (error) {
       // Handle unexpected error
       console.error("Error deleting user:", error.message);
+      alert("Error deleting user. Please try again.");
     }
   };
+  
 
   const fetchUsers = async () => {
     try {
@@ -476,7 +509,7 @@ const Usermgnt = () => {
       disableColumnMenu: true,
       renderCell: (params) => (
         <Box display="flex">
-          <IconButton>
+          <IconButton onClick={() => handleEditClick(params.row)}>
             <MdEdit
               style={{
                 color: colors.blueAccents[500],
@@ -485,7 +518,7 @@ const Usermgnt = () => {
               }}
             />
           </IconButton>
-          <IconButton>
+          <IconButton onClick={() => handleDelete(params.row.id)}>
             <BsTrash3Fill
               onClick={() => handleDelete(params.row.id)}
               style={{
@@ -560,7 +593,11 @@ const Usermgnt = () => {
             },
             toolbar: {
               setFilterButtonEl,
-              fetchUsers,
+              fetchUsers, 
+              setShowEditForm, // Pass the state setters as props
+              setEditFormData,
+              showEditForm, // Pass the state itself as props
+              editFormData,
             },
           }}
         />

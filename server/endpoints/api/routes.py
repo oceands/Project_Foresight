@@ -4,6 +4,7 @@ import time
 import cv2
 import requests
 import calendar
+import os
 
 #Flask Imports
 from flask import Response, jsonify, send_file
@@ -28,11 +29,18 @@ from reportlab.pdfgen import canvas
 from PIL import Image
 
 
-#Importing models
-modelWeapons = YOLO("C:/Users/Ocean/Project_Foresight/server/endpoints/auth/weaponmodel.pt")
-modelFire = YOLO("C:/Users/Ocean/Project_Foresight/server/endpoints/auth/firemodel.pt")
+# Get the directory of the current file (routes.py)
+current_dir = os.path.dirname(__file__)
 
-# Import your existing modules and code here, including your models, validation functions, etc.
+
+# Construct paths relative to the current directory
+modelWeapons_path = os.path.join(current_dir, '..', 'auth', 'weaponmodel.pt')
+modelFire_path = os.path.join(current_dir, '..', 'auth', 'firemodel.pt')
+
+# Initialize your models with the relative paths
+modelWeapons = YOLO(modelWeapons_path)
+modelFire = YOLO(modelFire_path)
+
 
 rest_api= Namespace("user",version="1.0", description="Regular user related operations")
 

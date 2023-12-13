@@ -41,13 +41,18 @@ login_model = rest_api.model('LoginModel', {
 })
 
 user_edit_model = rest_api.model('UserEditModel', {
-    "userID": fields.String(required=True, min_length=1, max_length=32),
+    "user_id": fields.Integer(required=True),
     "username": fields.String(required=True, min_length=2, max_length=32),
     "email": fields.String(required=True, min_length=4, max_length=64)
 })
 
 
-
+# Password Update Model
+password_update_model = rest_api.model('PasswordUpdateModel', {
+    "user_id": fields.Integer(required=True),
+    "old_password": fields.String(required=True, min_length=8, max_length=128),
+    "new_password": fields.String(required=True, min_length=8, max_length=128)
+})
 
 #Signup Api / CREATE User
 @rest_api.route('/api/users/register')
@@ -151,6 +156,39 @@ class LoginUser(Resource):
         add_token_to_database(refresh_token)
         return {"success": True, "Access_token": access_token, "Refresh_token": refresh_token,"Role": role ,"user": user_info}, 200
 
+
+
+# Password Update Endpoint
+@rest_api.route('/api/users/update_password')
+class UpdatePassword(Resource):
+    @rest_api.expect(password_update_model, validate=True)
+    @jwt_required()
+    def post(self):
+        req_data = request.get_json()
+        user_id = req_data.get("user_id")
+        old_password = req_data.get("old_password")
+        new_password = req_data.get("new_password")
+
+        # Fetch the user object based on user_id
+        user = Users.query.get(user_id)
+        if not user:
+            return {"success": False, "msg": "User not found"}, 404
+
+        # Check if old password is correct
+        if not user.check_password(old_password):
+            return {"success": False, "msg": "Incorrect old password"}, 401
+
+        # Check new password strength
+        if not is_strong_password(new_password):
+            return {"success": False, "msg": "New password is not strong enough"}, 400
+
+        # Set new password
+        user.set_password(new_password)
+        user.save()
+
+        return {"success": True, "msg": "Password updated successfully"}, 200
+    
+    
 #Deleteing the user
 @rest_api.route('/api/users/delete/<int:user_id>')  
 class UserDeletionResource(Resource):
@@ -176,39 +214,55 @@ class EditUser(Resource):
     @rest_api.expect(user_edit_model, validate=True)
     @jwt_required()
     def post(self):
-
         req_data = request.get_json()
+        target_user_id = req_data.get("user_id")  # Get the target user ID from the request
         new_uname = req_data.get("username")
         new_email = req_data.get("email")
-        #validation
-        email_exist= Users.get_by_email(self)
+        new_role_id = req_data.get("role_id")
 
+        # Fetch the target user object based on user_id
+        user = Users.query.get(target_user_id)
+        if not user:
+            return {"success": False, "msg": "User not found"}, 404
 
-         #check email format
-        try:
-            valid=validate_email(new_email)
+        # Email format validation
+        if new_email:
+            try:
+                valid = validate_email(new_email)
+            except EmailNotValidError as e:
+                return {"success": False, "msg": "This email format is invalid."}
 
-        except EmailNotValidError as e:
-
-            return {"success": False, "msg": "This email format is invalid."}
-
-
-        # Check if email exists
-        if  email_exist:
-            return {"success": False, "msg": "This email already exists."}, 400
-        
+            # Check if email exists for another user
+            email_exist = Users.query.filter(Users.id != target_user_id, Users.email == new_email).first()
+            if email_exist:
+                return {"success": False, "msg": "This email already exists."}, 400
+            user.email = new_email  # Update email
 
         if new_uname:
-                self.update_username(new_uname)
+            user.username = new_uname  # Update username
 
-        if new_email:
-                self.update_email(new_email)
+        # Update role
+        if new_role_id is not None:
+            self.update_user_role(target_user_id, new_role_id)
 
-        self.save()
+        user.save()  # Save user updates
 
-        return {"success": True, "msg": "User records updates successfully !"}, 200
-    
+        return {"success": True, "msg": "User records updated successfully!"}, 200
 
+    def update_user_role(self, user_id, new_role_id):
+        # Find existing user role
+        existing_user_role = UserRole.query.filter_by(user_id=user_id).first()
+
+        if existing_user_role:
+            # Update existing role
+            existing_user_role.role_id = new_role_id
+        else:
+            # Add new role
+            new_user_role = UserRole(user_id=user_id, role_id=new_role_id)
+            new_user_role.save()
+
+        db.session.commit()  # Commit the changes to the database
+        
     #Refresh the Token
     #protected route 3
     @rest_api.route('/api/users/refresh')

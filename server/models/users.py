@@ -53,6 +53,8 @@ class Users(db.Model):
     def update_username(self, new_username):
         self.username = new_username
 
+    
+
     # Define a method to check if JWT (JSON Web Token) authentication is active for the user
     def check_jwt_auth_active(self):
         return self.jwt_auth_active
